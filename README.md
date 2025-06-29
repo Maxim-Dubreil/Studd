@@ -2,6 +2,8 @@
 
 Projet de fin d'année - Application Rails avec Vite et Tailwind CSS
 
+> 🐳 **Démarrage rapide avec Docker** : Consultez la [documentation Docker complète](docker/README.md) pour un environnement de développement conteneurisé.
+
 ## Technologies utilisées
 
 - **Ruby on Rails 8.0.2** - Framework web backend
@@ -13,7 +15,12 @@ Projet de fin d'année - Application Rails avec Vite et Tailwind CSS
 
 ## Prérequis
 
-Avant de commencer, assurez-vous d'avoir installé :
+### Option 1 : Environnement Docker (recommandé)
+
+- **Docker** et **Docker Compose v2**
+- **Git**
+
+### Option 2 : Installation locale
 
 - **Ruby** (version 3.2.2 recommandée)
 - **Node.js** (version 20.19.0+ ou 22.12.0+)
@@ -21,6 +28,44 @@ Avant de commencer, assurez-vous d'avoir installé :
 - **Git**
 
 ## Installation et Setup
+
+### 🐳 Option A : Avec Docker (recommandé)
+
+> 📖 **Documentation complète** : [Docker README](docker/README.md)
+
+#### Démarrage rapide
+
+```bash
+# 1. Cloner le projet
+git clone <url-du-repo>
+cd T-YEP-600-REN_13
+
+# 2. Construire et démarrer les conteneurs
+docker compose -f docker/docker-compose.yml up --build
+```
+
+L'application sera accessible sur :
+
+- **Application Rails** : [http://localhost:3000](http://localhost:3000)
+- **Serveur Vite (HMR)** : [http://localhost:3036/vite-dev/](http://localhost:3036/vite-dev/)
+
+#### Commandes Docker essentielles
+
+```bash
+# Démarrer en arrière-plan
+docker compose -f docker/docker-compose.yml up -d
+
+# Arrêter les conteneurs
+docker compose -f docker/docker-compose.yml down
+
+# Console Rails dans le conteneur
+docker compose -f docker/docker-compose.yml exec web rails c
+
+# Shell dans le conteneur
+docker compose -f docker/docker-compose.yml exec web bash
+```
+
+### 🛠️ Option B : Installation locale
 
 ### 1. Cloner le projet
 
@@ -74,7 +119,22 @@ gem cleanup stringio
 
 ## Lancement de l'application
 
-### Démarrage complet (recommandé)
+### 🐳 Avec Docker
+
+```bash
+# Démarrer l'application (première fois ou après modifications)
+docker compose -f docker/docker-compose.yml up --build
+
+# Démarrer en arrière-plan
+docker compose -f docker/docker-compose.yml up -d
+```
+
+Accès :
+
+- **Application** : [http://localhost:3000](http://localhost:3000)
+- **Vite HMR** : [http://localhost:3036/vite-dev/](http://localhost:3036/vite-dev/)
+
+### 🛠️ Installation locale - Démarrage complet (recommandé)
 
 ```bash
 bin/dev
@@ -85,7 +145,7 @@ Cette commande lance simultanément :
 - 🌐 **Serveur Rails** sur `http://localhost:3000`
 - ⚡ **Serveur Vite** (assets frontend)
 
-### Commandes alternatives
+### Commandes alternatives (installation locale)
 
 ```bash
 # Serveur Rails uniquement
@@ -99,7 +159,34 @@ rails s -p 4000
 
 ## Commandes de développement
 
-### Base de données
+### 🐳 Commandes Docker
+
+```bash
+# Console Rails
+docker compose -f docker/docker-compose.yml exec web rails c
+
+# Générer un modèle, contrôleur, etc.
+docker compose -f docker/docker-compose.yml exec web rails generate MODEL/CONTROLLER
+
+# Exécuter les migrations
+docker compose -f docker/docker-compose.yml exec web rails db:migrate
+
+# Console base de données
+docker compose -f docker/docker-compose.yml exec web rails db
+
+# Shell dans le conteneur
+docker compose -f docker/docker-compose.yml exec web bash
+
+# Voir les logs
+docker compose -f docker/docker-compose.yml logs web
+
+# Redémarrer les services
+docker compose -f docker/docker-compose.yml restart
+```
+
+### 🛠️ Installation locale
+
+#### Base de données
 
 ```bash
 # Créer une nouvelle migration
