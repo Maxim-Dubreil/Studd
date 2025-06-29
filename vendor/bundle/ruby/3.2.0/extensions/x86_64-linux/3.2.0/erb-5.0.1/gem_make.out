@@ -1,0 +1,18 @@
+current directory: /home/maxim-dubreil/Epitech/600/T-YEP-600/vendor/bundle/ruby/3.2.0/gems/erb-5.0.1/ext/erb/escape
+/home/maxim-dubreil/.rbenv/versions/3.2.2/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /home/maxim-dubreil/Epitech/600/T-YEP-600/vendor/bundle/ruby/3.2.0/gems/erb-5.0.1/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20250629-157431-mo6zp6 sitelibdir\=./.gem.20250629-157431-mo6zp6 clean
+
+current directory: /home/maxim-dubreil/Epitech/600/T-YEP-600/vendor/bundle/ruby/3.2.0/gems/erb-5.0.1/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20250629-157431-mo6zp6 sitelibdir\=./.gem.20250629-157431-mo6zp6
+compiling escape.c
+linking shared-object erb/escape.so
+
+current directory: /home/maxim-dubreil/Epitech/600/T-YEP-600/vendor/bundle/ruby/3.2.0/gems/erb-5.0.1/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20250629-157431-mo6zp6 sitelibdir\=./.gem.20250629-157431-mo6zp6 install
+/usr/bin/install -c -m 0755 escape.so ./.gem.20250629-157431-mo6zp6/erb
+
+current directory: /home/maxim-dubreil/Epitech/600/T-YEP-600/vendor/bundle/ruby/3.2.0/gems/erb-5.0.1/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20250629-157431-mo6zp6 sitelibdir\=./.gem.20250629-157431-mo6zp6 clean

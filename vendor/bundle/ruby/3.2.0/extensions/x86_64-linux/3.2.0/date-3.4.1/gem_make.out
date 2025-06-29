@@ -1,0 +1,24 @@
+current directory: /home/maxim-dubreil/Epitech/600/T-YEP-600/vendor/bundle/ruby/3.2.0/gems/date-3.4.1/ext/date
+/home/maxim-dubreil/.rbenv/versions/3.2.2/bin/ruby extconf.rb
+checking for rb_category_warn()... yes
+checking for timezone in time.h with  -Werror... yes
+checking for altzone in time.h with  -Werror... no
+creating Makefile
+
+current directory: /home/maxim-dubreil/Epitech/600/T-YEP-600/vendor/bundle/ruby/3.2.0/gems/date-3.4.1/ext/date
+make DESTDIR\= sitearchdir\=./.gem.20250629-157431-6j1qvt sitelibdir\=./.gem.20250629-157431-6j1qvt clean
+
+current directory: /home/maxim-dubreil/Epitech/600/T-YEP-600/vendor/bundle/ruby/3.2.0/gems/date-3.4.1/ext/date
+make DESTDIR\= sitearchdir\=./.gem.20250629-157431-6j1qvt sitelibdir\=./.gem.20250629-157431-6j1qvt
+compiling date_core.c
+compiling date_parse.c
+compiling date_strftime.c
+compiling date_strptime.c
+linking shared-object date_core.so
+
+current directory: /home/maxim-dubreil/Epitech/600/T-YEP-600/vendor/bundle/ruby/3.2.0/gems/date-3.4.1/ext/date
+make DESTDIR\= sitearchdir\=./.gem.20250629-157431-6j1qvt sitelibdir\=./.gem.20250629-157431-6j1qvt install
+/usr/bin/install -c -m 0755 date_core.so ./.gem.20250629-157431-6j1qvt
+
+current directory: /home/maxim-dubreil/Epitech/600/T-YEP-600/vendor/bundle/ruby/3.2.0/gems/date-3.4.1/ext/date
+make DESTDIR\= sitearchdir\=./.gem.20250629-157431-6j1qvt sitelibdir\=./.gem.20250629-157431-6j1qvt clean

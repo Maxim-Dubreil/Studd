@@ -84,7 +84,6 @@ Cette commande lance simultanément :
 
 - 🌐 **Serveur Rails** sur `http://localhost:3000`
 - ⚡ **Serveur Vite** (assets frontend)
-- 🎨 **Watcher Tailwind CSS** (compilation automatique)
 
 ### Commandes alternatives
 
@@ -174,7 +173,7 @@ bundle exec rubocop
 
 # Rubocop avec auto-correction
 bundle exec rubocop -a
-
+```
 
 ## Structure du projet
 
@@ -184,8 +183,8 @@ bundle exec rubocop -a
 │ ├── controllers/ # Contrôleurs Rails
 │ ├── models/ # Modèles ActiveRecord
 │ ├── views/ # Vues ERB
-│ ├── frontend/ # Code frontend (JS/Vue)
-│ └── assets/ # Assets (CSS, images)
+│ ├── frontend/ # Code frontend (TS/Vue)
+│ └── assets/ # _A CHANGER LES CSS ET DANS STYLE FRONTEND ET AJOUTER LES ASSETS AUSSI DEDANS_
 ├── config/ # Configuration Rails
 ├── db/ # Migrations et schéma DB
 ├── spec/ # Tests RSpec
@@ -202,4 +201,3 @@ bundle exec rubocop -a
 - Tailwind CSS est configuré avec un watcher automatique
 - Devise est configuré pour l'authentification
 - PostgreSQL est utilisé en développement et production
-```
