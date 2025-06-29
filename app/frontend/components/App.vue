@@ -9,4 +9,5 @@ defineProps<{ msg?: string }>();
   </h1>
   <Button>Valider</Button>
   <Button variant="outline">Annuler</Button>
+  <Button variant="outline">Pourquoi ee ejhfseo hfhmr</Button>
 </template>
