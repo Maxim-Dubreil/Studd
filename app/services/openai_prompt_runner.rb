@@ -4,6 +4,8 @@ class OpenaiPromptRunner
   include HTTParty
   base_uri 'https://api.openai.com/v1'
 
+
+ # ici, je pars du principe que le contenu ( à l'origine en pdf ) a déja été trasnformé en string
   def initialize(focusTool:, contenu:)
     @focusTool = focusTool
     @contenu = contenu
@@ -38,7 +40,7 @@ class OpenaiPromptRunner
   private
 
   def get_prompt
-    file_path = Rails.root.join('app', 'prompt-mapping.json')
+    file_path = Rails.root.join('app', 'services', 'prompt-mapping.json')
     mapping = JSON.parse(File.read(file_path))
     mapping.dig(@focusTool, "prompt") || raise("Aucun prompt trouvé pour : #{@focusTool}")
   end
