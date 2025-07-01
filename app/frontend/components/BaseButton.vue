@@ -45,12 +45,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed } from 'vue';
 import {
   useStyleUtils,
   type ColorVariant,
   type SizeVariant,
-} from "../../composables/useStyleUtils";
+} from '../composables/useStyleUtils';
 
 interface Props {
   label?: string;
@@ -60,7 +60,7 @@ interface Props {
   disabled?: boolean;
   loading?: boolean;
   icon?: string;
-  iconPosition?: "left" | "right";
+  iconPosition?: 'left' | 'right';
   fullWidth?: boolean;
 }
 
@@ -69,12 +69,12 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  variant: "primary",
-  size: "md",
+  variant: 'primary',
+  size: 'md',
   outlined: false,
   disabled: false,
   loading: false,
-  iconPosition: "left",
+  iconPosition: 'left',
   fullWidth: false,
 });
 
@@ -89,23 +89,23 @@ const buttonClasses = computed(() => {
     props.outlined
   );
   const extraClasses = [
-    props.fullWidth && "w-full",
-    (props.disabled || props.loading) && "opacity-50 cursor-not-allowed",
+    props.fullWidth && 'w-full',
+    (props.disabled || props.loading) && 'opacity-50 cursor-not-allowed',
   ]
     .filter(Boolean)
-    .join(" ");
+    .join(' ');
 
   return `${baseClasses} ${extraClasses}`;
 });
 
 const iconClasses = computed(() => {
-  const spacing = props.iconPosition === "left" ? "mr-2" : "ml-2";
+  const spacing = props.iconPosition === 'left' ? 'mr-2' : 'ml-2';
   return `${getIconClasses.value(props.size)} ${spacing}`;
 });
 
 const handleClick = (event: MouseEvent) => {
   if (!props.disabled && !props.loading) {
-    emit("click", event);
+    emit('click', event);
   }
 };
 </script>

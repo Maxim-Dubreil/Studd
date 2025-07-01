@@ -1,2 +1,2 @@
-import '~/styles/app.css'
-console.log('Styles loaded')
+import '~/styles/app.css';
+import 'vue';

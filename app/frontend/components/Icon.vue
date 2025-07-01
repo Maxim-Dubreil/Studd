@@ -3,11 +3,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import {
-  useStyleUtils,
-  type SizeVariant,
-} from "../../composables/useStyleUtils";
+import { computed } from 'vue';
+import { useStyleUtils, type SizeVariant } from '../composables/useStyleUtils';
 
 // Import des icônes Lucide
 import {
@@ -108,7 +105,7 @@ import {
   Gamepad2,
   Moon,
   Sun,
-} from "lucide-vue-next";
+} from 'lucide-vue-next';
 
 interface Props {
   name: string;
@@ -117,8 +114,8 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  size: "md",
-  color: "text-current",
+  size: 'md',
+  color: 'text-current',
 });
 
 const { getIconClasses } = useStyleUtils();

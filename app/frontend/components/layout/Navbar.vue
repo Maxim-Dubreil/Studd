@@ -1,7 +1,7 @@
 <!-- filepath: app/frontend/components/layout/Navbar.vue -->
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import Icon from "../ui/Icon.vue";
+import Icon from "../Icon.vue";
 
 const navigationItems = ref([
   { id: "home", label: "Home", iconName: "home", href: "/" },

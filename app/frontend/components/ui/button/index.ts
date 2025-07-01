@@ -1,9 +1,20 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva, type VariantProps } from 'class-variance-authority';
 
-export { default as Button } from './Button.vue'
+export { default as Button } from './Button.vue';
 
 export const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*=\'size-\'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',
+  `inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md
+   text-sm font-medium
+
+   transition duration-200 ease-out           /* animé */
+   hover:scale-[1.02] hover:shadow-xl         /* zoom  ombre au survol */
+   active:scale-[.98]                         /* léger enfoncement au clic */
+
+   disabled:pointer-events-none disabled:opacity-50
+   [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4
+   shrink-0 [&_svg]:shrink-0
+   outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]
+ aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive`,
   {
     variants: {
       variant: {
@@ -18,6 +29,8 @@ export const buttonVariants = cva(
         ghost:
           'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
         link: 'text-primary underline-offset-4 hover:underline',
+        gradient:
+          'text-white bg-gradient-to-r from-indigo-500 to-purple-500 shadow-md hover:opacity-90',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',
@@ -30,7 +43,7 @@ export const buttonVariants = cva(
       variant: 'default',
       size: 'default',
     },
-  },
-)
+  }
+);
 
-export type ButtonVariants = VariantProps<typeof buttonVariants>
+export type ButtonVariants = VariantProps<typeof buttonVariants>;
