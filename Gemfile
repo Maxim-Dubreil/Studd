@@ -10,6 +10,7 @@ gem "pg", "~> 1.1"
 gem "puma", ">= 5.0"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
+gem "devise"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -17,6 +18,9 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+  gem "rspec-rails"
+  gem "annotate"
+  gem 'dotenv-rails'
 end
 
 gem "vite_rails", "~> 3.0", group: :development
