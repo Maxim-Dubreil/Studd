@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import DashboardLayout from "@/components/layout/DashboardLayout.vue";
-import DashboardHeader from "@/components/layout/DashboardHeader.vue";
+import DashboardLayout from "@/components/DashboardLayout.vue";
+import DashboardHeader from "@/components/layout/Header.vue";
 import DashboardPage from "@/components/pages/DashboardPage.vue";
 import WorkspacePage from "@/components/pages/WorkspacePage.vue";
 import { useNavigation } from "@/composables/useNavigation";
