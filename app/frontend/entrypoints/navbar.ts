@@ -1,5 +1,7 @@
-import { createApp } from "vue";
-import Sidebar from "../components/Navbar.vue";
-import "~/styles/app.css";
+import { createApp } from 'vue'
+import Navbar from '@/components/layout/Navbar.vue'
 
-createApp(Sidebar).mount("#navbar");
+const el = document.querySelector('#navbar')
+if (el) {
+  createApp(Navbar).mount(el)
+}

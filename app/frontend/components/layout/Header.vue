@@ -79,7 +79,7 @@ const props = withDefaults(defineProps<Props>(), {
 const { toggleTheme, isDark } = useTheme();
 
 const user = ref({
-  name: "User",
+  name: "Users",
   avatar: "",
   status: "online" as const,
 });
