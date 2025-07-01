@@ -66,4 +66,5 @@ const getCurrentPageTitle = () => {
       <component :is="getCurrentPageComponent()" />
     </template>
   </DashboardLayout>
+
 </template>

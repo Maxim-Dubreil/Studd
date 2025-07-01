@@ -1,0 +1,42 @@
+# ---- Base Ruby -------------------------------------------------
+FROM ruby:3.2.2-slim AS base
+
+# Paquets OS
+RUN apt-get update -qq && \
+    apt-get install -y --no-install-recommends \
+    build-essential libpq-dev git curl netcat-openbsd
+
+# Bundler dans une couche cacheable
+ENV BUNDLE_PATH=/gems \
+    BUNDLE_JOBS=4 \
+    BUNDLE_RETRY=3
+RUN gem install bundler
+
+
+# ---- Node (via NodeSource) ------------------------------------
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g pnpm
+
+# ---- Dépendances Ruby & JS ------------------------------------
+WORKDIR /app
+
+# Gems
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+RUN gem install bundler foreman
+
+
+# Packages JS
+COPY package.json package-lock.json ./
+RUN pnpm install
+
+# ---- Code de l’application ------------------------------------
+COPY . .
+
+# ---- Script de démarrage --------------------------------------
+COPY docker/entrypoints/dev.sh /usr/local/bin/dev.sh
+RUN chmod +x /usr/local/bin/dev.sh
+
+EXPOSE 3000 3036
+ENTRYPOINT ["/usr/local/bin/dev.sh"]
