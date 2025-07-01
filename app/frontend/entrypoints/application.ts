@@ -1,12 +1,12 @@
-import { createApp } from 'vue'
-import App from '@/components/App.vue'
-import '~/styles/app.css'
+// import { createApp } from 'vue'
+// import App from '@/components/App.vue'
+// import '~/styles/app.css'
 
 
-createApp(App).mount('#app')
-console.log('Vite ⚡️ Rails')
+// createApp(App).mount('#app')
+// console.log('Vite ⚡️ Rails')
 
-console.log('Visit the guide for more information: ', 'https://vite-ruby.netlify.app/guide/rails')
+// console.log('Visit the guide for more information: ', 'https://vite-ruby.netlify.app/guide/rails')
 
 // Example: Load Rails libraries in Vite.
 //

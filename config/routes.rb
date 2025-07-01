@@ -12,6 +12,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-    root "home#index"       # ← ajoutez ou décommentez cette ligne
+  root "pages#landingPage"
+
+
 
 end
