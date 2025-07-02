@@ -4,7 +4,7 @@ FROM ruby:3.2.2-slim AS base
 # Paquets OS
 RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends \
-    build-essential libpq-dev git curl netcat-openbsd
+    build-essential libpq-dev git curl netcat-openbsd \
 
 # Bundler dans une couche cacheable
 ENV BUNDLE_PATH=/gems \
