@@ -126,6 +126,6 @@
 </template>
 
 <script setup lang="ts">
-import Sidebar from "./Sidebar.vue";
+import Sidebar from "./Navbar.vue";
 import DashboardHeader from "./DashboardHeader.vue";
 </script>
