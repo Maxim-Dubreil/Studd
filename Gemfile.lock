@@ -279,9 +279,9 @@ PLATFORMS
 DEPENDENCIES
   annotate
   debug
+  devise
   dotenv-rails
   httparty
-  devise
   jbuilder
   pg (~> 1.1)
   propshaft

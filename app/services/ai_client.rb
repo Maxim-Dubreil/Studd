@@ -1,20 +1,15 @@
 require 'httparty'
 
-class OpenaiPromptRunner
+class OpenaiClient
   include HTTParty
   base_uri 'https://api.openai.com/v1'
 
-
- # ici, je pars du principe que le contenu ( à l'origine en pdf ) a déja été trasnformé en string
-  def initialize(focusTool:, contenu:)
-    @focusTool = focusTool
-    @contenu = contenu
+  def initialize(prompt:)
     @api_key = ENV['OPENAI_API_KEY']
-    @prompt = get_prompt
+    @prompt = prompt
   end
 
   def run
-    messages = build_messages
 
     response = self.class.post(
       '/chat/completions',
@@ -24,7 +19,7 @@ class OpenaiPromptRunner
       },
       body: {
         model: "gpt-4",
-        messages: messages,
+        messages: prompt,
         temperature: 0.7
       }.to_json
     )
@@ -39,26 +34,4 @@ class OpenaiPromptRunner
 
   private
 
-  def get_prompt
-    file_path = Rails.root.join('app', 'services', 'prompt-mapping.json')
-    mapping = JSON.parse(File.read(file_path))
-    mapping.dig(@focusTool, "prompt") || raise("Aucun prompt trouvé pour : #{@focusTool}")
-  end
-
-  def build_messages
-    [
-      {
-        role: "system",
-        content: "Tu es un assistant éducatif. Tu aides à générer des fiches, quiz et flashcards à partir d’un contenu fourni. Structure les réponses avec des balises comme [SECTION], [QUESTION], etc., selon le besoin."
-      },
-      {
-        role: "user",
-        content: "Consigne : #{@prompt}"
-      },
-      {
-        role: "user",
-        content: "Voici le contenu à partir duquel tu dois travailler :\n\n#{@contenu}"
-      }
-    ]
-  end
 end
