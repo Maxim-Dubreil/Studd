@@ -1,58 +1,28 @@
-<%= vite_client_tag %>
-<%= vite_typescript_tag 'application' %>
-<%= vite_typescript_tag 'navbar' %>
-<%= vite_typescript_tag 'header' %>
-
-<div
-  class="flex h-screen bg-gradient-to-br from-violet-100 via-blue-50 to-purple-100 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900 backdrop-blur-3xl relative overflow-hidden transition-colors duration-300"
->
-  <!-- Background effets -->
-  <div
-    class="absolute inset-0 bg-gradient-to-br from-violet-200/30 via-blue-100/20 to-purple-200/30 dark:from-violet-800/20 dark:via-blue-900/10 dark:to-purple-800/20 backdrop-blur-3xl"
-  ></div>
-  <div
-    class="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-violet-300/20 to-blue-300/20 dark:from-violet-600/10 dark:to-blue-600/10 rounded-full blur-3xl"
-  ></div>
-  <div
-    class="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-r from-purple-300/20 to-pink-300/20 dark:from-purple-600/10 dark:to-pink-600/10 rounded-full blur-3xl"
-  ></div>
-
-  <!-- Zone principale -->
-  <div class="flex-1 flex flex-col ml-64">
-
-
-    <!-- Contenu principal -->
-    <main class="flex-1 flex flex-col items-center justify-center p-8 relative z-10">
-      <div class="text-center">
-        <% if user_signed_in? %>
-          <h1 class="text-5xl font-bold text-gray-800 dark:text-white">
-            Bienvenue <%= current_user.email.split('@').first %>
-          </h1>
-        <% else %>
-          <h1 class="text-5xl font-bold text-gray-800 dark:text-white">
-            Welcome to StudyApp
-          </h1>
-        <% end %>
-        <p class="mt-4 text-xl text-gray-600 dark:text-gray-300">
-          Votre nouvelle plateforme d'étude collaborative.
-        </p>
-      </div>
-
-      <div class="mt-12 flex items-center space-x-4">
-        <% if user_signed_in? %>
-          <%= link_to "Dashboard", "/dashboard", class: "px-8 py-3 text-lg font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-transform transform hover:scale-105 shadow-lg" %>
-          <%= button_to "Logout", destroy_user_session_path, 
-        method: :delete, 
-        class: "px-8 py-3 text-lg font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-transform transform hover:scale-105 shadow-lg" %>
-        <div>
-        </div>
-      </div>
-        <% else %>
-          <%= link_to "Login", new_user_session_path, class: "px-8 py-3 text-lg font-medium text-white bg-slate-700 hover:bg-slate-800 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition-transform transform hover:scale-105 shadow-lg" %>
-          <%= link_to "Sign up", new_user_registration_path, class: "px-8 py-3 text-lg font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-transform transform hover:scale-105 shadow-lg" %>
-        <% end %>
-      </div>
-    </main>
-
-  </div>
+<div>
+  <!-- Effets d'arrière-plan LandingBackgroundEffects-->
+  <div>
+    <%= vue_component 'GradientBackground' %>
+    </div>
+    <!-- Navigation -->
+    <%= vue_component 'NavbarLanding',
+      {
+        left:   [  { label: 'StudyApp', url: root_path },  # ← 1er ⇒ dégradé + icône
+  { label: 'Docs',      url: docs_path  }],
+        center: [
+          { label: 'Accueil', url: root_path },
+          { label: 'À-propos', url: about_path }      # ou '#about' si tu n’as pas encore la route
+        ],
+        right:  [
+          { label: 'Inscription', url: signup_path, variant: 'gradient' },  # ou '#signup'
+          { label: 'Connexion',   url: login_path,  variant: 'outline'  }   # ou '#login'
+        ]
+      } do %>
+      <template data-slot="logo">
+        <%= inline_svg 'graduation-cap.svg', class: 'w-6 h-6 text-indigo-600 mr-1' %>
+      </template>
+    <% end %>
+    <!-- Hero Landing Hero-->
+    <!-- Features LandingFeatures-->
+    <!-- Call-to-Action LandingCTA-->
+    <!-- Footer LandingFooter -->
 </div>
