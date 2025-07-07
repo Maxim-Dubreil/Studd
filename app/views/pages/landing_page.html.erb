@@ -24,9 +24,15 @@
     <!-- Contenu principal -->
     <main class="flex-1 flex flex-col items-center justify-center p-8 relative z-10">
       <div class="text-center">
-        <h1 class="text-5xl font-bold text-gray-800 dark:text-white">
-          Welcome to StudyApp
-        </h1>
+        <% if user_signed_in? %>
+          <h1 class="text-5xl font-bold text-gray-800 dark:text-white">
+            Bienvenue <%= current_user.email.split('@').first %>
+          </h1>
+        <% else %>
+          <h1 class="text-5xl font-bold text-gray-800 dark:text-white">
+            Welcome to StudyApp
+          </h1>
+        <% end %>
         <p class="mt-4 text-xl text-gray-600 dark:text-gray-300">
           Votre nouvelle plateforme d'étude collaborative.
         </p>
@@ -34,7 +40,7 @@
 
       <div class="mt-12 flex items-center space-x-4">
         <% if user_signed_in? %>
-          <%= link_to "Dashboard", "/dashboard", class: "px-8 py-3 text-lg font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105 shadow-lg" %>
+          <%= link_to "Dashboard", "/dashboard", class: "px-8 py-3 text-lg font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-transform transform hover:scale-105 shadow-lg" %>
           <%= button_to "Logout", destroy_user_session_path, 
         method: :delete, 
         class: "px-8 py-3 text-lg font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-transform transform hover:scale-105 shadow-lg" %>
@@ -42,8 +48,8 @@
         </div>
       </div>
         <% else %>
-          <%= link_to "Login", new_user_session_path, class: "px-8 py-3 text-lg font-medium text-gray-800 dark:text-white bg-white/30 dark:bg-gray-800/30 backdrop-blur-xl border border-violet-200/50 dark:border-gray-700/50 rounded-lg hover:bg-white/50 dark:hover:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105 shadow-lg" %>
-          <%= link_to "Sign up", new_user_registration_path, class: "px-8 py-3 text-lg font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105 shadow-lg" %>
+          <%= link_to "Login", new_user_session_path, class: "px-8 py-3 text-lg font-medium text-white bg-slate-700 hover:bg-slate-800 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition-transform transform hover:scale-105 shadow-lg" %>
+          <%= link_to "Sign up", new_user_registration_path, class: "px-8 py-3 text-lg font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-transform transform hover:scale-105 shadow-lg" %>
         <% end %>
       </div>
     </main>
