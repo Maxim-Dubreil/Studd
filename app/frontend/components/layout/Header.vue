@@ -64,9 +64,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useTheme } from "../../composables/useTheme";
-import BaseButton from "../ui/BaseButton.vue";
-import UserAvatar from "../ui/UserAvatar.vue";
-import Icon from "../ui/Icon.vue";
+import BaseButton from "../BaseButton.vue";
+import UserAvatar from "../UserAvatar.vue";
+import Icon from "../Icon.vue";
 
 interface Props {
   title?: string;

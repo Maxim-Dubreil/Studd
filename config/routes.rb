@@ -13,5 +13,11 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  # Pages statiques temporaires
+  get '/about',  to: 'pages#about',  as: :about
+  get '/signup', to: 'pages#signup', as: :signup
+  get '/login',  to: 'pages#login',  as: :login
+  get '/docs', to: 'pages#docs', as: :docs
   root "pages#landingPage"
 end
