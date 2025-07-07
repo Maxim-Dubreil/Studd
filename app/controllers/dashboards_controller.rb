@@ -1,5 +1,6 @@
+# app/controllers/dashboards_controller.rb
 class DashboardsController < ApplicationController
-    def index
-        
-    end
+  def index
+    @page_title = 'Dashboard'
+  end
 end
