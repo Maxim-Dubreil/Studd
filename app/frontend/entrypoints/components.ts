@@ -1,3 +1,4 @@
+import TestFlashCard from '@/components/test/TestFlashCard.vue';
 import { createApp, defineAsyncComponent } from 'vue';
 
 // En prod on charge les composants à la volée.
@@ -14,6 +15,8 @@ const registry: Record<string, any> = {
   NavbarLanding: defineAsyncComponent(() => import('@/components/landingPage/NavbarLanding.vue')),
 
   GradientBackground: defineAsyncComponent(() => import('@/components/GradientBackground.vue')),
+
+  TestFlashCard: defineAsyncComponent(() => import('@/components/test/TestFlashCard.vue')),
   // …
 };
 

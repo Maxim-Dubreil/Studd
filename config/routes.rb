@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   devise_for :users
   get "home/index"
+
+  namespace :tools do
+  get 'flashcards/new', to: 'flashcards#new', as: :new_flashcard  # GET - Affiche le formulaire
+  post 'flashcards', to: 'flashcards#create', as: :flashcards     # POST - Traitement
+end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -19,5 +24,6 @@ Rails.application.routes.draw do
   get '/signup', to: 'pages#signup', as: :signup
   get '/login',  to: 'pages#login',  as: :login
   get '/docs', to: 'pages#docs', as: :docs
+  get '/dashboards', to: 'dashboards#index'
   root "pages#landingPage"
 end
