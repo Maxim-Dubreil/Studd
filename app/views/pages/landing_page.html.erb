@@ -1,10 +1,6 @@
 <div>
-  <!-- Effets d'arrière-plan LandingBackgroundEffects-->
-  <div>
-    <%= vue_component 'GradientBackground' %>
-    </div>
-    <!-- Navigation -->
-    <%= vue_component 'NavbarLanding',
+  <!-- Navigation -->
+  <%= vue_component 'NavbarLanding',
       {
         left:   [  { label: 'StudyApp', url: "root_path" },  # ← 1er ⇒ dégradé + icône
   { label: 'Docs',      url: "#"  }],
@@ -17,12 +13,8 @@
           { label: 'Connexion',   url: "login_path",  variant: 'outline'  }   # ou '#login'
         ]
       } do %>
-      <template data-slot="logo">
-        <%= inline_svg 'graduation-cap.svg', class: 'w-6 h-6 text-indigo-600 mr-1' %>
-      </template>
-    <% end %>
-    <!-- Hero Landing Hero-->
-    <!-- Features LandingFeatures-->
-    <!-- Call-to-Action LandingCTA-->
-    <!-- Footer LandingFooter -->
+    <template data-slot="logo">
+      <%= inline_svg 'graduation-cap.svg', class: 'w-6 h-6 text-indigo-600 mr-1' %>
+    </template>
+  <% end %>
 </div>

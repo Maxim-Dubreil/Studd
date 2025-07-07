@@ -73,7 +73,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  title: "Dashboard",
+  title: "",
 });
 
 const { toggleTheme, isDark } = useTheme();

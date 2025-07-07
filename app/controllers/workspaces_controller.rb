@@ -1,4 +1,6 @@
+# app/controllers/workspaces_controller.rb
 class WorkspacesController < ApplicationController
+
     before_action :authenticate_user!
     before_action :set_workspace, only: [:show, :edit, :update, :destroy]
 

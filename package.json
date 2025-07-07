@@ -16,6 +16,7 @@
     "vue-tsc": "^2.2.10"
   },
   "dependencies": {
+    "@hotwired/turbo-rails": "^8.0.16",
     "@vueuse/core": "^13.4.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

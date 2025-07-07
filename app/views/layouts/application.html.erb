@@ -7,17 +7,32 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= yield :head %>
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
     <link rel="icon" href="/icon.png" type="image/png" />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/icon.png" />
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= vite_client_tag %>
     <%= vite_typescript_tag 'application' %>
     <%= vite_typescript_tag 'components' %>
   </head>
-  <body data-turbo="false">
-    <%= yield %>
+
+  <body class="min-h-screen flex flex-col overflow-hidden">
+
+    <%= vue_component 'GradientBackground' %>
+    <%# ——— NAVBAR ——————————————————————————— %>
+    <% unless @hide_navbar %>
+      <%= render partial: 'shared/navbar' %>
+    <% end %>
+    <%# ——— CONTENEUR PRINCIPAL ———————————————— %>
+    <div class="flex overflow-hidden flex-row-reverse">
+      <% unless @hide_sidebar %>
+        <%= render partial: 'shared/sidebar' %>
+      <% end %>
+      <main
+    class="flex-1 overflow-auto flex items-center justify-center p-8
+           pr-64    <%# ← réserve 16 rem = w-64 %>"
+  >
+        <%= yield %>
+      </main>
+    </div>
   </body>
 </html>
