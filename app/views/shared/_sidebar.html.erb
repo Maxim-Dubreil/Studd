@@ -1,6 +1,8 @@
-<!-- app/views/shared/_sidebar.html.erb -->
 <%=
   vue_component 'NavBar',
     {},
-    class: 'w-64 h-full border-r border-white/20 dark:border-gray-700/30 bg-white/70 dark:bg-gray-900/70 backdrop-blur-lg'
+    class: 'fixed top-0 right-0 h-full w-64 flex flex-col
+            border-l border-white/20 dark:border-gray-700/30
+            bg-white/70 dark:bg-gray-900/70 backdrop-blur-lg
+            z-50'            
 %>

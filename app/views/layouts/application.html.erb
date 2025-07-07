@@ -14,16 +14,22 @@
     <%= vite_typescript_tag 'application' %>
     <%= vite_typescript_tag 'components' %>
   </head>
-  <body data-turbo="true" class="h-screen overflow-hidden">
-    <%= vue_component 'GradientBackground' %>
-    <div>
-      <%= yield %>
-    </div>
-    <% unless @hide_sidebar %>
-      <%= render partial: 'shared/sidebar' %>
-    <% end %>
+  <body class="min-h-screen flex flex-col overflow-hidden">
+    <%# ——— NAVBAR ——————————————————————————— %>
     <% unless @hide_navbar %>
       <%= render partial: 'shared/navbar' %>
     <% end %>
+    <%# ——— CONTENEUR PRINCIPAL ———————————————— %>
+    <div class="flex overflow-hidden flex-row-reverse">
+      <% unless @hide_sidebar %>
+        <%= render partial: 'shared/sidebar' %>
+      <% end %>
+      <main
+    class="flex-1 overflow-auto flex items-center justify-center p-8
+           pr-64    <%# ← réserve 16 rem = w-64 %>"
+  >
+        <%= yield %>
+      </main>
+    </div>
   </body>
 </html>
