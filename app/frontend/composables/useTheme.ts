@@ -1,48 +1,51 @@
-import { ref, computed, watch } from "vue";
+import { ref, watch, onMounted } from 'vue';
 
-export type Theme = "light" | "dark";
+const isDarkMode = ref(false);
 
 export const useTheme = () => {
-  const currentTheme = ref<Theme>("light");
-
-  const initTheme = () => {
-    const stored = localStorage.getItem("theme") as Theme;
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-
-    currentTheme.value = stored || (prefersDark ? "dark" : "light");
+  const initializeTheme = () => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      isDarkMode.value = savedTheme === 'dark';
+    } else {
+      isDarkMode.value = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    
     applyTheme();
   };
 
   const applyTheme = () => {
-    if (currentTheme.value === "dark") {
-      document.documentElement.classList.add("dark");
+    const html = document.documentElement;
+    if (isDarkMode.value) {
+      html.classList.add('dark');
+      html.setAttribute('data-theme', 'dark');
     } else {
-      document.documentElement.classList.remove("dark");
+      html.classList.remove('dark');
+      html.setAttribute('data-theme', 'light');
     }
   };
 
   const toggleTheme = () => {
-    currentTheme.value = currentTheme.value === "light" ? "dark" : "light";
+    isDarkMode.value = !isDarkMode.value;
+    localStorage.setItem('theme', isDarkMode.value ? 'dark' : 'light');
+    applyTheme();
   };
 
-  const setTheme = (theme: Theme) => {
-    currentTheme.value = theme;
+  const setTheme = (theme: 'light' | 'dark') => {
+    isDarkMode.value = theme === 'dark';
+    localStorage.setItem('theme', theme);
+    applyTheme();
   };
 
-  const isDark = computed(() => currentTheme.value === "dark");
-
-  watch(currentTheme, (newTheme) => {
-    localStorage.setItem("theme", newTheme);
+  // Watcher pour les changements de thème
+  watch(isDarkMode, () => {
     applyTheme();
   });
 
   return {
-    currentTheme,
-    isDark,
+    isDarkMode,
     toggleTheme,
     setTheme,
-    initTheme,
+    initializeTheme
   };
 };
