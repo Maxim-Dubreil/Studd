@@ -6,7 +6,7 @@ interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-  message: 'Chargement...',
+  message: 'Loading...',
   showLogo: true,
 });
 </script>
