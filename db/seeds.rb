@@ -7,3 +7,17 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+Workspace.delete_all
+User.delete_all
+
+User.create!([
+  { email: "user@example.com", password: "password", password_confirmation: "password" },
+  { email: "user2@example.com", password: "password", password_confirmation: "password" }
+])
+
+Workspace.create!([
+  { name: "Workspace 1", description: "Description for Workspace 1", owner_id: 1 },
+  { name: "Workspace 2", description: "Description for Workspace 2", owner_id: 1 },
+  { name: "Workspace 3", description: "Description for Workspace 3", owner_id: 1 }
+])
