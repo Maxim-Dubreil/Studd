@@ -20,5 +20,5 @@ Rails.application.routes.draw do
   get '/login',  to: 'pages#login',  as: :login
   get '/docs', to: 'pages#docs', as: :docs
   get '/dashboard', to: 'dashboards#index'
-  root "pages#landingPage"
+  root "pages#landing_page"
 end
