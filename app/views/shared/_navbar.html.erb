@@ -2,7 +2,6 @@
 <%=
   vue_component 'Header',
     { 
-      title: @page_title || 'StudyApp',
       show_navigation: true,
       current_user: defined?(current_user) ? current_user&.to_json : nil
     },

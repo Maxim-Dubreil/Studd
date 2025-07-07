@@ -2,7 +2,9 @@
 class PagesController < ApplicationController
 
   def landing_page
-    # Landing page avec layout spécial (sans shared components)
+
+    @hide_sidebar = true
+    @hide_navbar = true
   end
 
   def about

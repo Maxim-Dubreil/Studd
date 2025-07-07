@@ -15,35 +15,15 @@
     <%= vite_typescript_tag 'components' %>
   </head>
   <body data-turbo="true" class="h-screen overflow-hidden">
-    
-    <!-- Background global -->
     <%= vue_component 'GradientBackground' %>
-    
-    <% if controller_name == 'pages' && action_name == 'landing_page' %>
-      <!-- Layout pour landing page (SANS shared components) -->
-      <div class="min-h-screen">
-        <%= yield %>
-      </div>
-    <% else %>
-      <!-- Layout normal AVEC shared components -->
-      <div class="h-screen flex flex-col">
-        <!-- Header fixe en haut -->
-        <div class="h-16 w-full z-50">
-          <%= render 'shared/header' %>
-        </div>
-        <!-- Zone principale avec sidebar + contenu -->
-        <div class="flex-1 flex overflow-hidden">
-          <!-- Sidebar fixe à gauche -->
-          <div class="w-64 h-full z-40">
-            <%= render 'shared/sidebar' %>
-          </div>
-          <!-- Zone de contenu principal -->
-          <main class="flex-1 overflow-auto bg-transparent">
-            <%= yield %>
-          </main>
-        </div>
-      </div>
+    <div>
+      <%= yield %>
+    </div>
+    <% unless @hide_sidebar %>
+      <%= render partial: 'shared/sidebar' %>
     <% end %>
-    
+    <% unless @hide_navbar %>
+      <%= render partial: 'shared/navbar' %>
+    <% end %>
   </body>
 </html>
