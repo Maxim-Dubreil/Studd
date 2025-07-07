@@ -19,11 +19,9 @@ end
   # Defines the root path route ("/")
   # root "posts#index"
 
+
   # Pages statiques temporaires
-  get '/about',  to: 'pages#about',  as: :about
-  get '/signup', to: 'pages#signup', as: :signup
-  get '/login',  to: 'pages#login',  as: :login
-  get '/docs', to: 'pages#docs', as: :docs
-  get '/dashboards', to: 'dashboards#index'
-  root "pages#landingPage"
+  get '/dashboard', to: 'dashboards#index'
+  resources :workspaces
+  root "pages#landing_page"
 end

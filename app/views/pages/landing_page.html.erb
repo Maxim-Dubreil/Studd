@@ -6,15 +6,15 @@
     <!-- Navigation -->
     <%= vue_component 'NavbarLanding',
       {
-        left:   [  { label: 'StudyApp', url: root_path },  # ← 1er ⇒ dégradé + icône
-  { label: 'Docs',      url: docs_path  }],
+        left:   [  { label: 'StudyApp', url: "root_path" },  # ← 1er ⇒ dégradé + icône
+  { label: 'Docs',      url: "#"  }],
         center: [
-          { label: 'Accueil', url: root_path },
-          { label: 'À-propos', url: about_path }      # ou '#about' si tu n’as pas encore la route
+          { label: 'Accueil', url: "root_path" },
+          { label: 'À-propos', url: "about_path" }      # ou '#about' si tu n’as pas encore la route
         ],
         right:  [
-          { label: 'Inscription', url: signup_path, variant: 'gradient' },  # ou '#signup'
-          { label: 'Connexion',   url: login_path,  variant: 'outline'  }   # ou '#login'
+          { label: 'Inscription', url: "signup_path", variant: 'gradient' },  # ou '#signup'
+          { label: 'Connexion',   url: "login_path",  variant: 'outline'  }   # ou '#login'
         ]
       } do %>
       <template data-slot="logo">
