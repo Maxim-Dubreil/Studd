@@ -7,17 +7,32 @@ const registry: Record<string, any> = {
   Icon: defineAsyncComponent(() => import('@/components/Icon.vue')),
   Header: defineAsyncComponent(() => import('@/components/layout/Header.vue')),
   NavBar: defineAsyncComponent(() => import('@/components/layout/Navbar.vue')),
+
   NavbarLanding: defineAsyncComponent(
     () => import('@/components/landingPage/NavbarLanding.vue')
   ),
+
   GradientBackground: defineAsyncComponent(
     () => import('@/components/GradientBackground.vue')
   ),
 
-  TestFlashCard: defineAsyncComponent(
-    () => import('@/components/test/TestFlashCard.vue')
+  // Composants Dashboard
+  Dashboard: defineAsyncComponent(
+    () => import('@/components/dashboard/Dashboard.vue')
   ),
-
+  SidebarMenu: defineAsyncComponent(
+    () => import('@/components/dashboard/SidebarMenu.vue')
+  ),
+  DashboardContent: defineAsyncComponent(
+    () => import('@/components/dashboard/DashboardContent.vue')
+  ),
+  DashboardWidgets: defineAsyncComponent(
+    () => import('@/components/dashboard/DashboardWidgets.vue')
+  ),
+  TopNav: defineAsyncComponent(
+    () => import('@/components/dashboard/TopNav.vue')
+  ),
+  // …
 };
 
 function mountIslands() {
