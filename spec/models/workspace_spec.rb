@@ -14,8 +14,8 @@
 #  index_workspaces_on_user_id  (user_id)
 #
 
-class Workspace < ApplicationRecord
-  belongs_to :user
-  validates :name, presence: true
-  validates :user_id, presence: true
+require 'rails_helper'
+
+RSpec.describe Workspace, type: :model do
+  pending "add some examples to (or delete) #{__FILE__}"
 end
