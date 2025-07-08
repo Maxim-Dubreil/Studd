@@ -10,6 +10,7 @@ interface NavItem {
   url: string;
   variant?: 'gradient' | 'outline' | 'link' | 'default';
   external?: boolean;
+  data?: { [key: string]: any };
 }
 
 const props = defineProps<{
@@ -63,6 +64,7 @@ const props = defineProps<{
         <Button
           as="a"
           :href="item.url"
+          :data-turbo-method="item.data?.['data-turbo-method']"
           :data-turbo="item.url.includes('/dashboard') || item.url.includes('/workspaces') ? 'false' : 'true'"
           :variant="item.variant === 'gradient' ? 'gradient' : item.variant === 'outline' ? 'outline' : (item.variant ?? 'default')"
           size="sm"
