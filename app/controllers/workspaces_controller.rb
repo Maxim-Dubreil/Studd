@@ -8,6 +8,8 @@ class WorkspacesController < ApplicationController
     end
 
     def show
+        @hide_sidebar = true
+        @hide_navbar = true
     end
 
     def new
