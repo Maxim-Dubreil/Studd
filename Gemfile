@@ -24,3 +24,7 @@ group :development, :test do
 end
 
 gem "vite_rails", "~> 3.0", group: :development
+
+gem 'dotenv-rails', groups: [:development, :test]
+
+gem 'httparty'

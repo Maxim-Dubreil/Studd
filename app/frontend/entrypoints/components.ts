@@ -1,4 +1,4 @@
-// app/frontend/entrypoints/components.ts
+import TestFlashCard from '@/components/test/TestFlashCard.vue';
 import { createApp, defineAsyncComponent } from 'vue';
 
 const registry: Record<string, any> = {
@@ -13,7 +13,11 @@ const registry: Record<string, any> = {
   GradientBackground: defineAsyncComponent(
     () => import('@/components/GradientBackground.vue')
   ),
-  
+
+  TestFlashCard: defineAsyncComponent(
+    () => import('@/components/test/TestFlashCard.vue')
+  ),
+
 };
 
 function mountIslands() {
