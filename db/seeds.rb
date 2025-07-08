@@ -17,7 +17,7 @@ User.create!([
 ])
 
 Workspace.create!([
-  { name: "Workspace 1", description: "Description for Workspace 1", owner_id: 1 },
-  { name: "Workspace 2", description: "Description for Workspace 2", owner_id: 1 },
-  { name: "Workspace 3", description: "Description for Workspace 3", owner_id: 1 }
+  { name: "Workspace 1", owner_id: 1 },
+  { name: "Workspace 2", owner_id: 1 },
+  { name: "Workspace 3", owner_id: 1 }
 ])
