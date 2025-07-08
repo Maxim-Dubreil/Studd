@@ -12,12 +12,12 @@ Workspace.delete_all
 User.delete_all
 
 User.create!([
-  { email: "user@example.com", password: "password", password_confirmation: "password" },
-  { email: "user2@example.com", password: "password", password_confirmation: "password" }
+  { id: 1, email: "user@example.com", password: "password", password_confirmation: "password" },
+  { id: 2, email: "user2@example.com", password: "password", password_confirmation: "password" }
 ])
 
 Workspace.create!([
-  { name: "Workspace 1", owner_id: 1 },
-  { name: "Workspace 2", owner_id: 1 },
-  { name: "Workspace 3", owner_id: 1 }
+  { name: "Workspace 1", user_id: 1 },
+  { name: "Workspace 2", user_id: 1 },
+  { name: "Workspace 3", user_id: 1 }
 ])
