@@ -1,6 +1,14 @@
 # config/routes.rb
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: {
+    registrations: 'users/registrations',
+    sessions: 'users/sessions'
+  }
+  devise_scope :user do
+    get 'login', to: 'users/sessions#new', as: :login
+    get 'signup', to: 'users/registrations#new', as: :signup
+    delete 'logout', to: 'devise/sessions#destroy', as: :logout
+  end
   get "home/index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
