@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.9'
 
 services:
   db:
@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: study_app_development
     ports:
-      - "5432:5432"
+      - '5432:5432'
 
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -20,9 +20,10 @@ services:
     container_name: rails-vite.studyapp
     volumes:
       - ..:/app
+      - /app/node_modules # Volume anonyme pour protéger node_modules
     ports:
-      - "3000:3000"
-      - "3036:3036"
+      - '3000:3000'
+      - '3036:3036'
     depends_on:
       - db
     environment:

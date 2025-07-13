@@ -15,8 +15,7 @@ RUN gem install bundler
 
 # ---- Node (via NodeSource) ------------------------------------
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g pnpm
+    apt-get install -y nodejs
 
 # ---- Dépendances Ruby & JS ------------------------------------
 WORKDIR /app
@@ -29,7 +28,7 @@ RUN gem install bundler foreman
 
 # Packages JS
 COPY package.json package-lock.json ./
-RUN pnpm install
+RUN npm ci --only=production=false
 
 # ---- Code de l’application ------------------------------------
 COPY . .
