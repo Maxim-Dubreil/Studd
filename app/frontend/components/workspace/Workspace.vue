@@ -2,7 +2,7 @@
   <section class="pb-16">
     <!-- titre dynamique -->
     <h1 class="mb-10 text-center text-3xl md:text-4xl font-semibold">
-      {{ title }}
+      {{ props.title }}
     </h1>
 
     <!-- 4 lignes sur desktop -->
