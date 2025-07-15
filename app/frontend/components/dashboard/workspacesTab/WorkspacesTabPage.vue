@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import TopNav from '../dashboard/TopNav.vue';
-import SidebarMenu from '../dashboard/SidebarMenu.vue';
-import WorkspaceCard from './WorkspaceCard.vue';
-import GradientBackground from '../GradientBackground.vue';
-import BaseButton from '../BaseButton.vue';
-import Icon from '../Icon.vue';
+import TopNav from '../../dashboard/TopNav.vue';
+import SidebarMenu from '../../dashboard/SidebarMenu.vue';
+import WorkspaceCard from './WorkspaceTabCard.vue'; // Déjà correct
+import GradientBackground from '../../GradientBackground.vue';
+import BaseButton from '../../BaseButton.vue';
+import Icon from '../../Icon.vue';
 
 interface Workspace {
   id: number;
@@ -88,7 +88,7 @@ const displayedWorkspaces = computed(() => props.workspaces);
               <div
                 class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"
               >
-                <WorkspaceCard
+                <WorkspaceTabCard
                   v-for="workspace in displayedWorkspaces"
                   :key="workspace.id"
                   :workspace="workspace"
