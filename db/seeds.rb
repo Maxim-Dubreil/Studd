@@ -22,5 +22,5 @@ user_2_id = User.find_by(email: "user2@example.com").id
 Workspace.create!([
   { name: "Workspace 1", user_id: user_1_id },
   { name: "Workspace 2", user_id: user_2_id },
-  { name: "Workspace 3", user_id: user_1_id}
+  { name: "Workspace 3", user_id: user_1_id},
 ])

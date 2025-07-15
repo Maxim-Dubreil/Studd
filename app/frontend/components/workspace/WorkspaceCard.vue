@@ -2,7 +2,7 @@
   <div
     :class="[
       // Layout & base
-      'group relative col-span-3 flex flex-col justify-between rounded-xl overflow-hidden',
+      'group relative col-span-3 flex flex-col rounded-xl overflow-hidden',
       'bg-white shadow-[0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]',
       'dark:bg-black dark:border dark:border-white/10 dark:shadow-[inset_0_-20px_80px_-20px_#ffffff1f]',
       cls,
@@ -13,7 +13,7 @@
 
     <!-- Contenu principal -->
     <div
-      class="pointer-events-none z-10 flex flex-col gap-1 p-6
+      class="pointer-events-none z-10 flex flex-col gap-1 p-6 mt-auto
              transform-gpu transition-all duration-300 group-hover:-translate-y-10"
     >
       <component
