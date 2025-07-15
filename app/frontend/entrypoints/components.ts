@@ -32,6 +32,14 @@ const registry: Record<string, any> = {
   TopNav: defineAsyncComponent(
     () => import('@/components/dashboard/TopNav.vue')
   ),
+
+  // Composants Workspaces
+  WorkspacesPage: defineAsyncComponent(
+    () => import('@/components/workspaces/WorkspacesPage.vue')
+  ),
+  WorkspaceCard: defineAsyncComponent(
+    () => import('@/components/workspaces/WorkspaceCard.vue')
+  ),
   // …
 };
 
