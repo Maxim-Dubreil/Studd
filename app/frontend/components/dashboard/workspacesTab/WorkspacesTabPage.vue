@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import TopNav from '../../dashboard/TopNav.vue';
 import SidebarMenu from '../../dashboard/SidebarMenu.vue';
-import WorkspaceCard from './WorkspaceTabCard.vue'; // Déjà correct
+import WorkspaceTabCard from './WorkspaceTabCard.vue';
 import GradientBackground from '../../GradientBackground.vue';
 import BaseButton from '../../BaseButton.vue';
 import Icon from '../../Icon.vue';
