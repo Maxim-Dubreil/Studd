@@ -1,4 +1,4 @@
-import TestFlashCard from '@/components/test/TestFlashCard.vue';
+import CreateFlashCard from '@/components/tools/flashCard/CreateFlashCard.vue';
 import type Workspace from '@/components/workspace/Workspace.vue';
 import { createApp, defineAsyncComponent } from 'vue';
 
@@ -43,6 +43,12 @@ const registry: Record<string, any> = {
   WorkspaceTabCard: defineAsyncComponent(
     () => import('@/components/dashboard/workspacesTab/WorkspaceTabCard.vue')
   ),
+
+  CreateFlashCard: defineAsyncComponent(
+    () => import('@/components/tools/flashCard/CreateFlashCard.vue')
+  ),
+
+
   // …
 };
 
