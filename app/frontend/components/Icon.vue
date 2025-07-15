@@ -106,6 +106,7 @@ import {
   Sun,
   Check,
   MessageCircle,
+  LogOut,
 } from 'lucide-vue-next';
 
 interface Props {
@@ -250,8 +251,10 @@ const iconMap = {
 
   moon: Moon,
   sun: Sun,
-  
+
   'message-circle': MessageCircle,
+  logout: LogOut,
+  'log-out': LogOut,
 };
 
 const iconComponent = computed(() => {

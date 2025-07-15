@@ -33,11 +33,17 @@ const registry: Record<string, any> = {
   TopNav: defineAsyncComponent(
     () => import('@/components/dashboard/TopNav.vue')
   ),
-
   Workspace: defineAsyncComponent(
     () => import('@/components/workspace/Workspace.vue'),
   ),
 
+  WorkspacesTabPage: defineAsyncComponent(
+    () => import('@/components/dashboard/workspacesTab/WorkspacesTabPage.vue')
+  ),
+  WorkspaceTabCard: defineAsyncComponent(
+    () => import('@/components/dashboard/workspacesTab/WorkspaceTabCard.vue')
+  ),
+  // …
 };
 
 function mountIslands() {

@@ -5,6 +5,10 @@ class WorkspacesController < ApplicationController
 
     def index
         @workspaces = current_user.workspaces
+        @user = current_user
+        @hide_navbar = true
+        @hide_sidebar = true
+        @dashboard_fullscreen = true
     end
 
     def show

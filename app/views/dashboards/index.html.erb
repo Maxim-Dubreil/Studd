@@ -1,14 +1,10 @@
-<!-- app/views/dashboards/index.html.erb -->
-<div class="p-8">
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-[24px] p-8 border border-white/20 dark:border-gray-700/30">
-      <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">
-        DASHBOARD
-      </h1>
-      <p class="text-lg text-gray-600 dark:text-gray-300">
-        Contenu du Dashboard - Home page avec shared components (header + sidebar)
-        User logged <%= @user.email %>
-      </p>
-    </div>
-  </div>
-</div>
+<%=
+  vue_component 'Dashboard',
+    {
+      user: {
+        name: @user.email&.split('@')&.first&.capitalize || "Utilisateur",
+        email: @user.email,
+        avatar: @user.respond_to?(:avatar) ? @user.avatar : nil
+      }
+    }
+%>

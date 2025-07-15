@@ -1,10 +1,10 @@
 class DashboardsController < ApplicationController
+  before_action :authenticate_user!
+  
   def index
-    # Données pour le dashboard - sera remplacé par les vraies données API
-    @user = current_user || OpenStruct.new(
-      name: "Étudiant Demo", 
-      email: "demo@studyapp.com",
-      avatar: nil
-    )
+    @user = current_user
+    @hide_navbar = true
+    @hide_sidebar = true
+    @dashboard_fullscreen = true
   end
 end
