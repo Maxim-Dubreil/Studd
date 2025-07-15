@@ -1,4 +1,3 @@
-import TestFlashCard from '@/components/test/TestFlashCard.vue';
 import { createApp, defineAsyncComponent } from 'vue';
 
 const registry: Record<string, any> = {
@@ -17,11 +16,13 @@ const registry: Record<string, any> = {
   TestFlashCard: defineAsyncComponent(
     () => import('@/components/test/TestFlashCard.vue')
   ),
-
+  RegistrationForm: defineAsyncComponent(
+    () => import('@/components/Auth/RegistrationForm.vue')
+  ),
 };
 
 function mountIslands() {
-  // Nettoyer les anciennes instances Vue avant de remonter
+  // Nettoye les anciennes instances Vue avant de remonter
   document
     .querySelectorAll<HTMLElement>('[data-vue-component]')
     .forEach((el) => {
@@ -46,7 +47,7 @@ function mountIslands() {
     });
 }
 
-// Exposer la fonction globalement pour Turbo
+// Expose la fonction globalement pour Turbo
 window.mountVueIslands = mountIslands;
 
 // Montage initial

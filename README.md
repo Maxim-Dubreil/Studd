@@ -93,7 +93,7 @@ npm install
 rails db:create
 
 # Exécuter les migrations
-rails db:migrate
+bin/rails db:migrate
 
 # (Optionnel) Charger les données de test
 rails db:seed

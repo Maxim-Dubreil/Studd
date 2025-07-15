@@ -21,17 +21,23 @@ const props = defineProps<{
 </script>
 
 <template>
-  <Menubar class="mx-auto max-w-6xl mt-6 rounded-2xl grid grid-cols-3 items-center px-10 border-b dark:border-zinc-800 h-14 bg-background/70 dark:bg-background/40 backdrop-blur-md shadow-lg w-[calc(100%-2rem)]">
-    
+  <Menubar
+    class="mx-auto max-w-6xl mt-6 rounded-2xl grid grid-cols-3 items-center px-10 border-b dark:border-zinc-800 h-14 bg-background/70 dark:bg-background/40 backdrop-blur-md shadow-lg"
+  >
     <!-- Colonne gauche -->
-    <div class="flex items-center gap-4">
+    <div class="flex justify-start gap-4">
       <slot name="logo" />
       <template v-for="(item, i) in props.left" :key="item.label">
         <MenubarMenu>
           <MenubarTrigger as-child>
             <a
               :href="item.url"
-              :data-turbo="item.url.includes('/dashboard') || item.url.includes('/workspaces') ? 'false' : 'true'"
+              :data-turbo="
+                item.url.includes('/dashboard') ||
+                item.url.includes('/workspaces')
+                  ? 'false'
+                  : 'true'
+              "
               class="font-medium text-sm transition-colors duration-200 hover:text-indigo-600 dark:hover:text-indigo-400"
             >
               {{ item.label }}
@@ -48,7 +54,12 @@ const props = defineProps<{
           <MenubarTrigger as-child>
             <a
               :href="item.url"
-              :data-turbo="item.url.includes('/dashboard') || item.url.includes('/workspaces') ? 'false' : 'true'"
+              :data-turbo="
+                item.url.includes('/dashboard') ||
+                item.url.includes('/workspaces')
+                  ? 'false'
+                  : 'true'
+              "
               class="font-medium text-sm transition-colors duration-200 hover:text-indigo-600 dark:hover:text-indigo-400"
             >
               {{ item.label }}
@@ -59,14 +70,24 @@ const props = defineProps<{
     </div>
 
     <!-- Colonne droite -->
-    <div class="flex justify-end gap-2">
+    <div class="flex justify-end gap-4">
       <template v-for="item in props.right" :key="item.label">
         <Button
           as="a"
           :href="item.url"
           :data-turbo-method="item.data?.['data-turbo-method']"
-          :data-turbo="item.url.includes('/dashboard') || item.url.includes('/workspaces') ? 'false' : 'true'"
-          :variant="item.variant === 'gradient' ? 'gradient' : item.variant === 'outline' ? 'outline' : (item.variant ?? 'default')"
+          :data-turbo="
+            item.url.includes('/dashboard') || item.url.includes('/workspaces')
+              ? 'false'
+              : 'true'
+          "
+          :variant="
+            item.variant === 'gradient'
+              ? 'gradient'
+              : item.variant === 'outline'
+                ? 'outline'
+                : (item.variant ?? 'default')
+          "
           size="sm"
           class="min-w-[84px]"
         >
