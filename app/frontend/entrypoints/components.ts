@@ -1,4 +1,5 @@
-import TestFlashCard from '@/components/test/TestFlashCard.vue';
+import CreateFlashCard from '@/components/tools/flashCard/CreateFlashCard.vue';
+import type Workspace from '@/components/workspace/Workspace.vue';
 import { createApp, defineAsyncComponent } from 'vue';
 
 const registry: Record<string, any> = {
@@ -32,6 +33,22 @@ const registry: Record<string, any> = {
   TopNav: defineAsyncComponent(
     () => import('@/components/dashboard/TopNav.vue')
   ),
+  Workspace: defineAsyncComponent(
+    () => import('@/components/workspace/Workspace.vue'),
+  ),
+
+  WorkspacesTabPage: defineAsyncComponent(
+    () => import('@/components/dashboard/workspacesTab/WorkspacesTabPage.vue')
+  ),
+  WorkspaceTabCard: defineAsyncComponent(
+    () => import('@/components/dashboard/workspacesTab/WorkspaceTabCard.vue')
+  ),
+
+  CreateFlashCard: defineAsyncComponent(
+    () => import('@/components/tools/flashCard/CreateFlashCard.vue')
+  ),
+
+
   // …
 };
 

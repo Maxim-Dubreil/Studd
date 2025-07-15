@@ -29,6 +29,7 @@ end
   root "dashboards#index"
   get '/dashboard', to: 'dashboards#index', as: :dashboard
   get '/workspaces', to: 'workspaces#index', as: :workspaces
+  get '/workspaces/:id', to: 'workspaces#show', as: :workspace
   get '/blog', to: 'pages#blog', as: :blog
   get '/courses', to: 'pages#courses', as: :courses
   get '/calendar', to: 'pages#calendar', as: :calendar
@@ -37,7 +38,7 @@ end
   get '/about',  to: 'pages#about',  as: :about
   get '/docs', to: 'pages#docs', as: :docs
   get '/landing', to: 'pages#landingPage', as: :landing
-  
+
   # Routes API pour les données du dashboard
   namespace :api do
     namespace :v1 do
