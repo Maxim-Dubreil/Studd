@@ -50,7 +50,7 @@ const submitForm = () => {
 </script>
 
 <template>
-    <AuthLayout title="Créer un compte" subtitle="Rejoignez StudyApp aujourd'hui" :show-sidebar="true">
+    <AuthLayout title="Créer votre compte" subtitle="" :show-sidebar="true">
 
         <!-- Logo -->
         <template #logo>
@@ -61,15 +61,15 @@ const submitForm = () => {
             <FormErrors :errors="errors" />
 
             <!-- Formulaire -->
-            <form @submit.prevent="submitForm" class="space-y-4">
+            <form @submit.prevent="submitForm" class="space-y-6 mx-2 ">
                 <!-- Email -->
-                <div class="grid gap-2">
+                <div class="grid gap-2 pb-2">
                     <Label for="email">Email</Label>
                     <Input id="email" v-model="email" type="email" placeholder="votre@email.com" required
                         :disabled="isSubmitting" />
                 </div>
                 <!-- Mot de passe -->
-                <div class="grid gap-2">
+                <div class="grid gap-2 pb-2">
                     <Label for="password">
                         Mot de passe
                         <span v-if="minimumPasswordLength" class="text-sm text-muted-foreground font-normal">
@@ -79,14 +79,15 @@ const submitForm = () => {
                     <Input id="password" v-model="password" type="password" required :disabled="isSubmitting" />
                 </div>
                 <!-- Confirmation -->
-                <div class="grid gap-2">
+                <div class="grid gap-2 pb-15">
                     <Label for="password_confirmation">Confirmer le mot de passe</Label>
                     <Input id="password_confirmation" v-model="passwordConfirmation" type="password" required
                         :disabled="isSubmitting" />
                 </div>
                 <!-- Bouton -->
                 <div class="w-full flex item-center justify-center">
-                    <Button type="submit" class="w-50" :disabled="isSubmitting">
+                    <Button type="submit" class="w-45 h-12 rounded-2xl text-md" style="background-color: #7D6BFB"
+                        :disabled="isSubmitting">
                         <svg v-if="isSubmitting" class="mr-2 h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
                             </circle>
@@ -101,10 +102,13 @@ const submitForm = () => {
         </template>
         <!-- Sidebar avec image -->
         <template #sidebar>
-            <div class="relative bg-gradient-to-br from-emerald-500 to-blue-600 flex items-center justify-center">
-                <div class="text-center text-white p-8">
-                    <h2 class="text-2xl font-bold mb-4">Rejoignez StudyApp</h2>
-                    <p class="text-emerald-100">
+            <div class="relative flex items-center justify-center">
+                <div class="text-center text-white p-6">
+                    <h2 class="text-3xl mb-4">
+                        <span>Bienvenue sur </span>
+                        <span class="font-bold">Study App !</span>
+                    </h2>
+                    <p class="px-8 text-md">
                         La plateforme d'apprentissage qui révolutionne vos études
                     </p>
                 </div>

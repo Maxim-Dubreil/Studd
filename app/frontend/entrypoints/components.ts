@@ -1,3 +1,4 @@
+import type LoginForm from '@/components/Auth/LoginForm.vue';
 import { createApp, defineAsyncComponent } from 'vue';
 
 const registry: Record<string, any> = {
@@ -18,6 +19,9 @@ const registry: Record<string, any> = {
   ),
   RegistrationForm: defineAsyncComponent(
     () => import('@/components/Auth/RegistrationForm.vue')
+  ),
+  LoginForm: defineAsyncComponent(
+    () => import('@/components/Auth/LoginForm.vue')
   ),
 };
 
