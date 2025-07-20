@@ -1,4 +1,6 @@
 import type LoginForm from '@/components/Auth/LoginForm.vue';
+import type PasswordEditForm from '@/components/Auth/PasswordEditForm.vue';
+import type PasswordResetForm from '@/components/Auth/PasswordResetForm.vue';
 import { createApp, defineAsyncComponent } from 'vue';
 
 const registry: Record<string, any> = {
@@ -22,6 +24,9 @@ const registry: Record<string, any> = {
   ),
   LoginForm: defineAsyncComponent(
     () => import('@/components/Auth/LoginForm.vue')
+  ),
+  PasswordResetForm: defineAsyncComponent(
+    () => import('@/components/Auth/PasswordResetForm.vue')
   ),
 };
 

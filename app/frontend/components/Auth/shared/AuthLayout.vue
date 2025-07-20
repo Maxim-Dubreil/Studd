@@ -30,7 +30,7 @@ withDefaults(defineProps<Props>(), {
                                 <!-- Logo par défaut -->
 
                                 <h1 class="text-3xl font-bold">{{ title }}</h1>
-                                <p v-if="subtitle" class="text-balance text-muted-foreground">
+                                <p v-if="subtitle" class="text-balance text-muted-foreground max-w-md">
                                     {{ subtitle }}
                                 </p>
                             </div>
