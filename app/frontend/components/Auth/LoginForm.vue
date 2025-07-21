@@ -3,6 +3,8 @@ import { ref } from "vue";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+
 import AuthLayout from "./shared/AuthLayout.vue";
 import FormErrors from "./shared/FormErrors.vue";
 
@@ -31,7 +33,7 @@ const submitForm = () => {
   const emailInput = document.getElementById("rails-login-email") as HTMLInputElement;
   const passwordInput = document.getElementById("rails-login-password") as HTMLInputElement;
   const rememberInput = document.getElementById("rails-login-remember") as HTMLInputElement;
-if (rememberInput) rememberInput.checked = rememberMe.value;
+  if (rememberInput) rememberInput.checked = rememberMe.value;
 
   emailInput.value = email.value;
   passwordInput.value = password.value;
@@ -60,18 +62,23 @@ if (rememberInput) rememberInput.checked = rememberMe.value;
         </div>
 
         <!-- Mot de passe -->
+
         <div class="grid gap-2 pb-15">
-          <Label for="password">Mot de passe</Label>
-          <div>
-            <Input id="password" v-model="password" type="password" required :disabled="isSubmitting" />
-            <div class="text-center pt-2">
-              <a :href="links.forgot" class="text-sm underline underline-offset-4 hover:text-primary">
-                Mot de passe oublié ?
-              </a>
-            </div>
+          <div class="flex items-center">
+            <Label for="password">Mot de passe</Label>
+            <a :href="links.forgot" class="ml-auto inline-block text-sm underline">
+              Mot de passe oublié ?
+            </a>
+
+          </div>
+          <Input id="password" v-model="password" type="password" required :disabled="isSubmitting" />
+          <!-- Checkbox - remember -->
+          <div className="flex items-center justify-center gap-2 pt-1">
+            <Checkbox id="remember" v-model="rememberMe" :disabled="isSubmitting"
+              class="accent-[#7D6BFB] border-[#7D6BFB]" />
+            <Label for="remember" class="">Se souvenir de moi</Label>
           </div>
         </div>
-
         <!-- Confirmation -->
         <div class="w-full flex item-center justify-center">
           <Button type="submit" class="w-45 h-12 rounded-2xl text-md" style="background-color: #7D6BFB"
@@ -89,7 +96,7 @@ if (rememberInput) rememberInput.checked = rememberMe.value;
     <template #sidebar>
       <div class="relative flex items-center justify-center">
         <div class="text-center text-white p-8">
-          <h2 class="text-3xl mb-4">
+          <h2 class="text-2xl mb-4">
             <span>Bon retour sur </span>
             <span class="font-bold">Study App !</span>
           </h2>
