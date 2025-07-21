@@ -38,9 +38,7 @@ end
   # Pages statiques temporaires
   get '/about',  to: 'pages#about',  as: :about
   get '/docs', to: 'pages#docs', as: :docs
-  get '/landing', to: 'pages#landingPage', as: :landing
-
-  # Routes API pour les données du dashboard
+  get '/landing', to: 'pages#landing_page', as: :landing
   namespace :api do
     namespace :v1 do
       get '/me', to: 'users#me'
