@@ -31,7 +31,7 @@ const submitForm = () => {
   const emailInput = document.getElementById("rails-login-email") as HTMLInputElement;
   const passwordInput = document.getElementById("rails-login-password") as HTMLInputElement;
   const rememberInput = document.getElementById("rails-login-remember") as HTMLInputElement;
-  if (rememberInput) rememberInput.checked = rememberMe.value;
+if (rememberInput) rememberInput.checked = rememberMe.value;
 
   emailInput.value = email.value;
   passwordInput.value = password.value;
@@ -104,6 +104,4 @@ const submitForm = () => {
     </template>
 
   </AuthLayout>
-  <!-- Rails hidden form -->
-  <slot name="rails-form" />
 </template>
