@@ -27,7 +27,7 @@ end
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Routes principales de l'application
-  root "dashboards#index"
+  root "pages#landing_page"
   get '/dashboard', to: 'dashboards#index', as: :dashboard
   get '/workspaces', to: 'workspaces#index', as: :workspaces
   get '/workspaces/:id', to: 'workspaces#show', as: :workspace
