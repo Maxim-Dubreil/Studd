@@ -1,0 +1,11 @@
+<%=
+  vue_component 'WorkspacesTabPage',
+    {
+      workspaces: @workspaces.as_json(only: [:id, :name, :icon, :created_at, :updated_at]),
+      user: {
+        name: @user.email&.split('@')&.first&.capitalize || "Utilisateur",
+        email: @user.email,
+        avatar: @user.respond_to?(:avatar) ? @user.avatar : nil
+      }
+    }
+%>

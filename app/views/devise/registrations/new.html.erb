@@ -1,0 +1,18 @@
+<div hidden>
+  <%= form_for(resource, as: resource_name,
+      url: registration_path(resource_name),
+      html: { id: "rails-registration-form" }) do |f| %>
+    <%= f.email_field :email, id: "rails-reg-email" %>
+    <%= f.password_field :password, id: "rails-reg-password" %>
+    <%= f.password_field :password_confirmation, id: "rails-reg-password-confirmation" %>
+    <%= f.submit "S'inscrire", id: "rails-reg-submit" %>
+  <% end %>
+</div>
+
+<%= vue_component "RegistrationForm",
+      formUrl: registration_path(resource_name),
+      minimumPasswordLength: @minimum_password_length,
+      errors: resource.errors.full_messages,
+      csrfToken: form_authenticity_token,
+      links: { login: new_session_path(resource_name) } 
+      %>

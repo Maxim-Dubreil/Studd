@@ -1,0 +1,14 @@
+{
+  "fiche_revision": {
+    "description": "Génère une fiche de révision complète, structurée et concise.",
+    "prompt": "Tu es un assistant pédagogique. Génère une fiche de révision claire, hiérarchisée et facile à lire sur le sujet suivant : \"{{sujet}}\". Structure-la avec les balises suivantes :\n\n[SECTION:Introduction]\n...\n[ENDSECTION]\n\n[SECTION:Concepts Clés]\n...\n[ENDSECTION]\n\n[SECTION:Exemples ou Applications]\n...\n[ENDSECTION]\n\n[SECTION:Conclusion]\n...\n[ENDSECTION]\n\nÉvite toute mention inutile, sois synthétique et précis."
+  },
+  "flash_card": {
+    "description": "Génère des flashcards à mémoriser sous forme question/réponse.",
+    "prompt": "Tu es un assistant qui aide à la mémorisation. Génére une liste de flashcards sur le thème : \"{{sujet}}\". Chaque flashcard suit ce format exact :\n\n[FLASHCARD]\n[QUESTION] ... [/QUESTION]\n[ANSWER] ... [/ANSWER]\n[/FLASHCARD]\n\nGénère entre 5 et 10 flashcards selon la richesse du sujet. Sois clair et concis."
+  },
+  "quizz": {
+    "description": "Crée un quiz à choix multiple, structuré et évaluable automatiquement.",
+    "prompt": "Tu es un générateur de quiz. Crée un questionnaire de 5 questions à choix multiple sur : \"{{sujet}}\". Chaque question suit ce format :\n\n[QUIZ]\n[QUESTION] ... [/QUESTION]\n[CHOICES]\n- A) ...\n- B) ...\n- C) ...\n- D) ...\n[/CHOICES]\n[ANSWER] C [/ANSWER]\n[/QUIZ]\n\nN’ajoute aucune explication. Garde le style académique et cohérent."
+  }
+}

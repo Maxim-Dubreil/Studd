@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Chemin vers le docker-compose
+DC="docker compose -f ./docker-compose.yml"
+
+# Fonction d'aide
+function help() {
+  echo "Commandes disponibles :"
+  echo "  shell         → ouvre un shell dans le conteneur web"
+  echo "  logs          → affiche les logs du conteneur web"
+  echo "  db            → ouvre un psql dans le conteneur db"
+  echo "  restart       → redémarre le conteneur web"
+  echo "  all-restart   → redémarre tous les services"
+}
+
+# Mapping des commandes
+case "$1" in
+  shell)
+    $DC exec web bash
+    ;;
+  logs)
+    $DC logs -f web
+    ;;
+  db)
+    $DC exec db psql -U postgres
+    ;;
+  restart)
+    $DC restart web
+    ;;
+  all-restart)
+    $DC down && $DC up -d
+    ;;
+  *)
+    help
+    ;;
+esac

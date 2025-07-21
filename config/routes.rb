@@ -1,5 +1,21 @@
+# config/routes.rb
 Rails.application.routes.draw do
+  devise_for :users, controllers: {
+    registrations: 'users/registrations',
+    sessions: 'users/sessions',
+    passwords: 'users/passwords'
+  }
+  devise_scope :user do
+    get 'login', to: 'users/sessions#new', as: :login
+    get 'signup', to: 'users/registrations#new', as: :signup
+    delete 'logout', to: 'devise/sessions#destroy', as: :logout
+  end
   get "home/index"
+
+  namespace :tools do
+  get 'flashcards/new', to: 'flashcards#new', as: :new_flashcard  # GET - Affiche le formulaire
+  post 'flashcards', to: 'flashcards#create', as: :flashcards     # POST - Traitement
+end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -10,8 +26,26 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  # Defines the root path route ("/")
-  # root "posts#index"
-    root "home#index"       # ← ajoutez ou décommentez cette ligne
+  # Routes principales de l'application
+  root "pages#landing_page"
+  get '/dashboard', to: 'dashboards#index', as: :dashboard
+  get '/workspaces', to: 'workspaces#index', as: :workspaces
+  get '/workspaces/:id', to: 'workspaces#show', as: :workspace
+  get '/blog', to: 'pages#blog', as: :blog
+  get '/courses', to: 'pages#courses', as: :courses
+  get '/calendar', to: 'pages#calendar', as: :calendar
 
+  # Pages statiques temporaires
+  get '/about',  to: 'pages#about',  as: :about
+  get '/docs', to: 'pages#docs', as: :docs
+  get '/landing', to: 'pages#landing_page', as: :landing
+  namespace :api do
+    namespace :v1 do
+      get '/me', to: 'users#me'
+      get '/courses/next', to: 'courses#next'
+      get '/progress', to: 'progress#index'
+      get '/notifications', to: 'notifications#index'
+      get '/posts/latest', to: 'posts#latest'
+    end
+  end
 end

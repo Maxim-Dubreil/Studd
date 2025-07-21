@@ -1,0 +1,26 @@
+<div class="flex justify-center px-4">
+  <%= vue_component 'NavbarLanding',
+      {
+        left:   [  { label: 'StudyApp', url: root_path },
+                    { label: 'Docs',      url: "#"  }],
+        center: [
+          { label: 'Accueil', url: root_path },
+          { label: 'À-propos', url: "about_path" }
+        ],
+        right:  if user_signed_in?
+                  [
+                    { label: 'Dashboard', url: dashboard_path, variant: 'gradient' },
+                    { label: 'Déconnexion', url: logout_path, variant: 'outline', data: { 'data-turbo-method': :delete } }
+                  ]
+                else
+                  [
+                    { label: 'Inscription', url: signup_path, variant: 'gradient' },
+                    { label: 'Connexion',   url: login_path,  variant: 'outline'  }
+                  ]
+                end
+      } do %>
+    <template data-slot="logo">
+      <%= inline_svg 'graduation-cap.svg', class: 'w-6 h-6 text-indigo-600 mr-1' %>
+    </template>
+  <% end %>
+</div>

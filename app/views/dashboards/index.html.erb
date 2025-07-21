@@ -1,0 +1,9 @@
+<%=
+  vue_component 'Dashboard',
+    {
+      user: {
+        email: @user.email,
+        avatar: @user.respond_to?(:avatar) ? @user.avatar : nil
+      }
+    }
+%>
