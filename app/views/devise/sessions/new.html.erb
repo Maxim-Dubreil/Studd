@@ -12,6 +12,7 @@
       <%= f.email_field :email, id: "rails-login-email" %>
       <%= f.password_field :password, id: "rails-login-password" %>
       <%= f.submit "Se connecter", id: "rails-login-submit" %>
+      <%= f.check_box :remember_me, id: "rails-login-remember", class: "hidden" %>
     <% end %>
   </template>
 <% end %>
