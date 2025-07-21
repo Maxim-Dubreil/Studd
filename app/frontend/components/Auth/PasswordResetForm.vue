@@ -77,6 +77,4 @@ const submitForm = () => {
             </div>
         </template>
     </AuthLayout>
-    <slot name="rails-form" />
-
 </template>

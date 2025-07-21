@@ -21,6 +21,7 @@ const props = defineProps<Props>();
 const email = ref("");
 const password = ref("");
 const isSubmitting = ref(false);
+const rememberMe = ref(false);
 
 const submitForm = () => {
   if (isSubmitting.value) return;
@@ -29,6 +30,8 @@ const submitForm = () => {
   const railsForm = document.getElementById("rails-login-form") as HTMLFormElement;
   const emailInput = document.getElementById("rails-login-email") as HTMLInputElement;
   const passwordInput = document.getElementById("rails-login-password") as HTMLInputElement;
+  const rememberInput = document.getElementById("rails-login-remember") as HTMLInputElement;
+if (rememberInput) rememberInput.checked = rememberMe.value;
 
   emailInput.value = email.value;
   passwordInput.value = password.value;
@@ -101,6 +104,4 @@ const submitForm = () => {
     </template>
 
   </AuthLayout>
-  <!-- Rails hidden form -->
-  <slot name="rails-form" />
 </template>
