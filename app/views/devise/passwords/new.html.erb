@@ -1,16 +1,16 @@
-<%= vue_component 'PasswordResetForm', {
+
+<div hidden>
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { style: "display: none;", id: "rails-password-form" }) do |f| %>
+      <%= f.email_field :email, id: "rails-password-email" %>
+      <%= f.submit "Send me reset password instructions", id: "rails-password-submit" %>
+    <% end %>
+  </div>
+
+<%= vue_component 'PasswordResetForm',
   form_url: password_path(resource_name),
   errors: resource.errors.full_messages,
   csrf_token: form_authenticity_token,
   links: {
     login: new_session_path(resource_name),
     register: new_registration_path(resource_name)
-  }
-} do %>
-  <template data-slot="rails-form">
-    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { style: "display: none;", id: "rails-password-form" }) do |f| %>
-      <%= f.email_field :email, id: "rails-password-email" %>
-      <%= f.submit "Send me reset password instructions", id: "rails-password-submit" %>
-    <% end %>
-  </template>
-<% end %>
+  } %>
