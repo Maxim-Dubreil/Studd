@@ -1,6 +1,10 @@
 class DashboardsController < ApplicationController
-    def index
-            @page_title = 'Dashboard Principal'
-
-    end
+  before_action :authenticate_user!
+  
+  def index
+    @user = current_user
+    @hide_navbar = true
+    @hide_sidebar = true
+    @dashboard_fullscreen = true
+  end
 end

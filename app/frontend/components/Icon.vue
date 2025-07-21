@@ -6,7 +6,6 @@
 import { computed } from 'vue';
 import { useStyleUtils, type SizeVariant } from '../composables/useStyleUtils';
 
-// Import des icônes Lucide
 import {
   Home,
   Grid3X3,
@@ -105,6 +104,9 @@ import {
   Gamepad2,
   Moon,
   Sun,
+  Check,
+  MessageCircle,
+  LogOut,
 } from 'lucide-vue-next';
 
 interface Props {
@@ -134,7 +136,8 @@ const iconMap = {
 
   // Actions
   clock: Clock,
-  check: CheckCircle,
+  check: Check,
+  'check-circle': CheckCircle,
   check2: CheckCircle2,
   users: Users,
   settings: Settings,
@@ -204,8 +207,10 @@ const iconMap = {
   arrowLeft: ArrowLeft,
 
   // Analytics
+  'trending-up': TrendingUp,
   trendingUp: TrendingUp,
   trendingDown: TrendingDown,
+  'bar-chart': BarChart3,
   barChart: BarChart3,
   pieChart: PieChart,
   activity: Activity,
@@ -215,8 +220,10 @@ const iconMap = {
 
   // Education
   briefcase: Briefcase,
+  'graduation-cap': GraduationCap,
   graduation: GraduationCap,
   bookmarked: BookMarked,
+  'book-open': BookOpen,
   lightbulb: Lightbulb,
   coffee: Coffee,
   palette: Palette,
@@ -242,9 +249,12 @@ const iconMap = {
   headphones: Headphones,
   gamepad: Gamepad2,
 
-  // Theme
   moon: Moon,
   sun: Sun,
+
+  'message-circle': MessageCircle,
+  logout: LogOut,
+  'log-out': LogOut,
 };
 
 const iconComponent = computed(() => {
@@ -254,7 +264,7 @@ const iconComponent = computed(() => {
       `Icon "${props.name}" not found. Available icons:`,
       Object.keys(iconMap)
     );
-    return Home; // Icône par défaut
+    return Home;
   }
   return icon;
 });
