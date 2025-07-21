@@ -1,5 +1,3 @@
-import CreateFlashCard from '@/components/tools/flashCard/CreateFlashCard.vue';
-import type Workspace from '@/components/workspace/Workspace.vue';
 import { createApp, defineAsyncComponent } from 'vue';
 
 const registry: Record<string, any> = {
@@ -47,13 +45,21 @@ const registry: Record<string, any> = {
   CreateFlashCard: defineAsyncComponent(
     () => import('@/components/tools/flashCard/CreateFlashCard.vue')
   ),
-
+  RegistrationForm: defineAsyncComponent(
+    () => import('@/components/Auth/RegistrationForm.vue')
+  ),
+  LoginForm: defineAsyncComponent(
+    () => import('@/components/Auth/LoginForm.vue')
+  ),
+  PasswordResetForm: defineAsyncComponent(
+    () => import('@/components/Auth/PasswordResetForm.vue')
+  ),
 
   // …
 };
 
 function mountIslands() {
-  // Nettoyer les anciennes instances Vue avant de remonter
+  // Nettoye les anciennes instances Vue avant de remonter
   document
     .querySelectorAll<HTMLElement>('[data-vue-component]')
     .forEach((el) => {
@@ -78,7 +84,7 @@ function mountIslands() {
     });
 }
 
-// Exposer la fonction globalement pour Turbo
+// Expose la fonction globalement pour Turbo
 window.mountVueIslands = mountIslands;
 
 // Montage initial

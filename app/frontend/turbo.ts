@@ -27,7 +27,7 @@ if (typeof window !== 'undefined' && window.Turbo) {
   }
 }
 
-// Écouter les événements Turbo et remonter les composants Vue
+// Écoute les événements Turbo et remonte les composants Vue
 document.addEventListener('turbo:load', () => {
   console.log('🔄 Turbo load - Remontage des composants Vue');
   if (window.mountVueIslands) {
