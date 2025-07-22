@@ -1,6 +1,7 @@
 import { createApp, defineAsyncComponent } from 'vue';
 
 const registry: Record<string, any> = {
+  ThemeToggle: defineAsyncComponent(() => import('@/components/tools/ThemeToggle.vue')),
   UserAvatar: defineAsyncComponent(() => import('@/components/UserAvatar.vue')),
   BaseButton: defineAsyncComponent(() => import('@/components/BaseButton.vue')),
   Icon: defineAsyncComponent(() => import('@/components/Icon.vue')),

@@ -1,51 +1,38 @@
-import { ref, watch, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { getTheme, setTheme, toggleTheme as toggle, type Theme } from '@/lib/theme';
 
-const isDarkMode = ref(false);
+const themeRef = ref<Theme>(getTheme()); // 1 seule instance (module scope)
 
-export const useTheme = () => {
-  const initializeTheme = () => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      isDarkMode.value = savedTheme === 'dark';
-    } else {
-      isDarkMode.value = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    }
-    
-    applyTheme();
+export function useTheme() {
+  const handler = (e: Event) => {
+    themeRef.value = (e as CustomEvent<Theme>).detail;
   };
 
-  const applyTheme = () => {
-    const html = document.documentElement;
-    if (isDarkMode.value) {
-      html.classList.add('dark');
-      html.setAttribute('data-theme', 'dark');
-    } else {
-      html.classList.remove('dark');
-      html.setAttribute('data-theme', 'light');
-    }
+  onMounted(() => {
+    // maj initiale (au cas où)
+    themeRef.value = getTheme();
+    window.addEventListener('theme:change', handler);
+  });
+
+  onBeforeUnmount(() => {
+    window.removeEventListener('theme:change', handler);
+  });
+
+  const setTheme = (t: Theme) => {
+    // met à jour DOM + localStorage + event
+    themeRef.value = t;
+    setThemeDom(t);
+  };
+
+  const setThemeDom = (t: Theme) => {
+    // réutilise ton util global
+    setTheme(t);
   };
 
   const toggleTheme = () => {
-    isDarkMode.value = !isDarkMode.value;
-    localStorage.setItem('theme', isDarkMode.value ? 'dark' : 'light');
-    applyTheme();
+    toggle();
+    themeRef.value = getTheme();
   };
 
-  const setTheme = (theme: 'light' | 'dark') => {
-    isDarkMode.value = theme === 'dark';
-    localStorage.setItem('theme', theme);
-    applyTheme();
-  };
-
-  // Watcher pour les changements de thème
-  watch(isDarkMode, () => {
-    applyTheme();
-  });
-
-  return {
-    isDarkMode,
-    toggleTheme,
-    setTheme,
-    initializeTheme
-  };
-};
+  return { theme: themeRef, setTheme, toggleTheme };
+}

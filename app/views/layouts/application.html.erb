@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script nonce="<%= content_security_policy_nonce %>">
+(function () {
+  try {
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = saved || (prefersDark ? 'dark' : 'light');
+    const html = document.documentElement;
+    html.classList.toggle('dark', theme === 'dark');
+    html.setAttribute('data-theme', theme);
+  } catch (_) {}
+})();
+</script>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -20,6 +32,11 @@
     <% unless @dashboard_fullscreen %>
       <%= vue_component 'GradientBackground' %>
     <% end %>
+    <%# ——— BOUTON TOGGLE THEME ————————————————————— %>
+    <div class="fixed top-4 right-4 z-50">
+      <%= vue_component 'ThemeToggle' %>
+    </div>
+    
     <%# ——— NAVBAR ——————————————————————————— %>
     <% unless @hide_navbar %>
       <%= render partial: 'shared/navbar' %>

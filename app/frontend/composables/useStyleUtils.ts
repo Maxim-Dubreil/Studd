@@ -1,3 +1,4 @@
+// TODO: deprecated – à supprimer quand tous les composants sont migrés.
 import { computed } from "vue";
 
 export type SizeVariant = "sm" | "md" | "lg" | "xl";
@@ -10,112 +11,116 @@ export type ColorVariant =
   | "info";
 
 export const useStyleUtils = () => {
+  const sizeClasses: Record<SizeVariant, string> = {
+    sm: "px-3 py-1.5 text-sm",
+    md: "px-4 py-2 text-sm",
+    lg: "px-6 py-3 text-base",
+    xl: "px-8 py-4 text-lg",
+  };
+
+  // mapping tokens -> classes
+  const solidMap: Record<ColorVariant, string> = {
+    primary: "bg-primary text-primary-foreground hover:bg-primary/90",
+    secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/90",
+    success: "bg-success text-success-foreground hover:bg-success/90",
+    warning: "bg-warning text-warning-foreground hover:bg-warning/90",
+    danger: "bg-danger text-danger-foreground hover:bg-danger/90",
+    info: "bg-info text-info-foreground hover:bg-info/90",
+  };
+
+  const outlinedMap: Record<ColorVariant, string> = {
+    primary: "border-2 border-primary text-primary hover:bg-primary/10",
+    secondary: "border-2 border-secondary text-secondary hover:bg-secondary/10",
+    success: "border-2 border-success text-success hover:bg-success/10",
+    warning: "border-2 border-warning text-warning hover:bg-warning/10",
+    danger: "border-2 border-danger text-danger hover:bg-danger/10",
+    info: "border-2 border-info text-info hover:bg-info/10",
+  };
+
+  //Button classes
   const getButtonClasses = computed(
     () =>
       (
         variant: ColorVariant = "primary",
         size: SizeVariant = "md",
-        outlined: boolean = false
+        outlined = false
       ) => {
-        const baseClasses =
-          "inline-flex items-center justify-center font-medium rounded-[16px] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2";
+        const base =
+          "inline-flex items-center justify-center font-medium rounded-token transition-all duration-300 hover:shadow-elevate ...";
 
-        const sizeClasses = {
-          sm: "px-3 py-1.5 text-sm",
-          md: "px-4 py-2 text-sm",
-          lg: "px-6 py-3 text-base",
-          xl: "px-8 py-4 text-lg",
-        };
+        const color = outlined ? outlinedMap[variant] : solidMap[variant];
 
-        const colorClasses = {
-          primary: outlined
-            ? "border-2 border-violet-500 text-violet-500 hover:bg-violet-50"
-            : "bg-gradient-to-r from-violet-500 to-purple-500 text-white hover:from-violet-600 hover:to-purple-600 shadow-lg",
-          secondary: outlined
-            ? "border-2 border-gray-500 text-gray-500 hover:bg-gray-50"
-            : "bg-gray-500 text-white hover:bg-gray-600",
-          success: outlined
-            ? "border-2 border-green-500 text-green-500 hover:bg-green-50"
-            : "bg-green-500 text-white hover:bg-green-600",
-          warning: outlined
-            ? "border-2 border-yellow-500 text-yellow-500 hover:bg-yellow-50"
-            : "bg-yellow-500 text-white hover:bg-yellow-600",
-          danger: outlined
-            ? "border-2 border-red-500 text-red-500 hover:bg-red-50"
-            : "bg-gradient-to-r from-red-400 to-pink-500 text-white hover:from-red-500 hover:to-pink-600 shadow-lg",
-          info: outlined
-            ? "border-2 border-blue-500 text-blue-500 hover:bg-blue-50"
-            : "bg-blue-500 text-white hover:bg-blue-600",
-        };
-
-        return `${baseClasses} ${sizeClasses[size]} ${colorClasses[variant]}`;
+        return `${base} ${sizeClasses[size]} ${color}`;
       }
   );
+
+
+
+  //Card classes
+  type CardVariant = "glass" | "solid" | "outlined";
+  const paddingMap: Record<SizeVariant, string> = {
+    sm: "p-4",
+    md: "p-6",
+    lg: "p-8",
+    xl: "p-10",
+  };
+  const roundedMap: Record<SizeVariant, string> = {
+    sm: "rounded-token-sm",
+    md: "rounded-token-md",
+    lg: "rounded-token-lg",
+    xl: "rounded-token-xl",
+  };
+  const cardVariantMap: Record<CardVariant, string> = {
+    glass:
+      "backdrop-blur-lg bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10",
+    solid:
+      "bg-card text-card-foreground border border-border shadow-lg",
+    outlined:
+      "bg-transparent border-2 border-border hover:border-border/80",
+  };
 
   const getCardClasses = computed(
     () =>
       (
-        variant: "glass" | "solid" | "outlined" = "glass",
+        variant: CardVariant = "glass",
         padding: SizeVariant = "md",
         rounded: SizeVariant = "lg"
       ) => {
-        const baseClasses = "transition-all duration-300 hover:shadow-xl";
-
-        const paddingClasses = {
-          sm: "p-4",
-          md: "p-6",
-          lg: "p-8",
-          xl: "p-10",
-        };
-
-        const roundedClasses = {
-          sm: "rounded-[16px]",
-          md: "rounded-[20px]",
-          lg: "rounded-[24px]",
-          xl: "rounded-[28px]",
-        };
-
-        const variantClasses = {
-          glass:
-            "bg-white/70 backdrop-blur-lg shadow-lg border border-white/20",
-          solid: "bg-white shadow-lg border border-gray-200",
-          outlined:
-            "bg-transparent border-2 border-gray-200 hover:border-gray-300",
-        };
-
-        return `${baseClasses} ${paddingClasses[padding]} ${roundedClasses[rounded]} ${variantClasses[variant]}`;
+        const base = "transition-all duration-300 hover:shadow-xl";
+        return `${base} ${paddingMap[padding]} ${roundedMap[rounded]} ${cardVariantMap[variant]}`;
       }
   );
+
+  //Icon 
+  const iconSizeMap: Record<SizeVariant, string> = {
+    sm: "w-4 h-4",
+    md: "w-5 h-5",
+    lg: "w-6 h-6",
+    xl: "w-8 h-8",
+  };
 
   const getIconClasses = computed(
     () =>
-      (size: SizeVariant = "md", color: string = "text-gray-500") => {
-        const sizeClasses = {
-          sm: "w-4 h-4",
-          md: "w-5 h-5",
-          lg: "w-6 h-6",
-          xl: "w-8 h-8",
-        };
-
-        return `${sizeClasses[size]} ${color}`;
-      }
+      (size: SizeVariant = "md", colorClass = "text-muted-foreground") =>
+        `${iconSizeMap[size]} ${colorClass}`
   );
+
+  //Icon Container
+  const containerSizeMap: Record<SizeVariant, string> = {
+    sm: "w-8 h-8",
+    md: "w-10 h-10",
+    lg: "w-12 h-12",
+    xl: "w-16 h-16",
+  };
 
   const getIconContainerClasses = computed(
     () =>
       (
         size: SizeVariant = "md",
-        bgColor: string = "bg-gradient-to-br from-violet-400 to-purple-500"
-      ) => {
-        const sizeClasses = {
-          sm: "w-8 h-8",
-          md: "w-10 h-10",
-          lg: "w-12 h-12",
-          xl: "w-16 h-16",
-        };
-
-        return `${sizeClasses[size]} rounded-[16px] flex items-center justify-center ${bgColor}`;
-      }
+        // par défaut un gradient basé sur primary/success
+        bg = "bg-gradient-to-br from-primary to-success/70"
+      ) =>
+        `${containerSizeMap[size]} rounded-[16px] flex items-center justify-center ${bg}`
   );
 
   return {
