@@ -4,7 +4,7 @@ import TopNav from '../../dashboard/TopNav.vue';
 import SidebarMenu from '../../dashboard/SidebarMenu.vue';
 import WorkspaceTabCard from './WorkspaceTabCard.vue';
 import GradientBackground from '../../GradientBackground.vue';
-import BaseButton from '../../BaseButton.vue';
+import { Button } from "@/components/ui/button";
 import Icon from '../../Icon.vue';
 
 interface Workspace {
@@ -117,15 +117,15 @@ const displayedWorkspaces = computed(() => props.workspaces);
 
             <!-- Bouton Create New Workspace en bas -->
             <div class="p-6 border-t border-gray-100 dark:border-slate-700/50">
-              <BaseButton
+              <Button
                 @click="createNewWorkspace"
-                variant="primary"
+                variant="default"
                 size="lg"
-                class="w-full"
+                radius="xl"
               >
                 <Icon name="plus" class="w-5 h-5 mr-2" />
                 Créer un nouveau workspace
-              </BaseButton>
+              </Button>
             </div>
           </div>
 
@@ -179,8 +179,9 @@ const displayedWorkspaces = computed(() => props.workspaces);
                   Actions rapides
                 </h3>
                 <div class="space-y-2">
-                  <button
-                    class="w-full text-left p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors group"
+                  <Button
+                    variant = "outline"
+                    class="w-full"
                   >
                     <div class="flex items-center">
                       <Icon
@@ -192,9 +193,10 @@ const displayedWorkspaces = computed(() => props.workspaces);
                         >Paramètres</span
                       >
                     </div>
-                  </button>
-                  <button
-                    class="w-full text-left p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors group"
+                  </Button>
+                  <Button
+                    variant = "outline"
+                    class="w-full"
                   >
                     <div class="flex items-center">
                       <Icon
@@ -206,9 +208,10 @@ const displayedWorkspaces = computed(() => props.workspaces);
                         >Inviter des membres</span
                       >
                     </div>
-                  </button>
-                  <button
-                    class="w-full text-left p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors group"
+                  </Button>
+                  <Button
+                    variant = "outline"
+                    class="w-full"
                   >
                     <div class="flex items-center">
                       <Icon
@@ -220,7 +223,7 @@ const displayedWorkspaces = computed(() => props.workspaces);
                         >Documentation</span
                       >
                     </div>
-                  </button>
+                  </Button>
                 </div>
               </div>
 

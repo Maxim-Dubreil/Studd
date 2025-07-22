@@ -5,7 +5,6 @@ import DashboardContent from "./DashboardContent.vue";
 import DashboardWidgets from "./DashboardWidgets.vue";
 import TopNav from "./TopNav.vue";
 import GradientBackground from "../GradientBackground.vue";
-import { useTheme } from "../../composables/useTheme";
 
 interface Props {
   user?: {
@@ -23,11 +22,6 @@ const props = withDefaults(defineProps<Props>(), {
   })
 });
 
-const { initializeTheme } = useTheme();
-
-onMounted(() => {
-  initializeTheme();
-});
 </script>
 
 <template>

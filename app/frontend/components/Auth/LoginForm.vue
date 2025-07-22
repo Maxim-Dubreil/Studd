@@ -74,15 +74,13 @@ const submitForm = () => {
           <Input id="password" v-model="password" type="password" required :disabled="isSubmitting" />
           <!-- Checkbox - remember -->
           <div className="flex items-center justify-center gap-2 pt-1">
-            <Checkbox id="remember" v-model="rememberMe" :disabled="isSubmitting"
-              class="accent-[#7D6BFB] border-[#7D6BFB]" />
+            <Checkbox id="remember" v-model="rememberMe" :disabled="isSubmitting" />
             <Label for="remember" class="">Se souvenir de moi</Label>
           </div>
         </div>
         <!-- Confirmation -->
         <div class="w-full flex item-center justify-center">
-          <Button type="submit" class="w-45 h-12 rounded-2xl text-md cursor-pointer" style="background-color: #7D6BFB"
-            :disabled="isSubmitting">
+          <Button type="submit" variant="gradient" size="lg" class="w-45 radius-xl" :disabled="isSubmitting">
             <svg v-if="isSubmitting" class="mr-2 h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
               <path class="opacity-75" fill="currentColor"
