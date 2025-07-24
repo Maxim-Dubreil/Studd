@@ -7,7 +7,7 @@ class PagesController < ApplicationController
 
     @hide_sidebar = true
     @hide_navbar = true
-
+    @hide_theme_toggle = false
   end
 
   def about

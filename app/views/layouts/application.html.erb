@@ -33,9 +33,11 @@
       <%= vue_component 'GradientBackground' %>
     <% end %>
     <%# ——— BOUTON TOGGLE THEME ————————————————————— %>
-    <div class="fixed top-4 right-4 z-50">
-      <%= vue_component 'ThemeToggle' %>
-    </div>
+    <% unless @hide_theme_toggle %>
+      <div class="static top-8 right-8 z-1">
+        <%= vue_component 'ThemeToggle' %>
+      </div>
+    <% end %>
     
     <%# ——— NAVBAR ——————————————————————————— %>
     <% unless @hide_navbar %>
@@ -56,7 +58,7 @@
         <% end %>
         <main
       class="flex-1 overflow-auto flex items-center justify-center p-8
-             <%= @hide_sidebar ? '' : 'pr-64' %>    <%# ← réserve 16 rem = w-64 seulement si sidebar visible %>"
+          <%= @hide_sidebar ? '' : 'pr-64' %>    <%# ← réserve 16 rem = w-64 seulement si sidebar visible %>"
     >
           <%= yield %>
         </main>
