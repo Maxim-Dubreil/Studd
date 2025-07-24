@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useTheme } from '@/composables/useTheme'
 import { Button } from '@/components/ui/button'
-import Icon from '@/components/Icon.vue'
+import { Icon } from '@/components/ui/icon'
 
 const { theme, toggleTheme } = useTheme()
 const isDark = computed(() => theme.value === 'dark')

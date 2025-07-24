@@ -2,8 +2,8 @@ import { createApp, defineAsyncComponent } from 'vue';
 
 const registry: Record<string, any> = {
   ThemeToggle: defineAsyncComponent(() => import('@/components/tools/ThemeToggle.vue')),
-  UserAvatar: defineAsyncComponent(() => import('@/components/UserAvatar.vue')),
-  Icon: defineAsyncComponent(() => import('@/components/Icon.vue')),
+  UserAvatar: defineAsyncComponent(() => import('@/components/ui/avatar/UserAvatar.vue')),
+  Icon: defineAsyncComponent(() => import('@/components/ui/icon/Icon.vue')),
   Header: defineAsyncComponent(() => import('@/components/layout/Header.vue')),
   NavBar: defineAsyncComponent(() => import('@/components/layout/Navbar.vue')),
 
@@ -46,13 +46,13 @@ const registry: Record<string, any> = {
     () => import('@/components/tools/flashCard/CreateFlashCard.vue')
   ),
   RegistrationForm: defineAsyncComponent(
-    () => import('@/components/Auth/RegistrationForm.vue')
+    () => import('@/components/auth/RegistrationForm.vue')
   ),
   LoginForm: defineAsyncComponent(
-    () => import('@/components/Auth/LoginForm.vue')
+    () => import('@/components/auth/LoginForm.vue')
   ),
   PasswordResetForm: defineAsyncComponent(
-    () => import('@/components/Auth/PasswordResetForm.vue')
+    () => import('@/components/auth/PasswordResetForm.vue')
   ),
 
   // …

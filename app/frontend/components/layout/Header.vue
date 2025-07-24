@@ -2,8 +2,8 @@
 import { ref } from "vue";
 import { useTheme } from "../../composables/useTheme";
 import { Button } from "@/components/ui/button";
-import UserAvatar from "../UserAvatar.vue";
-import Icon from "../Icon.vue";
+import UserAvatar from "../ui/avatar/UserAvatar.vue";
+import { Icon } from '@/components/ui/icon'
 
 interface Props {
   title?: string;

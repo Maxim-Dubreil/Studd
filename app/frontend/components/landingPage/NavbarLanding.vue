@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { Menubar, MenubarMenu, MenubarTrigger } from '@/components/ui/menubar';
 import { Button } from '@/components/ui/button';
-import Icon from '@/components/Icon.vue';
+import { Icon } from '@/components/ui/icon'
 import { cn } from '@/lib/utils';
 
 interface NavItem {
@@ -22,24 +22,19 @@ const props = defineProps<{
 
 <template>
   <Menubar
-    class="mx-auto max-w-6xl mt-6 rounded-2xl grid grid-cols-3 items-center px-10 border-b dark:border-zinc-800 h-14 bg-background/70 dark:bg-background/40 backdrop-blur-md shadow-lg"
-  >
+    class="mx-auto max-w-6xl mt-6 rounded-2xl grid grid-cols-3 items-center px-10 border-b dark:border-zinc-800 h-14 bg-background/70 dark:bg-background/40 backdrop-blur-md shadow-lg">
     <!-- Colonne gauche -->
     <div class="flex justify-start gap-4">
       <slot name="logo" />
       <template v-for="(item, i) in props.left" :key="item.label">
         <MenubarMenu>
           <MenubarTrigger as-child>
-            <a
-              :href="item.url"
-              :data-turbo="
-                item.url.includes('/dashboard') ||
+            <a :href="item.url" :data-turbo="item.url.includes('/dashboard') ||
                 item.url.includes('/workspaces')
-                  ? 'false'
-                  : 'true'
+                ? 'false'
+                : 'true'
               "
-              class="font-medium text-sm transition-colors duration-200 hover:text-indigo-600 dark:hover:text-indigo-400"
-            >
+              class="font-medium text-sm transition-colors duration-200 hover:text-indigo-600 dark:hover:text-indigo-400">
               {{ item.label }}
             </a>
           </MenubarTrigger>
@@ -52,16 +47,12 @@ const props = defineProps<{
       <template v-for="item in props.center" :key="item.label">
         <MenubarMenu>
           <MenubarTrigger as-child>
-            <a
-              :href="item.url"
-              :data-turbo="
-                item.url.includes('/dashboard') ||
+            <a :href="item.url" :data-turbo="item.url.includes('/dashboard') ||
                 item.url.includes('/workspaces')
-                  ? 'false'
-                  : 'true'
+                ? 'false'
+                : 'true'
               "
-              class="font-medium text-sm transition-colors duration-200 hover:text-indigo-600 dark:hover:text-indigo-400"
-            >
+              class="font-medium text-sm transition-colors duration-200 hover:text-indigo-600 dark:hover:text-indigo-400">
               {{ item.label }}
             </a>
           </MenubarTrigger>
@@ -72,25 +63,15 @@ const props = defineProps<{
     <!-- Colonne droite -->
     <div class="flex justify-end gap-4">
       <template v-for="item in props.right" :key="item.label">
-        <Button
-          as="a"
-          :href="item.url"
-          :data-turbo-method="item.data?.['data-turbo-method']"
-          :data-turbo="
-            item.url.includes('/dashboard') || item.url.includes('/workspaces')
-              ? 'false'
-              : 'true'
-          "
-          :variant="
-            item.variant === 'gradient'
+        <Button as="a" :href="item.url" :data-turbo-method="item.data?.['data-turbo-method']" :data-turbo="item.url.includes('/dashboard') || item.url.includes('/workspaces')
+            ? 'false'
+            : 'true'
+          " :variant="item.variant === 'gradient'
               ? 'gradient'
               : item.variant === 'outline'
                 ? 'outline'
                 : (item.variant ?? 'default')
-          "
-          size="sm"
-          class="min-w-[84px]"
-        >
+            " size="sm" class="min-w-[84px]">
           {{ item.label }}
         </Button>
       </template>
