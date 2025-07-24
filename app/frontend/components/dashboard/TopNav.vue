@@ -78,7 +78,6 @@ const logout = () => {
         class="text-red-600 dark:text-red-400 group-hover:text-red-700 dark:group-hover:text-red-300 transition-all duration-300" />
     </Button>
 
-    <!-- Avatar -->
-    <UserAvatar :src="props.user.avatar" :name="props.user.name"clickable @click="openUserMenu" />
+    <UserAvatar />
   </div>
 </template>
