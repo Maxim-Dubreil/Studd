@@ -31,10 +31,10 @@ const props = withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col overflow-hidden relative">
+  <div class="min-h-screen flex flex-col overflow-hidden relative z-20">
     <!-- Gradient + Theme toggle -->
     <GradientBackground v-if="!hideGradient" />
-    <ThemeToggle v-if="!hideToggle" class="fixed top-8 right-8 z-10" />
+    <ThemeToggle v-if="!hideToggle" class="fixed top-8 right-8 z-30" />
     <!-- Overlay en dark mode -->
 
     <!-- Layout principal -->
@@ -52,7 +52,7 @@ const props = withDefaults(defineProps<Props>(), {
         </div>
 
         <!-- Slot (contenu des pages) -->
-        <main class="flex-1 overflow-auto p-8">
+        <main class="flex-1 overflow-auto p-8 min-h-screen">
           <slot />
         </main>
       </div>

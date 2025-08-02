@@ -26,9 +26,7 @@ const activeItem = ref<string>('');
 onMounted(() => {
   const currentPath = window.location.pathname;
   const activeNav = navigationItems.value.find(
-    (item) =>
-      currentPath === item.href ||
-      (item.href !== '/' && currentPath.startsWith(item.href))
+    (item) => currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href))
   );
   if (activeNav) {
     activeItem.value = activeNav.id;
@@ -65,9 +63,7 @@ const getIconClasses = (itemId: string) => {
   >
     <!-- Logo -->
     <div class="p-6 border-b border-gray-100 dark:border-slate-700/50">
-      <h1
-        class="text-xl font-bold text-black dark:text-white transition-colors duration-300"
-      >
+      <h1 class="text-xl font-bold text-black dark:text-white transition-colors duration-300">
         StudyApp
       </h1>
     </div>
