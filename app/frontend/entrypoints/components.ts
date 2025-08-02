@@ -1,4 +1,4 @@
-import LandingLayout from '@/components/landingPage/LandingLayout.vue';
+import LandingLayout from '@/components/landingPage/LandingPage.vue';
 import { createApp, defineAsyncComponent } from 'vue';
 
 const registry: Record<string, any> = {
@@ -8,7 +8,7 @@ const registry: Record<string, any> = {
   TopNav: defineAsyncComponent(() => import('@/components/shared/TopNav.vue')),
   SidebarMenu: defineAsyncComponent(() => import('@/components/shared/SidebarMenu.vue')),
   AppLayout: defineAsyncComponent(() => import('@/components/layout/AppLayout.vue')),
-  LandingLayout: defineAsyncComponent(() => import('@/components/landingPage/LandingLayout.vue')),
+  LandingLayout: defineAsyncComponent(() => import('@/components/landingPage/LandingPage.vue')),
   NavbarLanding: defineAsyncComponent(() => import('@/components/landingPage/NavbarLanding.vue')),
 
   GradientBackground: defineAsyncComponent(
