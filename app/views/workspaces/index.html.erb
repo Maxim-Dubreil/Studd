@@ -1,11 +1,6 @@
-<%=
-  vue_component 'WorkspacesTabPage',
-    {
-      workspaces: @workspaces.as_json(only: [:id, :name, :icon, :created_at, :updated_at]),
-      user: {
-        name: @user.email&.split('@')&.first&.capitalize || "Utilisateur",
-        email: @user.email,
-        avatar: @user.respond_to?(:avatar) ? @user.avatar : nil
-      }
-    }
+<%= vue_component 'WorkspaceIndex',
+  {
+    workspaces: @workspaces.map { |w| { id: w.id, name: w.name, created_at: w.created_at, updated_at: w.updated_at } },
+    user: { email: @user.email}
+  }
 %>

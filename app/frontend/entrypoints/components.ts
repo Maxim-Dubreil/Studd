@@ -1,4 +1,3 @@
-import LandingLayout from '@/components/landingPage/LandingPage.vue';
 import { createApp, defineAsyncComponent } from 'vue';
 
 const registry: Record<string, any> = {
@@ -10,37 +9,33 @@ const registry: Record<string, any> = {
   AppLayout: defineAsyncComponent(() => import('@/components/layout/AppLayout.vue')),
   LandingLayout: defineAsyncComponent(() => import('@/components/landingPage/LandingPage.vue')),
   NavbarLanding: defineAsyncComponent(() => import('@/components/landingPage/NavbarLanding.vue')),
-
   GradientBackground: defineAsyncComponent(
     () => import('@/components/shared/GradientBackground.vue')
   ),
-
-  // Composants Dashboard
+  // Dashboard
   Dashboard: defineAsyncComponent(() => import('@/components/dashboard/Dashboard.vue')),
-
   DashboardContent: defineAsyncComponent(
     () => import('@/components/dashboard/DashboardContent.vue')
   ),
   DashboardWidgets: defineAsyncComponent(
     () => import('@/components/dashboard/DashboardWidgets.vue')
   ),
-  Workspace: defineAsyncComponent(() => import('@/components/workspace/Workspace.vue')),
 
-  WorkspacesTabPage: defineAsyncComponent(
-    () => import('@/components/dashboard/workspacesTab/WorkspacesTabPage.vue')
+  // Workspace
+  WorkspaceShow: defineAsyncComponent(
+    () => import('@/components/workspace/Show/WorkspaceShow.vue')
   ),
-  WorkspaceTabCard: defineAsyncComponent(
-    () => import('@/components/dashboard/workspacesTab/WorkspaceTabCard.vue')
-  ),
-
   CreateFlashCard: defineAsyncComponent(
     () => import('@/components/tools/flashCard/CreateFlashCard.vue')
   ),
+  WorkspaceIndex: defineAsyncComponent(
+    () => import('@/components/workspace/Index/WorkspaceIndex.vue')
+  ),
+
+  // Auth
   RegistrationForm: defineAsyncComponent(() => import('@/components/auth/RegistrationForm.vue')),
   LoginForm: defineAsyncComponent(() => import('@/components/auth/LoginForm.vue')),
   PasswordResetForm: defineAsyncComponent(() => import('@/components/auth/PasswordResetForm.vue')),
-
-  // …
 };
 
 function mountIslands() {
