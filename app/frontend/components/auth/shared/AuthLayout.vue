@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Card, CardContent } from '@/components/ui/card';
-import Gradient from '@/components/GradientBackground.vue';
+import Gradient from '@/components/shared/GradientBackground.vue';
 
 interface Props {
     title: string;

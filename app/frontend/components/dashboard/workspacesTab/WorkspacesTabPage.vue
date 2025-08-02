@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import TopNav from '../../dashboard/TopNav.vue';
 import SidebarMenu from '../../dashboard/SidebarMenu.vue';
 import WorkspaceTabCard from './WorkspaceTabCard.vue';
-import GradientBackground from '../../GradientBackground.vue';
+import GradientBackground from '../../shared/GradientBackground.vue';
 import { Button } from "@/components/ui/button";
 import { Icon } from '@/components/ui/icon'
 
@@ -130,13 +130,13 @@ const displayedWorkspaces = computed(() => props.workspaces);
                     <span class="text-gray-600 dark:text-gray-400">Total des workspaces:</span>
                     <span class="font-medium text-gray-800 dark:text-white">{{
                       displayedWorkspaces.length
-                      }}</span>
+                    }}</span>
                   </div>
                   <div class="flex justify-between text-sm">
                     <span class="text-gray-600 dark:text-gray-400">Créés ce mois:</span>
                     <span class="font-medium text-gray-800 dark:text-white">{{
                       displayedWorkspaces.length
-                      }}</span>
+                    }}</span>
                   </div>
                 </div>
               </div>

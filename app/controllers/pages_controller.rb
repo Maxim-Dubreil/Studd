@@ -4,10 +4,6 @@ class PagesController < ApplicationController
   before_action :redirect_if_logged_in, only: [:landing_page]
   
   def landing_page
-
-    @hide_sidebar = true
-    @hide_navbar = true
-    @hide_theme_toggle = false
   end
 
   def about

@@ -3,8 +3,5 @@ class DashboardsController < ApplicationController
   
   def index
     @user = current_user
-    @hide_navbar = true
-    @hide_sidebar = true
-    @dashboard_fullscreen = true
   end
 end

@@ -1,39 +1,30 @@
+import LandingLayout from '@/components/landingPage/LandingLayout.vue';
 import { createApp, defineAsyncComponent } from 'vue';
 
 const registry: Record<string, any> = {
-  ThemeToggle: defineAsyncComponent(() => import('@/components/tools/ThemeToggle.vue')),
+  ThemeToggle: defineAsyncComponent(() => import('@/components/shared/ThemeToggle.vue')),
   UserAvatar: defineAsyncComponent(() => import('@/components/ui/avatar/UserAvatar.vue')),
   Icon: defineAsyncComponent(() => import('@/components/ui/icon/Icon.vue')),
-  Header: defineAsyncComponent(() => import('@/components/layout/Header.vue')),
-  NavBar: defineAsyncComponent(() => import('@/components/layout/Navbar.vue')),
-
-  NavbarLanding: defineAsyncComponent(
-    () => import('@/components/landingPage/NavbarLanding.vue')
-  ),
+  TopNav: defineAsyncComponent(() => import('@/components/shared/TopNav.vue')),
+  SidebarMenu: defineAsyncComponent(() => import('@/components/shared/SidebarMenu.vue')),
+  AppLayout: defineAsyncComponent(() => import('@/components/layout/AppLayout.vue')),
+  LandingLayout: defineAsyncComponent(() => import('@/components/landingPage/LandingLayout.vue')),
+  NavbarLanding: defineAsyncComponent(() => import('@/components/landingPage/NavbarLanding.vue')),
 
   GradientBackground: defineAsyncComponent(
-    () => import('@/components/GradientBackground.vue')
+    () => import('@/components/shared/GradientBackground.vue')
   ),
 
   // Composants Dashboard
-  Dashboard: defineAsyncComponent(
-    () => import('@/components/dashboard/Dashboard.vue')
-  ),
-  SidebarMenu: defineAsyncComponent(
-    () => import('@/components/dashboard/SidebarMenu.vue')
-  ),
+  Dashboard: defineAsyncComponent(() => import('@/components/dashboard/Dashboard.vue')),
+
   DashboardContent: defineAsyncComponent(
     () => import('@/components/dashboard/DashboardContent.vue')
   ),
   DashboardWidgets: defineAsyncComponent(
     () => import('@/components/dashboard/DashboardWidgets.vue')
   ),
-  TopNav: defineAsyncComponent(
-    () => import('@/components/dashboard/TopNav.vue')
-  ),
-  Workspace: defineAsyncComponent(
-    () => import('@/components/workspace/Workspace.vue'),
-  ),
+  Workspace: defineAsyncComponent(() => import('@/components/workspace/Workspace.vue')),
 
   WorkspacesTabPage: defineAsyncComponent(
     () => import('@/components/dashboard/workspacesTab/WorkspacesTabPage.vue')
@@ -45,43 +36,33 @@ const registry: Record<string, any> = {
   CreateFlashCard: defineAsyncComponent(
     () => import('@/components/tools/flashCard/CreateFlashCard.vue')
   ),
-  RegistrationForm: defineAsyncComponent(
-    () => import('@/components/auth/RegistrationForm.vue')
-  ),
-  LoginForm: defineAsyncComponent(
-    () => import('@/components/auth/LoginForm.vue')
-  ),
-  PasswordResetForm: defineAsyncComponent(
-    () => import('@/components/auth/PasswordResetForm.vue')
-  ),
+  RegistrationForm: defineAsyncComponent(() => import('@/components/auth/RegistrationForm.vue')),
+  LoginForm: defineAsyncComponent(() => import('@/components/auth/LoginForm.vue')),
+  PasswordResetForm: defineAsyncComponent(() => import('@/components/auth/PasswordResetForm.vue')),
 
   // …
 };
 
 function mountIslands() {
   // Nettoye les anciennes instances Vue avant de remonter
-  document
-    .querySelectorAll<HTMLElement>('[data-vue-component]')
-    .forEach((el) => {
-      if ((el as any).__vue_app__) {
-        (el as any).__vue_app__.unmount();
-        delete (el as any).__vue_app__;
-      }
-    });
+  document.querySelectorAll<HTMLElement>('[data-vue-component]').forEach((el) => {
+    if ((el as any).__vue_app__) {
+      (el as any).__vue_app__.unmount();
+      delete (el as any).__vue_app__;
+    }
+  });
 
   // Monter les nouvelles instances
-  document
-    .querySelectorAll<HTMLElement>('[data-vue-component]')
-    .forEach((el) => {
-      const name = el.dataset.vueComponent!;
-      const props = JSON.parse(el.dataset.vueProps || '{}');
-      const Comp = registry[name];
-      if (!Comp) return console.error(`Component "${name}" introuvable`);
+  document.querySelectorAll<HTMLElement>('[data-vue-component]').forEach((el) => {
+    const name = el.dataset.vueComponent!;
+    const props = JSON.parse(el.dataset.vueProps || '{}');
+    const Comp = registry[name];
+    if (!Comp) return console.error(`Component "${name}" introuvable`);
 
-      const app = createApp(Comp, props);
-      app.mount(el);
-      (el as any).__vue_app__ = app; // Stocker la référence pour le nettoyage
-    });
+    const app = createApp(Comp, props);
+    app.mount(el);
+    (el as any).__vue_app__ = app; // Stocker la référence pour le nettoyage
+  });
 }
 
 // Expose la fonction globalement pour Turbo
