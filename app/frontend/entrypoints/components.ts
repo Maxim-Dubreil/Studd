@@ -26,12 +26,12 @@ const registry: Record<string, any> = {
     () => import('@/components/workspace/Show/WorkspaceShow.vue')
   ),
   CreateFlashCard: defineAsyncComponent(
-    () => import('@/components/tools/flashCard/CreateFlashCard.vue')
+    () => import('@/components/workspace/flashCard/CreateFlashCard.vue')
   ),
   WorkspaceIndex: defineAsyncComponent(
     () => import('@/components/workspace/Index/WorkspaceIndex.vue')
   ),
-  FlashCardSet: defineAsyncComponent(() => import('@/components/tools/flashCard/FlashCardSet.vue')),
+  FlashCardSet: defineAsyncComponent(() => import('@/components/workspace/flashCard/FlashCardSet.vue')),
 
   // Auth
   RegistrationForm: defineAsyncComponent(() => import('@/components/auth/RegistrationForm.vue')),
