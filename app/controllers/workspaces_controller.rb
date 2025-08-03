@@ -16,7 +16,7 @@ class WorkspacesController < ApplicationController
   def create
     @workspace = current_user.workspaces.build(workspace_params)
     if @workspace.save
-            render json: @workspace.to_json(include: [:icon, { raw_content: { methods: [:content_type, :file_name] } }]), status: :created
+            render json: @workspace.to_json(include: [:icon, { raw_content: { methods: [:content_type, :file_name, :file_url] } }]), status: :created
     else
       render json: @workspace.errors, status: :unprocessable_entity
     end
@@ -24,7 +24,7 @@ class WorkspacesController < ApplicationController
 
   def update
     if @workspace.update(workspace_params)
-      render json: @workspace.to_json(include: [:icon, { raw_content: { methods: [:content_type, :file_name] } }])
+      render json: @workspace.to_json(include: [:icon, { raw_content: { methods: [:content_type, :file_name, :file_url] } }])
     else
       render json: @workspace.errors, status: :unprocessable_entity
     end
