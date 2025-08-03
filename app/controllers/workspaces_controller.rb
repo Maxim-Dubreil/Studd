@@ -1,52 +1,47 @@
 # app/controllers/workspaces_controller.rb
 class WorkspacesController < ApplicationController
+  before_action :authenticate_user!
+  before_action :set_workspace, only: [:show, :update, :destroy]
 
-    before_action :set_workspace, only: [:show, :edit, :update, :destroy]
+  def index
+    @workspaces = current_user.workspaces
+    @user = current_user
+  end
 
-    def index
-        @workspaces = current_user.workspaces
-        @user = current_user
+  def show
+    @workspace = current_user.workspaces.find(params[:id])
+
+  end
+
+  def create
+    @workspace = current_user.workspaces.build(workspace_params)
+    if @workspace.save
+            render json: @workspace.to_json(include: [:icon, { raw_content: { methods: [:content_type, :file_name] } }]), status: :created
+    else
+      render json: @workspace.errors, status: :unprocessable_entity
     end
+  end
 
-    def show
+  def update
+    if @workspace.update(workspace_params)
+      render json: @workspace.to_json(include: [:icon, { raw_content: { methods: [:content_type, :file_name] } }])
+    else
+      render json: @workspace.errors, status: :unprocessable_entity
     end
+  end
 
-    def new
-        @workspace = current_user.workspaces.build
-    end
+  def destroy
+    @workspace.destroy
+    head :no_content
+  end
 
-    def create
-        @workspace = current_user.workspaces.build(workspace_params)
-        if @workspace.save
-            redirect_to @workspace, notice: 'Workspace was successfully created.'
-        else
-            render :new
-        end
-    end
+  private
 
-    def edit
-    end
+  def set_workspace
+    @workspace = current_user.workspaces.find(params[:id])
+  end
 
-    def update
-        if @workspace.update(workspace_params)
-            redirect_to @workspace, notice: 'Workspace was successfully updated.'
-        else
-            render :edit
-        end
-    end
-
-    def destroy
-        @workspace.destroy
-        redirect_to workspaces_url, notice: 'Workspace was successfully destroyed.'
-    end
-
-    private
-
-    def set_workspace
-        @workspace = current_user.workspaces.find(params[:id])
-    end
-
-    def workspace_params
-      params.require(:workspace).permit(:name, :icon)
-    end
+  def workspace_params
+    params.require(:workspace).permit(:name, :icon_id)
+  end
 end

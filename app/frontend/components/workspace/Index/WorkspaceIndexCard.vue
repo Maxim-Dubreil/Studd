@@ -1,11 +1,18 @@
 <script setup lang="ts">
   import { Icon } from '@/components/ui/icon';
   import { computed } from 'vue';
+  import { useIconResolver } from '@/composables/useIconResolver';
+
+  interface IconInfo {
+    id: number;
+    name: string;
+    path: string;
+  }
 
   interface Workspace {
     id: number;
     name: string;
-    icon?: string;
+    icon?: IconInfo;
     created_at: string;
     updated_at: string;
   }
@@ -15,10 +22,11 @@
   }
 
   const props = defineProps<Props>();
+  const { getIconUrl } = useIconResolver();
 
   // Déterminer l'icône à afficher
-  const workspaceIcon = computed(() => {
-    return props.workspace.icon || 'grid';
+  const customIconUrl = computed(() => {
+    return props.workspace.icon ? getIconUrl(props.workspace.icon.path) : null;
   });
 
   // Formater la date de création
@@ -27,15 +35,16 @@
     return date.toLocaleDateString('fr-FR');
   });
 
+  const emit = defineEmits(['edit']);
+
   // Naviguer vers le workspace
   const openWorkspace = () => {
     window.location.href = `/workspaces/${props.workspace.id}`;
   };
 
-  // Éditer le workspace
-  const editWorkspace = (event: Event) => {
+  const openEditModal = (event: Event) => {
     event.stopPropagation();
-    window.location.href = `/workspaces/${props.workspace.id}/edit`;
+    emit('edit', props.workspace);
   };
 </script>
 
@@ -47,16 +56,23 @@
     <!-- Header avec icône et menu -->
     <div class="mb-4 flex items-start justify-between">
       <div class="flex items-center">
+        <img
+          v-if="customIconUrl"
+          :src="customIconUrl"
+          :alt="props.workspace.icon.name"
+          class="h-16 w-16 rounded-lg object-contain dark:invert"
+        />
         <div
-          class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-r from-violet-500 to-purple-600 shadow-lg transition-all duration-300 group-hover:shadow-xl dark:from-violet-600 dark:to-purple-700"
+          v-else
+          class="flex h-16 w-16 items-center justify-center rounded-lg bg-gray-200 dark:bg-slate-800"
         >
-          <Icon :name="workspaceIcon" class="h-6 w-6 text-white" />
+          <Icon name="grid" class="h-8 w-8 text-gray-400 dark:text-gray-500" />
         </div>
       </div>
 
       <!-- Menu d'actions -->
       <button
-        @click="editWorkspace"
+        @click="openEditModal"
         class="rounded-lg p-2 opacity-0 transition-all duration-200 group-hover:opacity-100 hover:bg-gray-100 dark:hover:bg-slate-600"
       >
         <Icon

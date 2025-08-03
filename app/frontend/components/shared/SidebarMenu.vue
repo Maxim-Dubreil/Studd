@@ -1,75 +1,76 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { Icon } from '@/components/ui/icon';
+  import { Icon } from '@/components/ui/icon';
+  import { onMounted, ref } from 'vue';
 
-const navigationItems = ref([
-  { id: 'home', label: 'Home', iconName: 'home', href: '/' },
-  {
-    id: 'workspaces',
-    label: 'Workspaces',
-    iconName: 'grid',
-    href: '/workspaces',
-  },
-  { id: 'blog', label: 'Blog', iconName: 'document', href: '/blog' },
-  { id: 'courses', label: 'Courses', iconName: 'book', href: '/courses' },
-  {
-    id: 'calendar',
-    label: 'Calendar',
-    iconName: 'calendar',
-    href: '/calendar',
-  },
-]);
+  const navigationItems = ref([
+    { id: 'home', label: 'Home', iconName: 'home', href: '/' },
+    {
+      id: 'workspaces',
+      label: 'Workspaces',
+      iconName: 'grid',
+      href: '/workspaces',
+    },
+    { id: 'blog', label: 'Blog', iconName: 'document', href: '/blog' },
+    { id: 'courses', label: 'Courses', iconName: 'book', href: '/courses' },
+    {
+      id: 'calendar',
+      label: 'Calendar',
+      iconName: 'calendar',
+      href: '/calendar',
+    },
+  ]);
 
-const activeItem = ref<string>('');
+  const activeItem = ref<string>('');
 
-// Détecter la page active basée sur l'URL actuelle
-onMounted(() => {
-  const currentPath = window.location.pathname;
-  const activeNav = navigationItems.value.find(
-    (item) => currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href))
-  );
-  if (activeNav) {
-    activeItem.value = activeNav.id;
-  } else if (currentPath === '/' || currentPath === '/dashboard') {
-    activeItem.value = 'home';
-  }
-});
+  // Détecter la page active basée sur l'URL actuelle
+  onMounted(() => {
+    const currentPath = window.location.pathname;
+    const activeNav = navigationItems.value.find(
+      (item) =>
+        currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href))
+    );
+    if (activeNav) {
+      activeItem.value = activeNav.id;
+    } else if (currentPath === '/' || currentPath === '/dashboard') {
+      activeItem.value = 'home';
+    }
+  });
 
-const getItemClasses = (itemId: string) => {
-  const baseClasses =
-    'w-full flex items-center px-6 py-4 rounded-2xl text-sm font-medium transition-all duration-300 text-left hover:shadow-lg group';
+  const getItemClasses = (itemId: string) => {
+    const baseClasses =
+      'w-full flex items-center px-6 py-4 rounded-2xl text-sm font-medium transition-all duration-300 text-left hover:shadow-lg group';
 
-  if (activeItem.value === itemId) {
-    return `${baseClasses} bg-gradient-to-r from-violet-500 to-purple-600 dark:from-violet-600 dark:to-purple-700 text-white shadow-xl transform hover:scale-[1.02]`;
-  }
+    if (activeItem.value === itemId) {
+      return `${baseClasses} bg-gradient-to-r from-violet-500 to-purple-600 dark:from-violet-600 dark:to-purple-700 text-white shadow-xl transform hover:scale-[1.02]`;
+    }
 
-  return `${baseClasses} text-gray-600 dark:text-gray-300 hover:bg-violet-50 dark:hover:bg-violet-900/30 hover:text-violet-600 dark:hover:text-violet-400`;
-};
+    return `${baseClasses} text-gray-600 dark:text-gray-300 hover:bg-violet-50 dark:hover:bg-violet-900/30 hover:text-violet-600 dark:hover:text-violet-400`;
+  };
 
-const getIconClasses = (itemId: string) => {
-  const baseClasses = 'w-5 h-5 mr-4 transition-all duration-300';
+  const getIconClasses = (itemId: string) => {
+    const baseClasses = 'w-5 h-5 mr-4 transition-all duration-300';
 
-  if (activeItem.value === itemId) {
-    return `${baseClasses} text-white`;
-  }
+    if (activeItem.value === itemId) {
+      return `${baseClasses} text-white`;
+    }
 
-  return `${baseClasses} text-gray-500 dark:text-gray-400 group-hover:text-violet-600 dark:group-hover:text-violet-400`;
-};
+    return `${baseClasses} text-gray-500 dark:text-gray-400 group-hover:text-violet-600 dark:group-hover:text-violet-400`;
+  };
 </script>
 
 <template>
   <div
-    class="w-60 h-full bg-white/80 dark:bg-slate-800/90 backdrop-blur-xl rounded-2xl shadow-xl dark:shadow-2xl border border-white/20 dark:border-slate-700/50 flex flex-col transition-all duration-300"
+    class="flex h-full w-60 flex-col rounded-2xl border border-white/20 bg-white/80 shadow-xl backdrop-blur-xl transition-all duration-300 dark:border-slate-700/50 dark:bg-slate-800/90 dark:shadow-2xl"
   >
     <!-- Logo -->
-    <div class="p-6 border-b border-gray-100 dark:border-slate-700/50">
-      <h1 class="text-xl font-bold text-black dark:text-white transition-colors duration-300">
+    <div class="border-b border-gray-100 p-6 dark:border-slate-700/50">
+      <h1 class="text-xl font-bold text-black transition-colors duration-300 dark:text-white">
         StudyApp
       </h1>
     </div>
 
     <!-- Navigation -->
-    <nav class="flex-1 px-4 space-y-2 py-4">
+    <nav class="flex-1 space-y-2 px-4 py-4">
       <a
         v-for="item in navigationItems"
         :key="item.id"

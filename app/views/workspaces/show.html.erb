@@ -1,1 +1,11 @@
-<%= vue_component 'WorkspaceShow', { title: @workspace.name } %>
+<%= vue_component 'WorkspaceShow'
+    {
+      workspace: @workspace.as_json(
+        include: {
+          icon: { only: [:id, :name, :path] },
+          raw_content: { only: [:id, :content, :file_name], methods: [:content_type] }
+        }
+      )
+    }
+%>
+

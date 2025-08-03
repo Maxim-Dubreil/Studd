@@ -2,19 +2,26 @@
   <div
     :class="[
       // Layout & base
-      'group relative col-span-3 flex flex-col rounded-xl overflow-hidden',
+      'group relative col-span-3 flex flex-col overflow-hidden rounded-xl',
       'bg-white shadow-[0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]',
-      'dark:bg-black dark:border dark:border-white/10 dark:shadow-[inset_0_-20px_80px_-20px_#ffffff1f]',
+      'dark:border dark:border-white/10 dark:bg-black dark:shadow-[inset_0_-20px_80px_-20px_#ffffff1f]',
       cls,
     ]"
   >
     <!-- background décoratif -->
+    <div class="absolute inset-0 overflow-hidden rounded-xl">
+      <img
+        v-if="bgImage"
+        :src="bgImage"
+        alt=""
+        class="absolute inset-0 h-full w-full object-cover opacity-30 transition-opacity duration-300 group-hover:opacity-50"
+      />
+    </div>
     <slot name="bg" />
 
     <!-- Contenu principal -->
     <div
-      class="pointer-events-none z-10 flex flex-col gap-1 p-6 mt-auto
-             transform-gpu transition-all duration-300 group-hover:-translate-y-10"
+      class="pointer-events-none z-10 mt-auto flex transform-gpu flex-col gap-1 p-6 transition-all duration-300 group-hover:-translate-y-10"
     >
       <component
         :is="Icon"
@@ -26,9 +33,7 @@
 
     <!-- CTA -->
     <div
-      class="pointer-events-none absolute bottom-0 flex w-full translate-y-10 opacity-0
-             p-4 transform-gpu transition-all duration-300
-             group-hover:translate-y-0 group-hover:opacity-100"
+      class="pointer-events-none absolute bottom-0 flex w-full translate-y-10 transform-gpu p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
     >
       <a
         :href="href"
@@ -41,24 +46,24 @@
 
     <!-- overlay hover -->
     <div
-      class="pointer-events-none absolute inset-0 transition-all duration-300
-             group-hover:bg-black/5 dark:group-hover:bg-neutral-800/10"
+      class="pointer-events-none absolute inset-0 transition-all duration-300 group-hover:bg-black/5 dark:group-hover:bg-neutral-800/10"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ArrowRight } from 'lucide-vue-next'
+  import { ArrowRight } from 'lucide-vue-next';
 
-const props = defineProps<{
-  name: string
-  desc: string
-  href: string
-  cta: string
-  Icon: any
-  cls?: string
-}>()
+  const props = defineProps<{
+    name: string;
+    desc: string;
+    href: string;
+    cta: string;
+    Icon: any;
+    cls?: string;
+    bgImage?: string;
+  }>();
 
-/* On garde 'cls' dans le template directement : pas besoin de destructurer. */
-const { cls } = props
+  /* On garde 'cls' dans le template directement : pas besoin de destructurer. */
+  const { cls } = props;
 </script>

@@ -1,16 +1,43 @@
 <script setup lang="ts">
+  import { computed, nextTick, ref } from 'vue';
+
   import { Button } from '@/components/ui/button';
   import { Icon } from '@/components/ui/icon';
-  import { computed } from 'vue';
+  import AddContentModal from '@/components/workspace/AddContentModal.vue';
+  import CreateWorkspaceModal from '@/components/workspace/CreateWorkspaceModal.vue';
+  import EditWorkspaceModal from '@/components/workspace/EditWorkspaceModal.vue';
   import AppLayout from '../../layout/AppLayout.vue';
-  import WorkspaceTabCard from './WorkspaceIndexCard.vue';
+  import WorkspaceIndexCard from './WorkspaceIndexCard.vue';
+
+  interface Icon {
+    id: number;
+    name: string;
+    path: string;
+  }
+
+  interface RawContent {
+    id: number;
+    content?: string | null;
+    content_type?: string | null;
+    file_name?: string | null;
+  }
 
   interface Workspace {
     id: number;
     name: string;
-    icon?: string;
+    icon?: Icon;
     created_at: string;
     updated_at: string;
+    raw_content?: RawContent | null;
+  }
+
+  interface Modal {
+    openModal: () => void;
+  }
+
+  interface EditModal {
+    openModal: () => void;
+    closeModal: () => void;
   }
 
   interface Props {
@@ -31,49 +58,94 @@
     }),
   });
 
-  const createNewWorkspace = () => {
-    // Rediriger vers la page de création
-    window.location.href = '/workspaces/new';
+  const createWorkspaceModal = ref<Modal | null>(null);
+  const contentModal = ref<{ openModal: () => void } | null>(null);
+  const selectedWorkspaceForEdit = ref<Workspace | null>(null);
+  const selectedContent = ref<RawContent | null>(null);
+  const localWorkspaces = ref<Workspace[]>(props.workspaces);
+
+  const openCreateWorkspaceModal = () => {
+    if (createWorkspaceModal.value) createWorkspaceModal.value.openModal();
   };
 
-  // Calculer le nombre de workspaces à afficher (max 6 avant scroll)
-  const displayedWorkspaces = computed(() => props.workspaces);
+  const handleOpenEditModal = (workspace: Workspace) => {
+    selectedWorkspaceForEdit.value = workspace;
+  };
+
+  const handleCloseEditModal = () => {
+    selectedWorkspaceForEdit.value = null;
+  };
+
+  const handleOpenContentModal = (content: RawContent | null) => {
+    selectedContent.value = content;
+    nextTick(() => {
+      if (contentModal.value) contentModal.value.openModal();
+    });
+  };
+
+  const handleWorkspaceCreated = (newWorkspace: Workspace) => {
+    localWorkspaces.value.push(newWorkspace);
+    selectedWorkspaceForEdit.value = newWorkspace;
+    handleOpenContentModal(null);
+  };
+
+  const handleContentUpdated = (updatedContent: RawContent) => {
+    if (selectedWorkspaceForEdit.value) {
+      const index = localWorkspaces.value.findIndex(
+        (ws) => ws.id === selectedWorkspaceForEdit.value!.id
+      );
+      if (index !== -1) {
+        localWorkspaces.value[index].raw_content = updatedContent;
+      }
+      handleCloseEditModal();
+    }
+  };
+
+  const handleWorkspaceUpdated = (updatedWorkspace: Workspace) => {
+    const index = localWorkspaces.value.findIndex((ws: Workspace) => ws.id === updatedWorkspace.id);
+    if (index !== -1) {
+      localWorkspaces.value[index] = { ...localWorkspaces.value[index], ...updatedWorkspace };
+    }
+    handleCloseEditModal();
+  };
+
+  const handleWorkspaceDeleted = (workspaceId: number) => {
+    localWorkspaces.value = localWorkspaces.value.filter((ws: Workspace) => ws.id !== workspaceId);
+    handleCloseEditModal();
+  };
+  const displayedWorkspaces = computed(() => localWorkspaces.value);
 </script>
 
 <template>
   <AppLayout :hide-sidebar="false" :hide-top-nav="false" :hide-gradient="false" :hide-toggle="true">
     <div class="relative min-h-screen">
-      <!-- Overlay pour améliorer le contraste -->
       <div
         class="absolute inset-0 bg-white/5 backdrop-blur-[1px] transition-all duration-500 dark:bg-black/20"
       ></div>
+      <div class="relative z-10 flex h-screen">
+        <div class="flex-shrink-0 p-4"></div>
 
-      <!-- Structure en 3 parties -->
-      <div class="relative flex h-screen">
-        <!-- Zone centrale -->
         <div class="flex flex-1 flex-col">
-          <!-- Contenu principal -->
-          <div class="flex flex-1 gap-6 overflow-hidden p-2">
-            <!-- Carte centrale avec les workspaces -->
+          <div class="flex-shrink-0"></div>
+
+          <div class="flex flex-1 gap-6 overflow-hidden p-6">
             <div
               class="flex flex-1 flex-col rounded-2xl border border-white/20 bg-white/80 shadow-xl backdrop-blur-xl dark:border-slate-700/50 dark:bg-slate-800/90 dark:shadow-2xl"
             >
-              <!-- Header de la carte centrale -->
               <div class="border-b border-gray-100 p-6 dark:border-slate-700/50">
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Mes Workspaces</h1>
                 <p class="mt-1 text-gray-600 dark:text-gray-300">Gérez vos espaces de travail</p>
               </div>
 
-              <!-- Grille des workspaces - scrollable sans scrollbar visible -->
               <div class="scrollbar-hide flex-1 overflow-y-auto p-6">
                 <div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  <WorkspaceTabCard
+                  <WorkspaceIndexCard
                     v-for="workspace in displayedWorkspaces"
                     :key="workspace.id"
                     :workspace="workspace"
+                    @edit="(workspace: Workspace) => handleOpenEditModal(workspace)"
                   />
 
-                  <!-- Message si aucun workspace -->
                   <div
                     v-if="displayedWorkspaces.length === 0"
                     class="col-span-full py-12 text-center"
@@ -91,28 +163,28 @@
                   </div>
                 </div>
               </div>
-
-              <!-- Bouton Create New Workspace en bas -->
-              <div class="border-t border-gray-100 p-6 dark:border-slate-700/50">
-                <Button @click="createNewWorkspace" variant="default" size="lg" radius="xl">
-                  <Icon name="plus" class="mr-2 h-5 w-5" />
-                  Créer un nouveau workspace
+              <div
+                class="flex justify-center border-t border-gray-100 p-6 dark:border-slate-700/50"
+              >
+                <Button
+                  @click="openCreateWorkspaceModal"
+                  variant="secondary"
+                  size="icon"
+                  class="h-14 w-14 cursor-pointer rounded-full"
+                >
+                  <Icon name="plus" class="h-8 w-8" />
                 </Button>
               </div>
             </div>
 
-            <!-- Carte latérale droite -->
             <div
               class="flex w-80 flex-col rounded-2xl border border-white/20 bg-white/80 shadow-xl backdrop-blur-xl dark:border-slate-700/50 dark:bg-slate-800/90 dark:shadow-2xl"
             >
-              <!-- Header de la carte latérale -->
               <div class="border-b border-gray-100 p-6 dark:border-slate-700/50">
                 <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Informations</h2>
               </div>
 
-              <!-- Contenu de la carte latérale -->
               <div class="flex-1 space-y-6 p-6">
-                <!-- Statistiques -->
                 <div
                   class="rounded-xl bg-gradient-to-r from-violet-500/10 to-purple-500/10 p-4 dark:from-violet-500/20 dark:to-purple-500/20"
                 >
@@ -135,7 +207,6 @@
                   </div>
                 </div>
 
-                <!-- Actions rapides -->
                 <div>
                   <h3 class="mb-3 text-sm font-medium text-gray-700 dark:text-gray-300">
                     Actions rapides
@@ -183,7 +254,6 @@
                   </div>
                 </div>
 
-                <!-- Aide -->
                 <div class="rounded-xl bg-blue-50/50 p-4 dark:bg-blue-900/20">
                   <div class="flex items-start">
                     <Icon name="info" class="mt-0.5 h-5 w-5 text-blue-500 dark:text-blue-400" />
@@ -203,5 +273,21 @@
         </div>
       </div>
     </div>
+    <CreateWorkspaceModal ref="createWorkspaceModal" @workspace-created="handleWorkspaceCreated" />
+    <AddContentModal
+      v-if="selectedWorkspaceForEdit"
+      ref="contentModal"
+      :workspace="selectedWorkspaceForEdit"
+      :rawContent="selectedContent"
+      @content-updated="handleContentUpdated"
+    />
+    <EditWorkspaceModal
+      v-if="selectedWorkspaceForEdit"
+      :workspace="selectedWorkspaceForEdit"
+      @close="handleCloseEditModal"
+      @workspace-updated="handleWorkspaceUpdated"
+      @workspace-deleted="handleWorkspaceDeleted"
+      @open-content-modal="handleOpenContentModal"
+    />
   </AppLayout>
 </template>

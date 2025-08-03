@@ -8,9 +8,11 @@
 #  user_id    :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  icon_id    :integer
 #
 # Indexes
 #
+#  index_workspaces_on_icon_id  (icon_id)
 #  index_workspaces_on_user_id  (user_id)
 #
 

@@ -1,49 +1,49 @@
 <script setup lang="ts">
-import { Icon } from '@/components/ui/icon';
-import { Button } from '@/components/ui/button';
-import UserAvatar from '../ui/avatar/UserAvatar.vue';
-import { useTheme } from '../../composables/useTheme';
+  import { Button } from '@/components/ui/button';
+  import { Icon } from '@/components/ui/icon';
+  import { useTheme } from '../../composables/useTheme';
+  import UserAvatar from '../ui/avatar/UserAvatar.vue';
 
-interface Props {
-  user?: {
-    name: string;
-    email: string;
-    avatar?: string;
-  };
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  user: () => ({
-    name: 'Étudiant Demo',
-    email: 'demo@studyapp.com',
-    avatar: undefined,
-  }),
-});
-
-const { theme, toggleTheme } = useTheme();
-
-const openSettings = () => {
-  console.log('Ouverture des paramètres');
-  // Logique pour ouvrir le panneau de paramètres
-};
-
-const openUserMenu = () => {
-  console.log('Ouverture du menu utilisateur');
-  // Logique pour ouvrir le menu utilisateur
-};
-
-const logout = () => {
-  if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
-    const link = document.createElement('a');
-    link.href = '/logout';
-    link.setAttribute('data-turbo-method', 'delete');
-    link.setAttribute('data-turbo-confirm', 'false');
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  interface Props {
+    user?: {
+      name: string;
+      email: string;
+      avatar?: string;
+    };
   }
-};
+
+  const props = withDefaults(defineProps<Props>(), {
+    user: () => ({
+      name: 'Étudiant Demo',
+      email: 'demo@studyapp.com',
+      avatar: undefined,
+    }),
+  });
+
+  const { theme, toggleTheme } = useTheme();
+
+  const openSettings = () => {
+    console.log('Ouverture des paramètres');
+    // Logique pour ouvrir le panneau de paramètres
+  };
+
+  const openUserMenu = () => {
+    console.log('Ouverture du menu utilisateur');
+    // Logique pour ouvrir le menu utilisateur
+  };
+
+  const logout = () => {
+    if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+      const link = document.createElement('a');
+      link.href = '/logout';
+      link.setAttribute('data-turbo-method', 'delete');
+      link.setAttribute('data-turbo-confirm', 'false');
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
 </script>
 
 <template>
@@ -72,8 +72,8 @@ const logout = () => {
         :class="[
           'transition-all duration-300',
           theme === 'dark'
-            ? 'text-yellow-500 group-hover:text-yellow-400 group-hover:rotate-12'
-            : 'text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-500 group-hover:-rotate-12',
+            ? 'text-yellow-500 group-hover:rotate-12 group-hover:text-yellow-400'
+            : 'text-indigo-600 group-hover:-rotate-12 group-hover:text-indigo-500 dark:text-indigo-400',
         ]"
       />
     </Button>
@@ -88,7 +88,7 @@ const logout = () => {
     >
       <Icon
         name="settings"
-        class="text-gray-600 dark:text-gray-300 group-hover:text-gray-800 dark:group-hover:text-gray-100 transition-all duration-300 group-hover:rotate-90"
+        class="text-gray-600 transition-all duration-300 group-hover:rotate-90 group-hover:text-gray-800 dark:text-gray-300 dark:group-hover:text-gray-100"
       />
     </Button>
 
@@ -103,7 +103,7 @@ const logout = () => {
     >
       <Icon
         name="log-out"
-        class="text-red-600 dark:text-red-400 group-hover:text-red-700 dark:group-hover:text-red-300 transition-all duration-300"
+        class="text-red-600 transition-all duration-300 group-hover:text-red-700 dark:text-red-400 dark:group-hover:text-red-300"
       />
     </Button>
 

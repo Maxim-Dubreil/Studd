@@ -1,27 +1,25 @@
 <script setup lang="ts">
-import { Menubar, MenubarMenu, MenubarTrigger } from '@/components/ui/menubar';
-import { Button } from '@/components/ui/button';
-import { Icon } from '@/components/ui/icon';
-import { cn } from '@/lib/utils';
+  import { Button } from '@/components/ui/button';
+  import { Menubar, MenubarMenu, MenubarTrigger } from '@/components/ui/menubar';
 
-interface NavItem {
-  label: string;
-  url: string;
-  variant?: 'gradient' | 'outline' | 'link' | 'default';
-  external?: boolean;
-  data?: { [key: string]: any };
-}
+  interface NavItem {
+    label: string;
+    url: string;
+    variant?: 'gradient' | 'outline' | 'link' | 'default';
+    external?: boolean;
+    data?: { [key: string]: any };
+  }
 
-const props = defineProps<{
-  left: NavItem[];
-  center: NavItem[];
-  right: NavItem[];
-}>();
+  const props = defineProps<{
+    left: NavItem[];
+    center: NavItem[];
+    right: NavItem[];
+  }>();
 </script>
 
 <template>
   <Menubar
-    class="mt-6 rounded-2xl grid grid-cols-3 items-center px-10 border-b dark:border-zinc-800 h-14 bg-background/70 dark:bg-background/40 backdrop-blur-md shadow-lg max-w-250"
+    class="bg-background/70 dark:bg-background/40 mt-6 grid h-14 max-w-250 grid-cols-3 items-center rounded-2xl border-b px-10 shadow-lg backdrop-blur-md dark:border-zinc-800"
   >
     <!-- Colonne gauche -->
     <div class="flex gap-4">
@@ -36,7 +34,7 @@ const props = defineProps<{
                   ? 'false'
                   : 'true'
               "
-              class="font-medium text-sm transition-colors duration-200 hover:text-indigo-600 dark:hover:text-indigo-400"
+              class="text-sm font-medium transition-colors duration-200 hover:text-indigo-600 dark:hover:text-indigo-400"
             >
               {{ item.label }}
             </a>
@@ -57,7 +55,7 @@ const props = defineProps<{
                   ? 'false'
                   : 'true'
               "
-              class="font-medium text-sm transition-colors duration-200 hover:text-indigo-600 dark:hover:text-indigo-400"
+              class="text-sm font-medium transition-colors duration-200 hover:text-indigo-600 dark:hover:text-indigo-400"
             >
               {{ item.label }}
             </a>
