@@ -2,6 +2,7 @@
   import { Button } from '@/components/ui/button';
   import { Icon } from '@/components/ui/icon';
   import { useTheme } from '../../composables/useTheme';
+  import DecoDialog from '../ui/alert-dialog/DecoDialog.vue';
   import UserAvatar from '../ui/avatar/UserAvatar.vue';
 
   interface Props {
@@ -33,16 +34,12 @@
   };
 
   const logout = () => {
-    if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
-      const link = document.createElement('a');
-      link.href = '/logout';
-      link.setAttribute('data-turbo-method', 'delete');
-      link.setAttribute('data-turbo-confirm', 'false');
-
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
+    const link = document.createElement('a');
+    link.href = '/logout';
+    link.setAttribute('data-turbo-method', 'delete');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 </script>
 
@@ -93,19 +90,7 @@
     </Button>
 
     <!-- Bouton Déconnexion -->
-    <Button
-      @click="logout"
-      variant="outline"
-      size="default"
-      radius="xl"
-      title="Se déconnecter"
-      class="shadow-lg backdrop-blur-sm"
-    >
-      <Icon
-        name="log-out"
-        class="text-red-600 transition-all duration-300 group-hover:text-red-700 dark:text-red-400 dark:group-hover:text-red-300"
-      />
-    </Button>
+    <DecoDialog :on-confirm="logout" />
 
     <UserAvatar />
   </div>

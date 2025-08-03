@@ -1,6 +1,6 @@
 # app/controllers/pages_controller.rb
 class PagesController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:landing_page, :about]
+  skip_before_action :authenticate_user!, only: [:landing_page, :about, :profile]
   before_action :redirect_if_logged_in, only: [:landing_page]
   
   def landing_page
@@ -9,6 +9,11 @@ class PagesController < ApplicationController
   def about
     @page_title = 'À propos'
   end
+
+  def about
+    @page_title = 'À propos'
+  end
+
 
   private
 
