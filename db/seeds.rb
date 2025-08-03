@@ -8,6 +8,7 @@ ActiveRecord::Base.transaction do
   Workspace.destroy_all
   User.destroy_all
   Icon.destroy_all
+  RawContent.destroy_all
 end
 
 puts "Creating users..."

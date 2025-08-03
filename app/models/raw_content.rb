@@ -17,7 +17,6 @@ class RawContent < ApplicationRecord
   has_one_attached :file, dependent: :destroy
 
   validate :file_or_content_present
-  validate :file_and_content_not_both_present
 
   def content_type
     if file.attached?
@@ -31,6 +30,10 @@ class RawContent < ApplicationRecord
 
   def file_name
     file.attached? ? file.filename.to_s : nil
+  end
+
+  def file_url
+    file.url if file.attached?
   end
 
   private
