@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { Icon } from '@/components/ui/icon';
-  import { computed } from 'vue';
   import { useIconResolver } from '@/composables/useIconResolver';
+  import { computed } from 'vue';
 
   interface IconInfo {
     id: number;
@@ -71,7 +71,7 @@
       </div>
 
       <!-- Menu d'actions -->
-      <button
+      <Button
         @click="openEditModal"
         class="rounded-lg p-2 opacity-0 transition-all duration-200 group-hover:opacity-100 hover:bg-gray-100 dark:hover:bg-slate-600"
       >
@@ -79,7 +79,7 @@
           name="settings"
           class="h-4 w-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
         />
-      </button>
+      </Button>
     </div>
 
     <!-- Contenu principal -->

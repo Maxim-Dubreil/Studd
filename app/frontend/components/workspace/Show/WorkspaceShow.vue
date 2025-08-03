@@ -1,13 +1,5 @@
 <template>
   <AppLayout :hide-sidebar="false" :hide-top-nav="true" :hide-toggle="false" :hide-gradient="false">
-    <div class="absolute top-8 left-8 z-10 flex items-center gap-4">
-      <a
-        :href="`/workspaces`"
-        class="rounded-full bg-gray-800/50 p-2 text-white transition-colors hover:bg-gray-800/80"
-      >
-        <ArrowLeft class="h-6 w-6" />
-      </a>
-    </div>
     <section class="pb-16">
       <div class="relative mb-10 text-center">
         <a

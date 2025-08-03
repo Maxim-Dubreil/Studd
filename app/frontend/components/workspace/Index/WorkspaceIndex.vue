@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import { computed, nextTick, ref } from 'vue';
 
+  import AddContentModal from '@/components/rawContent/AddContentModal.vue';
   import { Button } from '@/components/ui/button';
   import { Icon } from '@/components/ui/icon';
-  import AddContentModal from '@/components/workspace/AddContentModal.vue';
-  import CreateWorkspaceModal from '@/components/workspace/CreateWorkspaceModal.vue';
-  import EditWorkspaceModal from '@/components/workspace/EditWorkspaceModal.vue';
+  import CreateWorkspaceModal from '@/components/workspace/create/CreateWorkspaceModal.vue';
+  import EditWorkspaceModal from '@/components/workspace/edit/EditWorkspaceModal.vue';
   import AppLayout from '../../layout/AppLayout.vue';
   import WorkspaceIndexCard from './WorkspaceIndexCard.vue';
 
@@ -119,15 +119,8 @@
 <template>
   <AppLayout :hide-sidebar="false" :hide-top-nav="false" :hide-gradient="false" :hide-toggle="true">
     <div class="relative min-h-screen">
-      <div
-        class="absolute inset-0 bg-white/5 backdrop-blur-[1px] transition-all duration-500 dark:bg-black/20"
-      ></div>
       <div class="relative z-10 flex h-screen">
-        <div class="flex-shrink-0 p-4"></div>
-
         <div class="flex flex-1 flex-col">
-          <div class="flex-shrink-0"></div>
-
           <div class="flex flex-1 gap-6 overflow-hidden p-6">
             <div
               class="flex flex-1 flex-col rounded-2xl border border-white/20 bg-white/80 shadow-xl backdrop-blur-xl dark:border-slate-700/50 dark:bg-slate-800/90 dark:shadow-2xl"
