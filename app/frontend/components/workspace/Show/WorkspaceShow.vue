@@ -1,6 +1,6 @@
 <template>
-  <AppLayout :hide-sidebar="false" :hide-top-nav="true" :hide-toggle="false" :hide-gradient="false">
-    <section class="pb-16">
+  <AppLayout :hide-sidebar="true" :hide-top-nav="true" :hide-toggle="false" :hide-gradient="false">
+    <section class="px-10 pb-16">
       <div class="relative mb-10 text-center">
         <a
           href="/workspaces"
