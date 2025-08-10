@@ -1,9 +1,16 @@
 <script setup lang="ts">
   import { Button } from '@/components/ui/button';
   import { Icon } from '@/components/ui/icon';
+  import { CalendarDays } from 'lucide-vue-next';
+  import { ref } from 'vue';
+
+  import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
   import { useTheme } from '../../composables/useTheme';
   import DecoDialog from '../ui/alert-dialog/DecoDialog.vue';
   import UserAvatar from '../ui/avatar/UserAvatar.vue';
+  import UserMenuModal from './UserMenuModal.vue';
+
+  import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 
   interface Props {
     user?: {
@@ -13,15 +20,8 @@
     };
   }
 
-  const props = withDefaults(defineProps<Props>(), {
-    user: () => ({
-      name: 'Étudiant Demo',
-      email: 'demo@studyapp.com',
-      avatar: undefined,
-    }),
-  });
-
   const { theme, toggleTheme } = useTheme();
+  const userMenuModalRef = ref();
 
   const openSettings = () => {
     console.log('Ouverture des paramètres');
@@ -29,8 +29,8 @@
   };
 
   const openUserMenu = () => {
-    console.log('Ouverture du menu utilisateur');
-    // Logique pour ouvrir le menu utilisateur
+    console.log('Ouverture du menu utilisateur'); // Debug
+    userMenuModalRef.value?.openModal();
   };
 
   const logout = () => {
@@ -40,6 +40,11 @@
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const handleProfileUpdated = (profile: any) => {
+    console.log('Profil mis à jour:', profile);
+    // Logique pour traiter la mise à jour du profil
   };
 </script>
 
@@ -92,6 +97,39 @@
     <!-- Bouton Déconnexion -->
     <DecoDialog :on-confirm="logout" />
 
-    <UserAvatar />
+    <HoverCard>
+      <HoverCardTrigger as-child>
+        <UserAvatar :onClick="openUserMenu" />
+      </HoverCardTrigger>
+      <HoverCardContent class="w-64 p-4">
+        <div class="flex flex-col space-y-4">
+          <div class="flex items-center gap-3">
+            <Avatar>
+              <AvatarImage src="https://github.com/unovue.png" alt="@unovue" />
+              <AvatarFallback>Avatar</AvatarFallback>
+            </Avatar>
+            <div class="flex flex-col space-y-1">
+              <Label class="text-sm font-semibold">John Doe</Label>
+              <Label class="text-muted-foreground text-xs">john.doe@example.com</Label>
+            </div>
+          </div>
+          <div class="bg-border h-px"></div>
+
+          <!-- Section date -->
+          <div class="flex items-center gap-2">
+            <CalendarDays class="h-4 w-4 opacity-70" />
+            <span class="text-muted-foreground text-xs">Joined January 2014</span>
+          </div>
+          <div class="text-14px flex justify-end pt-1">
+            <Button variant="default" size="sm" @click="openUserMenu">
+              <Icon name="edit" class="h-4 w-4" />
+              Edit Profile
+            </Button>
+          </div>
+        </div>
+      </HoverCardContent>
+    </HoverCard>
+
+    <UserMenuModal ref="userMenuModalRef" @profile-updated="handleProfileUpdated" />
   </div>
 </template>
