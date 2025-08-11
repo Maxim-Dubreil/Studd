@@ -63,7 +63,7 @@
         <WorkspaceCard
           name="Cartes mentales"
           desc="Génère des cartes mentales à partir des fichiers uploadés"
-          href="#"
+          :href="`${props.workspace.id}/mindmaps`"
           cta="Ouvrir"
           :Icon="Calendar"
           :bg-image="carteMentaleIcon"

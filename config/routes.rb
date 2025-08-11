@@ -16,7 +16,7 @@ Rails.application.routes.draw do
     # Si ton contrôleur est Workspaces::FlashcardsController :
     scope module: :workspaces do
       resources :flashcards, only: %i[index show create]
-      resources :mind_maps, only: %i[index show create]
+      resource :mindmaps, only: %i[show create]
     end
   end
 

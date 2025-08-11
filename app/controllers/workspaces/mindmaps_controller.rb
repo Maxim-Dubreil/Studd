@@ -116,7 +116,7 @@ TEXT
     end
 
     def set_mindmap
-      @mindmap = @workspace.mind_maps.order(id: :desc).first
+      @mindmap = @workspace.mindmaps.order(id: :desc).first
     end
   end
 end

@@ -1,0 +1,5 @@
+<% if @mindmap %>
+  <%= vue_component 'MindMapShow', { workspace_id: @workspace.id, content: @mindmap.content } %>
+<% else %>
+  <%= vue_component 'MindMapShow', { workspace_id: @workspace.id } %>
+<% end %>
