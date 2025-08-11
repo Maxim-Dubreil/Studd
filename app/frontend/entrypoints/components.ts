@@ -24,9 +24,6 @@ const registry: Record<string, any> = {
   NavbarLanding: defineAsyncComponent(
     () => import('@/components/pages/landingPage/NavbarLanding.vue')
   ),
-  ProfilPage: defineAsyncComponent(
-    () => import('@/components/pages/profilPage/Profil.vue')
-  ),
 
   // Dashboard
   Dashboard: defineAsyncComponent(() => import('@/components/dashboard/Dashboard.vue')),
