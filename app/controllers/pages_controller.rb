@@ -10,11 +10,6 @@ class PagesController < ApplicationController
     @page_title = 'À propos'
   end
 
-  def profil_page
-    @page_title = 'Profil'
-  end
-
-
   private
 
   def redirect_if_logged_in

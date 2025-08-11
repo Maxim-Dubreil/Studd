@@ -1,32 +1,32 @@
 <script setup lang="ts">
-  import GradientBackground from '@/components/shared/GradientBackground.vue';
-  import SidebarMenu from '@/components/shared/SidebarMenu.vue';
-  import ThemeToggle from '@/components/shared/ThemeToggle.vue';
-  import TopNav from '@/components/shared/TopNav.vue';
+import GradientBackground from '@/components/shared/GradientBackground.vue';
+import SidebarMenu from '@/components/shared/SidebarMenu.vue';
+import ThemeToggle from '@/components/shared/ThemeToggle.vue';
+import TopNav from '@/components/shared/TopNav.vue';
 
-  interface Props {
-    hideSidebar?: boolean;
-    hideTopNav?: boolean;
-    hideToggle?: boolean;
-    hideGradient?: boolean;
-    user?: {
-      name: string;
-      email: string;
-      avatar?: string;
-    };
-  }
+interface Props {
+  hideSidebar?: boolean;
+  hideTopNav?: boolean;
+  hideToggle?: boolean;
+  hideGradient?: boolean;
+  user?: {
+    name: string;
+    email: string;
+    avatar?: string;
+  };
+}
 
-  const props = withDefaults(defineProps<Props>(), {
-    hideSidebar: false,
-    hideTopNav: false,
-    hideToggle: false,
-    hideGradient: false,
-    user: () => ({
-      name: 'Utilisateur',
-      email: 'email@example.com',
-      avatar: undefined,
-    }),
-  });
+const props = withDefaults(defineProps<Props>(), {
+  hideSidebar: false,
+  hideTopNav: false,
+  hideToggle: false,
+  hideGradient: false,
+  user: () => ({
+    name: 'Utilisateur',
+    email: 'user@example.com',
+    avatar: undefined,
+  }),
+});
 </script>
 
 <template>
