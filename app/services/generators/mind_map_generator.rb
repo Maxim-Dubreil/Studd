@@ -7,41 +7,30 @@ module Generators
 
     def call
       prompt       = PromptBuilder::Mindmap.new(@content).build
-      raw_response = AiClient.new(prompt: prompt).call
+      raw_response = Clients::AiClient.new(prompt: prompt).call
       parse_response(raw_response)
     end
 
     private
 
     def parse_response(raw)
-      obj = JSON.parse(raw)
+      mindmap = JSON.parse(raw).fetch('mindmap')      # KeyError si la clé manque
 
-      nodes = Array(obj["nodes"]).map do |n|
-        {
-          id: n.fetch("id").to_s,
-          position: {
-            x: Float(n.dig("position", "x")),
-            y: Float(n.dig("position", "y")),
-          },
-          data: { label: n.dig("data", "label").to_s },
-          style: (n["style"].is_a?(Hash) ? n["style"] : nil)
-        }.compact
-      end
-
-      edges = Array(obj["edges"]).map do |e|
-        {
-          id: e.fetch("id").to_s,
-          source: e.fetch("source").to_s,
-          target: e.fetch("target").to_s,
-          type: (e["type"] || "bezier")
+      idx   = 0
+      build = nil
+      build = ->(node) do
+        out = {
+          id:       (idx += 1).to_s,                  # "1", "2", "3"…
+          topic:    node['topic'],
+          children: (node['children'] || []).map { |c| build.call(c) }
         }
-      end
+        out[:style] = node['style'] if node.key?('style')   # ← NOUVEAU
+        out
+    end
 
-      { nodes: nodes, edges: edges }
+      { nodeData: build.call(mindmap) }               # directement prêt pour mind.init
     rescue JSON::ParserError => e
-      raise "Réponse IA invalide : #{e.message}\n--- Contenu reçu ---\n#{raw}"
-    rescue KeyError, TypeError, ArgumentError => e
-      raise "JSON manquant ou mal formé : #{e.message}\n--- Contenu reçu ---\n#{raw}"
+      raise "Réponse OpenAI invalide : #{e.message}\n--- Contenu reçu ---\n#{raw}"
     end
 
 

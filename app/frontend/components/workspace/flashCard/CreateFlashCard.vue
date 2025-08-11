@@ -55,7 +55,7 @@
             class="absolute flex h-36 w-56 rotate-3 transform items-center justify-center rounded-lg shadow-lg transition-all duration-400 ease-in-out group-hover:scale-105 group-hover:rotate-6"
             :style="{ backgroundColor: set.content?.[0]?.color || '#818cf8' }"
           >
-            <span class="truncate px-4 text-center font-medium text-white">
+            <span class="truncate px-4 text-center font-medium text-gray-900">
               {{ set.content?.[0]?.term || 'Nouveau set' }}
             </span>
           </div>
