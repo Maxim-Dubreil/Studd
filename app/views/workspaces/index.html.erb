@@ -1,7 +1,12 @@
-<%=
-  vue_component 'WorkspacesTabPage',
+<%= vue_component 'WorkspaceIndex',
     {
-      workspaces: @workspaces.as_json(only: [:id, :name, :icon, :created_at, :updated_at]),
+            workspaces: @workspaces.as_json(
+        only: [:id, :name, :created_at, :updated_at],
+                include: { 
+          icon: { only: [:id, :name, :path] },
+          raw_content: { methods: [:content_type, :file_name], only: [:id, :content] }
+        }
+      ),
       user: {
         name: @user.email&.split('@')&.first&.capitalize || "Utilisateur",
         email: @user.email,
@@ -9,3 +14,4 @@
       }
     }
 %>
+

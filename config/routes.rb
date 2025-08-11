@@ -12,10 +12,13 @@ Rails.application.routes.draw do
   end
   get "home/index"
 
-  namespace :tools do
-  get 'flashcards/new', to: 'flashcards#new', as: :new_flashcard  # GET - Affiche le formulaire
-  post 'flashcards', to: 'flashcards#create', as: :flashcards     # POST - Traitement
-end
+  resources :workspaces, only: %i[index show] do
+    # Si ton contrôleur est Workspaces::FlashcardsController :
+    scope module: :workspaces do
+      resources :flashcards, only: %i[index show create]
+    end
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -29,8 +32,10 @@ end
   # Routes principales de l'application
   root "pages#landing_page"
   get '/dashboard', to: 'dashboards#index', as: :dashboard
-  get '/workspaces', to: 'workspaces#index', as: :workspaces
-  get '/workspaces/:id', to: 'workspaces#show', as: :workspace
+
+  resources :workspaces, only: [:index, :show, :create, :update, :destroy]
+  resources :raw_contents, only: [:create, :update]
+  resources :icons, only: [:index]
   get '/blog', to: 'pages#blog', as: :blog
   get '/courses', to: 'pages#courses', as: :courses
   get '/calendar', to: 'pages#calendar', as: :calendar
@@ -39,6 +44,7 @@ end
   get '/about',  to: 'pages#about',  as: :about
   get '/docs', to: 'pages#docs', as: :docs
   get '/landing', to: 'pages#landing_page', as: :landing
+  get '/profil', to: 'pages#profil_page', as: :profil
   namespace :api do
     namespace :v1 do
       get '/me', to: 'users#me'

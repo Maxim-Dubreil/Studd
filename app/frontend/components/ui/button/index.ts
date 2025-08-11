@@ -1,7 +1,5 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export { default as Button } from './Button.vue';
-
 export const buttonVariants = cva(
   `inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md
    text-sm font-medium
@@ -38,12 +36,21 @@ export const buttonVariants = cva(
         lg: 'h-10 rounded-md px-6 has-[>svg]:px-4',
         icon: 'size-9',
       },
+      radius: {
+        sm: 'rounded-token-sm',
+        md: 'rounded-token-md',
+        lg: 'rounded-token-lg',
+        xl: 'rounded-token-xl',
+        none: 'rounded-none'
+      },
     },
     defaultVariants: {
       variant: 'default',
       size: 'default',
+      radius: 'xl'
     },
   }
 );
 
 export type ButtonVariants = VariantProps<typeof buttonVariants>;
+export { default as Button } from './Button.vue';

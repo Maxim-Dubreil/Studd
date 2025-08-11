@@ -5,8 +5,6 @@ class Users::SessionsController < Devise::SessionsController
 
   # GET /resource/sign_in
   def new
-    @hide_navbar = true
-    @hide_sidebar = true
     super
   end
 

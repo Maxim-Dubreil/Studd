@@ -48,4 +48,8 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # Use local storage for Active Storage in development
+  config.active_storage.service = :cloudinary
+  config.active_storage.url_options = { host: 'localhost', port: 3000 }
 end

@@ -1,13 +1,9 @@
 # app/controllers/pages_controller.rb
 class PagesController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:landing_page, :about]
+  skip_before_action :authenticate_user!, only: [:landing_page, :about, :profil_page]
   before_action :redirect_if_logged_in, only: [:landing_page]
   
   def landing_page
-
-    @hide_sidebar = true
-    @hide_navbar = true
-
   end
 
   def about

@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script nonce="<%= content_security_policy_nonce %>">
+(function () {
+  try {
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = saved || (prefersDark ? 'dark' : 'light');
+    const html = document.documentElement;
+    html.classList.toggle('dark', theme === 'dark');
+    html.setAttribute('data-theme', theme);
+  } catch (_) {}
+})();
+</script>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -15,35 +27,7 @@
     <%= vite_typescript_tag 'components' %>
   </head>
 
-  <body class="min-h-screen flex flex-col overflow-hidden">
-
-    <% unless @dashboard_fullscreen %>
-      <%= vue_component 'GradientBackground' %>
-    <% end %>
-    <%# ——— NAVBAR ——————————————————————————— %>
-    <% unless @hide_navbar %>
-      <%= render partial: 'shared/navbar' %>
-    <% end %>
-
-    <%# ——— CONTENEUR PRINCIPAL ———————————————— %>
-    <% if @dashboard_fullscreen %>
-      <%# Mode plein écran pour le dashboard %>
-      <main class="flex-1 overflow-hidden">
-        <%= yield %>
-      </main>
-    <% else %>
-      <%# Mode normal avec ou sans sidebar %>
-      <div class="flex overflow-hidden flex-row-reverse">
-        <% unless @hide_sidebar %>
-          <%= render partial: 'shared/sidebar' %>
-        <% end %>
-        <main
-      class="flex-1 overflow-auto flex items-center justify-center p-8
-             <%= @hide_sidebar ? '' : 'pr-64' %>    <%# ← réserve 16 rem = w-64 seulement si sidebar visible %>"
-    >
-          <%= yield %>
-        </main>
-      </div>
-    <% end %>
+  <body>
+    <%= yield %>
   </body>
 </html>
