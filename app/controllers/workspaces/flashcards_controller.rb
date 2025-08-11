@@ -5,19 +5,16 @@ module Workspaces
     before_action :get_flash_card_sets, only: %i[new]
 
     def index
-      @hide_sidebar = true
-      @hide_navbar = true
+
       @flash_cards_sets = @workspace.flash_cards_sets.order(created_at: :desc)
     end
 
     def new
-      @hide_sidebar = true
-      @hide_navbar = true
+
     end
 
     def show
-      @hide_sidebar = true
-      @hide_navbar = true
+
     end
 
     def create

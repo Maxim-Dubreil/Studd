@@ -17,10 +17,12 @@
 
 <template>
   <AppLayout :hideSidebar="true" :hideTopNav="true" :hideToggle="false" :hideGradient="false">
-    <NavbarLanding :left="props.left" :center="props.center" :right="props.right">
-      <template #logo>
-        <slot name="logo" />
-      </template>
-    </NavbarLanding>
+    <div class="flex justify-center px-4">
+      <NavbarLanding :left="props.left" :center="props.center" :right="props.right">
+        <template #logo>
+          <slot name="logo" />
+        </template>
+      </NavbarLanding>
+    </div>
   </AppLayout>
 </template>

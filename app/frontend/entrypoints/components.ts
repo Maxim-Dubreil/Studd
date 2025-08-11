@@ -1,17 +1,33 @@
 import { createApp, defineAsyncComponent } from 'vue';
 
 const registry: Record<string, any> = {
-  ThemeToggle: defineAsyncComponent(() => import('@/components/shared/ThemeToggle.vue')),
-  UserAvatar: defineAsyncComponent(() => import('@/components/ui/avatar/UserAvatar.vue')),
-  Icon: defineAsyncComponent(() => import('@/components/ui/icon/Icon.vue')),
-  TopNav: defineAsyncComponent(() => import('@/components/shared/TopNav.vue')),
-  SidebarMenu: defineAsyncComponent(() => import('@/components/shared/SidebarMenu.vue')),
+  // Layout
   AppLayout: defineAsyncComponent(() => import('@/components/layout/AppLayout.vue')),
-  LandingLayout: defineAsyncComponent(() => import('@/components/landingPage/LandingPage.vue')),
-  NavbarLanding: defineAsyncComponent(() => import('@/components/landingPage/NavbarLanding.vue')),
+
+  // Shared Components
   GradientBackground: defineAsyncComponent(
     () => import('@/components/shared/GradientBackground.vue')
   ),
+  ThemeToggle: defineAsyncComponent(() => import('@/components/shared/ThemeToggle.vue')),
+  SidebarMenu: defineAsyncComponent(() => import('@/components/shared/SidebarMenu.vue')),
+  TopNav: defineAsyncComponent(() => import('@/components/shared/TopNav.vue')),
+
+  // UI Components
+  UserAvatar: defineAsyncComponent(() => import('@/components/ui/avatar/UserAvatar.vue')),
+  Icon: defineAsyncComponent(() => import('@/components/ui/icon/Icon.vue')),
+
+  // Pages components
+    // Landing Page
+  LandingPage: defineAsyncComponent(
+    () => import('@/components/pages/landingPage/LandingPage.vue')
+  ),
+  NavbarLanding: defineAsyncComponent(
+    () => import('@/components/pages/landingPage/NavbarLanding.vue')
+  ),
+  ProfilPage: defineAsyncComponent(
+    () => import('@/components/pages/profilPage/Profil.vue')
+  ),
+
   // Dashboard
   Dashboard: defineAsyncComponent(() => import('@/components/dashboard/Dashboard.vue')),
   DashboardContent: defineAsyncComponent(
@@ -31,7 +47,9 @@ const registry: Record<string, any> = {
   WorkspaceIndex: defineAsyncComponent(
     () => import('@/components/workspace/Index/WorkspaceIndex.vue')
   ),
-  FlashCardSet: defineAsyncComponent(() => import('@/components/workspace/flashCard/FlashCardSet.vue')),
+  FlashCardSet: defineAsyncComponent(
+    () => import('@/components/workspace/flashCard/FlashCardSet.vue')
+  ),
 
   // Auth
   RegistrationForm: defineAsyncComponent(() => import('@/components/auth/RegistrationForm.vue')),
