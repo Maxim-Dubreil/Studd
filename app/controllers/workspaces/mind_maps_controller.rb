@@ -75,7 +75,7 @@ module Workspaces
 TEXT
 
       # Génération de la mindmap
-      mindmap_data = Generators::MindmapsGenerator.new(cours).call
+      mindmap_data = Generators::MindMapGenerator.new(cours).call
 
       # Création de l'enregistrement en base de données
       @mindmapContent = @workspace.mind_maps.create!(
