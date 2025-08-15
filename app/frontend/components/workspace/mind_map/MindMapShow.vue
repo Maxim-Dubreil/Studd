@@ -1,11 +1,21 @@
 <template>
   <!-- Affichage de la mindmap si elle existe -->
-  <div v-if="!isLoading && content" class="relative">
+  <div v-if="!isLoading && content" class="relative flex items-center justify-center min-h-screen">
     <div id="map" class="w-300 h-[600px] rounded-xl"></div>
-    <button @click="deleteMindmap" class="absolute top-2 right-2 px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-lg shadow-md"
+    <Button
+      @click="deleteMindmap"
+      variant="destructive"
+      size="sm"
+      class="absolute top-2 right-2"
     >
       Supprimer
-    </button>
+    </Button>
+    <a
+      :href="`/workspaces/${props.workspace_id}`"
+      class="bg-card/50 hover:bg-card/80 absolute top-2 left-2 rounded-lg border p-2 backdrop-blur-sm"
+    >
+      <Icon name="arrow-left" class="h-6 w-6" />
+    </a>
   </div>
   <!-- Affichage du loader pendant la génération -->
   <div v-else-if="isLoading" class="flex flex-col items-center justify-center h-[600px]">
@@ -36,6 +46,8 @@ import MindElixir from 'mind-elixir'
 import type { MindElixirData } from 'mind-elixir'
 import type { Options } from 'mind-elixir'
 import 'mind-elixir/style.css'
+import Icon from '@/components/ui/icon/Icon.vue'
+import { Button } from '@/components/ui/button'
 
 interface props {
   workspace_id: number
