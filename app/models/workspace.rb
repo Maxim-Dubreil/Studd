@@ -24,4 +24,5 @@ class Workspace < ApplicationRecord
   validates :name, presence: true, length: { minimum: 3 }
   validates :user_id, presence: true
   has_many :flash_cards_sets, dependent: :destroy
+  has_many :mindmaps, dependent: :destroy
 end

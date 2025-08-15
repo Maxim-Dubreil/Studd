@@ -11,7 +11,7 @@ module Generators
 
     def call
       prompt       = PromptBuilder::Flashcard.new(@content).build
-      raw_response = AiClient.new(prompt: prompt).call
+      raw_response = Clients::AiClient.new(prompt: prompt).call
       parse_response(raw_response)
     end
 

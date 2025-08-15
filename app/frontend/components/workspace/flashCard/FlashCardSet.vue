@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import FlashcardTemplate from '@/components/tools/flashCard/FlashCardTemplate.vue';
+  import FlashcardTemplate from '@/components/workspace/flashCard/FlashCardTemplate.vue';
   import {
     Carousel,
     CarouselContent,

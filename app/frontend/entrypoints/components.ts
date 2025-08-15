@@ -47,6 +47,9 @@ const registry: Record<string, any> = {
   FlashCardSet: defineAsyncComponent(
     () => import('@/components/workspace/flashCard/FlashCardSet.vue')
   ),
+  MindMapShow: defineAsyncComponent(
+    () => import('@/components/workspace/mind_map/MindMapShow.vue')
+  ),
 
   // Auth
   RegistrationForm: defineAsyncComponent(() => import('@/components/auth/RegistrationForm.vue')),
