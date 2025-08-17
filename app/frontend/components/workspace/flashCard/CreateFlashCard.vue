@@ -38,38 +38,49 @@
         v-else
         v-for="set in props.flashCardSets"
         :key="set.id"
-        @click="handleRedirect(set.id)"
-        class="group flex h-[384px] w-[320px] flex-none snap-start flex-col rounded-3xl bg-gray-50 p-8 transition-all duration-300 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800"
+        class="group relative flex h-[384px] w-[320px] flex-none snap-start flex-col rounded-3xl bg-gray-50 p-8 transition-all duration-300 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800"
       >
-        <!-- Mini‑cartes empilées ------------------------------------------>
-        <div class="relative mb-8 flex flex-grow items-center justify-center">
-          <!-- Carte arrière -->
-          <div
-            v-if="set.content?.[1]"
-            class="absolute h-40 w-64 -rotate-6 transform rounded-lg shadow-md transition-all duration-400 ease-in-out group-hover:scale-105 group-hover:-rotate-12"
-            :style="{ backgroundColor: set.content?.[1]?.color || '#a5b4fc' }"
-          ></div>
+        <!-- Bouton de suppression -->
+        <button
+          @click.stop="confirmDelete(set.id)"
+          class="absolute top-3 right-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-gray-200/80 opacity-0 transition-opacity duration-200 hover:bg-red-100 group-hover:opacity-100 dark:bg-gray-700/80 dark:hover:bg-red-900/80"
+          title="Supprimer cette collection"
+        >
+          <Trash2 class="h-4 w-4 text-gray-600 dark:text-gray-300" />
+        </button>
 
-          <!-- Carte avant -->
-          <div
-            class="absolute flex h-40 w-64 rotate-3 transform items-center justify-center rounded-lg shadow-lg transition-all duration-400 ease-in-out group-hover:scale-105 group-hover:rotate-6"
-            :style="{ backgroundColor: set.content?.[0]?.color || '#818cf8' }"
-          >
-            <span class="truncate px-4 text-center font-medium text-gray-900">
-              {{ set.content?.[0]?.term || 'Nouveau set' }}
-            </span>
+        <!-- Zone cliquable pour redirection -->
+        <div @click="handleRedirect(set.id)" class="flex h-full w-full flex-col">
+          <!-- Mini‑cartes empilées ------------------------------------------>
+          <div class="relative mb-8 flex flex-grow items-center justify-center">
+            <!-- Carte arrière -->
+            <div
+              v-if="set.content?.[1]"
+              class="absolute h-40 w-64 -rotate-6 transform rounded-lg shadow-md transition-all duration-400 ease-in-out group-hover:scale-105 group-hover:-rotate-12"
+              :style="{ backgroundColor: set.content?.[1]?.color || '#a5b4fc' }"
+            ></div>
+
+            <!-- Carte avant -->
+            <div
+              class="absolute flex h-40 w-64 rotate-3 transform items-center justify-center rounded-lg shadow-lg transition-all duration-400 ease-in-out group-hover:scale-105 group-hover:rotate-6"
+              :style="{ backgroundColor: set.content?.[0]?.color || '#818cf8' }"
+            >
+              <span class="truncate px-4 text-center font-medium text-gray-900">
+                {{ set.content?.[0]?.term || 'Nouveau set' }}
+              </span>
+            </div>
           </div>
-        </div>
 
-        <!-- Titre + compteur --------------------------------------------->
-        <div class="mt-auto">
-          <h3 class="text-left text-xl font-medium text-gray-800 dark:text-gray-100">
-            {{ set.name }}
-          </h3>
-          <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-            {{ set.content?.length || 0 }}
-            {{ (set.content?.length || 0) > 1 ? 'cartes' : 'carte' }}
-          </p>
+          <!-- Titre + compteur --------------------------------------------->
+          <div class="mt-auto">
+            <h3 class="text-left text-xl font-medium text-gray-800 dark:text-gray-100">
+              {{ set.name }}
+            </h3>
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+              {{ set.content?.length || 0 }}
+              {{ (set.content?.length || 0) > 1 ? 'cartes' : 'carte' }}
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -137,16 +148,50 @@
       </AlertDialog>
     </div>
   </section>
+
+  <!-- Modal de confirmation de suppression -->
+  <AlertDialog v-model:open="isDeleteDialogOpen">
+    <AlertDialogContent>
+      <AlertDialogHeader>
+        <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
+        <AlertDialogDescription>
+          Êtes-vous sûr de vouloir supprimer cette collection de flashcards ?
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+      <AlertDialogFooter>
+        <AlertDialogCancel @click="isDeleteDialogOpen = false">Annuler</AlertDialogCancel>
+        <Button variant="destructive" @click="deleteFlashCardSet" :disabled="isDeleteLoading">
+          <span v-if="!isDeleteLoading">Supprimer</span>
+          <span v-else class="flex items-center gap-2">
+            <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-dasharray="60"
+                stroke-dashoffset="20"
+              />
+            </svg>
+            Suppression...
+          </span>
+        </Button>
+      </AlertDialogFooter>
+    </AlertDialogContent>
+  </AlertDialog>
 </template>
 
 <script setup lang="ts">
-  import { ArrowLeft } from 'lucide-vue-next';
+  import { ArrowLeft, Trash2 } from 'lucide-vue-next';
   import { ref } from 'vue';
   import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
+    AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
@@ -185,6 +230,9 @@
   const isLoading = ref(false);
   const setName = ref('');
   const isDialogOpen = ref(false);
+  const isDeleteDialogOpen = ref(false);
+  const isDeleteLoading = ref(false);
+  const flashCardSetToDelete = ref<number | null>(null);
 
   /* ---------- Helpers ---------- */
   function getCsrfToken(): string {
@@ -231,5 +279,37 @@
 
   function handleRedirect(id: number) {
     window.location.href = `/workspaces/${props.workspace_id}/flashcards/${id}`;
+  }
+
+  function confirmDelete(id: number) {
+    flashCardSetToDelete.value = id;
+    isDeleteDialogOpen.value = true;
+  }
+
+  async function deleteFlashCardSet() {
+    if (!flashCardSetToDelete.value) return;
+
+    isDeleteLoading.value = true;
+
+    try {
+      const res = await fetch(`/workspaces/${props.workspace_id}/flashcards/${flashCardSetToDelete.value}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'X-CSRF-Token': getCsrfToken(),
+        },
+      });
+
+      if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
+
+      // Fermer le modal et rafraîchir la page
+      isDeleteDialogOpen.value = false;
+      window.location.reload();
+    } catch (err: unknown) {
+      error.value = err instanceof Error ? err.message : 'Erreur inconnue';
+    } finally {
+      isDeleteLoading.value = false;
+    }
   }
 </script>
