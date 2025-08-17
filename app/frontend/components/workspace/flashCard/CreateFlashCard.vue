@@ -7,13 +7,13 @@
       <ArrowLeft class="h-6 w-6" />
     </a>
   </div>
-  <!-- Section stretches to the full viewport width and inherits the page gradient -->
+
   <section
-    class="<!-- ⬅️ plus large que 7xl --> mx-auto w-full max-w-screen-xl px-4 py-10 font-sans sm:px-8 sm:py-20 lg:py-5"
+    class="mx-auto w-full max-w-screen-xl px-4 py-8 font-sans sm:px-8 sm:py-16 lg:py-8"
   >
-    <div class="mb-12 text-center sm:mb-16">
+    <div class="mb-16 text-center">
       <h2
-        class="mb-3 text-4xl font-extrabold tracking-tight text-gray-900 sm:mb-4 sm:text-5xl lg:text-6xl dark:text-white"
+        class="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl dark:text-white"
       >
         Vos collections
       </h2>
@@ -24,7 +24,7 @@
 
     <!-- SCROLLER -------------------------------------------------------- -->
     <div
-      class="<!-- espaces entre cartes --> <!-- espace pour la barre --> scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 flex w-full snap-x snap-mandatory gap-10 overflow-x-auto scroll-smooth pb-2 lg:gap-12"
+      class="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 flex w-full snap-x snap-mandatory gap-8 overflow-x-auto scroll-smooth pb-4 lg:gap-16"
     >
       <!-- Message quand aucun set n'est disponible -->
       <div v-if="props.flashCardSets.length === 0" class="w-full py-8 text-center">
@@ -39,20 +39,20 @@
         v-for="set in props.flashCardSets"
         :key="set.id"
         @click="handleRedirect(set.id)"
-        class="<!-- NE PAS se rétrécir --> <!-- carte + large / + haute --> group <!-- ancrage au scroll --> flex h-[380px] w-[17rem] flex-none snap-start flex-col rounded-3xl bg-gray-50 p-6 transition-all duration-300 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800"
+        class="group flex h-[384px] w-[320px] flex-none snap-start flex-col rounded-3xl bg-gray-50 p-8 transition-all duration-300 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800"
       >
         <!-- Mini‑cartes empilées ------------------------------------------>
-        <div class="relative mb-4 flex flex-grow items-center justify-center">
+        <div class="relative mb-8 flex flex-grow items-center justify-center">
           <!-- Carte arrière -->
           <div
             v-if="set.content?.[1]"
-            class="absolute h-36 w-56 -rotate-6 transform rounded-lg shadow-md transition-all duration-400 ease-in-out group-hover:scale-105 group-hover:-rotate-12"
+            class="absolute h-40 w-64 -rotate-6 transform rounded-lg shadow-md transition-all duration-400 ease-in-out group-hover:scale-105 group-hover:-rotate-12"
             :style="{ backgroundColor: set.content?.[1]?.color || '#a5b4fc' }"
           ></div>
 
           <!-- Carte avant -->
           <div
-            class="absolute flex h-36 w-56 rotate-3 transform items-center justify-center rounded-lg shadow-lg transition-all duration-400 ease-in-out group-hover:scale-105 group-hover:rotate-6"
+            class="absolute flex h-40 w-64 rotate-3 transform items-center justify-center rounded-lg shadow-lg transition-all duration-400 ease-in-out group-hover:scale-105 group-hover:rotate-6"
             :style="{ backgroundColor: set.content?.[0]?.color || '#818cf8' }"
           >
             <span class="truncate px-4 text-center font-medium text-gray-900">
@@ -63,10 +63,10 @@
 
         <!-- Titre + compteur --------------------------------------------->
         <div class="mt-auto">
-          <h3 class="text-left text-lg font-medium text-gray-800 dark:text-gray-100">
+          <h3 class="text-left text-xl font-medium text-gray-800 dark:text-gray-100">
             {{ set.name }}
           </h3>
-          <p class="text-sm text-gray-500 dark:text-gray-400">
+          <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
             {{ set.content?.length || 0 }}
             {{ (set.content?.length || 0) > 1 ? 'cartes' : 'carte' }}
           </p>
@@ -74,12 +74,12 @@
       </div>
     </div>
 
-    <div class="mt-8 flex justify-center">
+    <div class="mt-16 flex justify-center">
       <!-- Bouton pour ouvrir le modal -->
-      <AlertDialog>
+      <AlertDialog v-model:open="isDialogOpen">
         <AlertDialogTrigger as-child>
           <button
-            class="rounded-xl bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+            class="rounded-xl bg-red-500 px-6 py-3 text-white hover:bg-red-600 text-lg font-medium"
           >
             Créer une nouvelle collection
           </button>
@@ -89,16 +89,16 @@
             <AlertDialogTitle>Créer une nouvelle collection</AlertDialogTitle>
           </AlertDialogHeader>
 
-          <div class="space-y-4 py-4">
+          <div class="space-y-4 py-8">
             <div>
-              <label for="set-name" class="mb-1 block text-sm font-medium text-gray-700">
+              <label for="set-name" class="mb-2 block text-sm font-medium text-gray-700">
                 Nom du set de flashcards
               </label>
               <input
                 id="set-name"
                 v-model="setName"
                 type="text"
-                class="w-full rounded-md border px-3 py-2 shadow-sm focus:border-red-500 focus:ring-red-500 focus:outline-none"
+                class="w-full rounded-md border px-4 py-3 shadow-sm focus:border-red-500 focus:ring-red-500 focus:outline-none"
                 placeholder="Ex: Vocabulaire français"
               />
             </div>
@@ -106,7 +106,7 @@
 
           <AlertDialogFooter>
             <AlertDialogCancel>Annuler</AlertDialogCancel>
-            <AlertDialogAction
+            <Button
               @click="generate"
               :disabled="isLoading || !setName.trim()"
               :class="
@@ -131,7 +131,7 @@
                 </svg>
                 Chargement…
               </span>
-            </AlertDialogAction>
+            </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -152,6 +152,7 @@
     AlertDialogTitle,
     AlertDialogTrigger,
   } from '@/components/ui/alert-dialog';
+  import { Button } from '@/components/ui/button';
 
   interface props {
     workspace_id: number;
@@ -182,7 +183,8 @@
   const flashcards = ref<Flashcard[]>([]);
   const error = ref<string | null>(null);
   const isLoading = ref(false);
-  const setName = ref(''); // Nouvel état pour le nom du set
+  const setName = ref('');
+  const isDialogOpen = ref(false);
 
   /* ---------- Helpers ---------- */
   function getCsrfToken(): string {
@@ -216,6 +218,10 @@
 
       const data = (await res.json()) as FlashcardsResponse;
       flashcards.value = data.flashcards;
+
+      // Fermer le modal et rafraîchir la page pour afficher la nouvelle collection
+      isDialogOpen.value = false;
+      window.location.reload();
     } catch (err: unknown) {
       error.value = err instanceof Error ? err.message : 'Erreur inconnue';
     } finally {
