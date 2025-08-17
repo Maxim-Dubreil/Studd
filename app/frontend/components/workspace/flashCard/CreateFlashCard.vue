@@ -74,49 +74,67 @@
       </div>
     </div>
 
-    <div class="space-y-4">
-      <div>
-        <label for="set-name" class="mb-1 block text-sm font-medium text-gray-700">
-          Nom du set de flashcards
-        </label>
-        <input
-          id="set-name"
-          v-model="setName"
-          type="text"
-          class="w-full rounded-md border px-3 py-2 shadow-sm focus:border-red-500 focus:ring-red-500 focus:outline-none"
-          placeholder="Ex: Vocabulaire français"
-        />
-      </div>
+    <div class="mt-8 flex justify-center">
+      <!-- Bouton pour ouvrir le modal -->
+      <AlertDialog>
+        <AlertDialogTrigger as-child>
+          <button
+            class="rounded-xl bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+          >
+            Créer une nouvelle collection
+          </button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Créer une nouvelle collection</AlertDialogTitle>
+          </AlertDialogHeader>
 
-      <button
-        @click="generate"
-        :disabled="isLoading || !setName.trim()"
-        class="rounded-xl px-4 py-2 text-white"
-        :class="
-          isLoading
-            ? 'cursor-not-allowed bg-gray-400'
-            : !setName.trim()
-              ? 'bg-gray-400'
-              : 'bg-red-500 hover:bg-red-600'
-        "
-      >
-        <span v-if="!isLoading">Générer les flashcards</span>
-        <span v-else class="flex items-center gap-2">
-          <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
-            <circle
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              stroke-width="4"
-              stroke-linecap="round"
-              stroke-dasharray="60"
-              stroke-dashoffset="20"
-            />
-          </svg>
-          Chargement…
-        </span>
-      </button>
+          <div class="space-y-4 py-4">
+            <div>
+              <label for="set-name" class="mb-1 block text-sm font-medium text-gray-700">
+                Nom du set de flashcards
+              </label>
+              <input
+                id="set-name"
+                v-model="setName"
+                type="text"
+                class="w-full rounded-md border px-3 py-2 shadow-sm focus:border-red-500 focus:ring-red-500 focus:outline-none"
+                placeholder="Ex: Vocabulaire français"
+              />
+            </div>
+          </div>
+
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction
+              @click="generate"
+              :disabled="isLoading || !setName.trim()"
+              :class="
+                isLoading || !setName.trim()
+                  ? 'cursor-not-allowed bg-gray-400'
+                  : ''
+              "
+            >
+              <span v-if="!isLoading">Générer les flashcards</span>
+              <span v-else class="flex items-center gap-2">
+                <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                    stroke-dasharray="60"
+                    stroke-dashoffset="20"
+                  />
+                </svg>
+                Chargement…
+              </span>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   </section>
 </template>
@@ -124,6 +142,16 @@
 <script setup lang="ts">
   import { ArrowLeft } from 'lucide-vue-next';
   import { ref } from 'vue';
+  import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+  } from '@/components/ui/alert-dialog';
 
   interface props {
     workspace_id: number;
@@ -165,6 +193,8 @@
 
   /* ---------- Actions ---------- */
   const generate = async (): Promise<void> => {
+    if (!setName.value.trim()) return;
+
     error.value = null;
     isLoading.value = true;
 
