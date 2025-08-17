@@ -65,6 +65,9 @@ module PromptBuilder
                  * Niveau 0 → couleur[0], niveau 1 → couleur[1], niveau 2 → couleur[2]…
               6. Applique un "border-radius" plus faible lorsque la profondeur augmente :
                  * 16px (niveau 0) → 12px (niveau 1) → 8px (niveau 2).
+              7. IMPORTANT: Assure-toi que chaque nœud a la même couleur de fond ("background") que la couleur de sa branche parente.
+                 * La couleur de la branche est déterminée par la couleur du nœud parent.
+                 * Exemple: si un nœud parent a un style {"background":"#ffb3ba"}, tous ses enfants directs doivent avoir la même couleur de fond.
 
             ▸ Contenu source à transformer en mind-map :
             #{@content}

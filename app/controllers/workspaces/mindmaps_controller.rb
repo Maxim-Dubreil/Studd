@@ -1,7 +1,7 @@
 module Workspaces
   class MindmapsController < ApplicationController
     before_action :set_workspace
-    before_action :set_mindmap, only: [:show, :destroy]
+    before_action :set_mindmap, only: [:show, :destroy, :update]
     before_action :set_content, only: [:create]
 
     def show
@@ -28,6 +28,22 @@ module Workspaces
       else
         render json: { errors: @mindmapContent.errors.full_messages },
               status: :unprocessable_entity
+      end
+    end
+
+    def update
+      # Récupérer la dernière mind-map du workspace
+      last_map = @workspace.mindmaps.order(id: :desc).first
+
+      if last_map
+        # Mettre à jour le contenu avec les données reçues
+        if last_map.update(content: params[:content])
+          render json: { mindmap: last_map }, status: :ok
+        else
+          render json: { errors: last_map.errors.full_messages }, status: :unprocessable_entity
+        end
+      else
+        render json: { error: 'Aucune mindmap à mettre à jour' }, status: :not_found
       end
     end
 
