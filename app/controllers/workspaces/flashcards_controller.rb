@@ -1,7 +1,7 @@
 module Workspaces
   class FlashcardsController < ::ApplicationController
     before_action :set_workspace
-    before_action :set_flash_cards_set, only: %i[show]
+    before_action :set_flash_cards_set, only: %i[show destroy]
     before_action :get_flash_card_sets, only: %i[new]
     before_action :set_content, only: %i[create]
 
@@ -36,6 +36,20 @@ module Workspaces
       else
         render json: { errors: @flash_cards_set.errors.full_messages },
               status: :unprocessable_entity
+      end
+    end
+
+    def destroy
+      if @flash_cards_set.destroy
+        respond_to do |format|
+          format.html { redirect_to workspace_flashcards_path(@workspace), notice: 'Collection supprimée avec succès.' }
+          format.json { head :no_content }
+        end
+      else
+        respond_to do |format|
+          format.html { redirect_to workspace_flashcards_path(@workspace), alert: 'Erreur lors de la suppression.' }
+          format.json { render json: { error: 'Erreur lors de la suppression' }, status: :unprocessable_entity }
+        end
       end
     end
 
