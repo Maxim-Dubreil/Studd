@@ -48,6 +48,9 @@ const registry: Record<string, any> = {
   MindMapShow: defineAsyncComponent(
     () => import('@/components/workspace/mind_map/MindMapShow.vue')
   ),
+  QuizzShow: defineAsyncComponent(
+    () => import('@/components/workspace/quizz/QuizzShow.vue')
+  ),
 
   // Auth
   RegistrationForm: defineAsyncComponent(() => import('@/components/auth/RegistrationForm.vue')),
