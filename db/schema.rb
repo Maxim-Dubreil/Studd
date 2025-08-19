@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_11_102040) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_19_180757) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -69,6 +69,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_11_102040) do
     t.index ["workspace_id"], name: "index_mindmaps_on_workspace_id"
   end
 
+  create_table "quizzes", force: :cascade do |t|
+    t.bigint "workspace_id", null: false
+    t.string "title"
+    t.text "description"
+    t.jsonb "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["workspace_id"], name: "index_quizzes_on_workspace_id"
+  end
+
   create_table "raw_contents", force: :cascade do |t|
     t.bigint "workspace_id", null: false
     t.datetime "created_at", null: false
@@ -104,6 +114,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_11_102040) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "flash_cards_sets", "workspaces"
   add_foreign_key "mindmaps", "workspaces"
+  add_foreign_key "quizzes", "workspaces"
   add_foreign_key "raw_contents", "workspaces"
   add_foreign_key "workspaces", "icons"
   add_foreign_key "workspaces", "users"
