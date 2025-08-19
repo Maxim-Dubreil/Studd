@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     scope module: :workspaces do
       resources :flashcards, only: %i[index show create destroy]
       resource :mindmaps, only: %i[show create destroy update]
+      resource :quizzes, only: %i[show]
     end
   end
 
