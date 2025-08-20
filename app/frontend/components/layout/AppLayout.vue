@@ -27,7 +27,7 @@ const defaultOpen = true
   <!-- ====== BRANCHE AVEC SIDEBAR ====== -->
   <template v-if="!props.hideSidebar">
     <SidebarProvider v-model:open="open" :defaultOpen="defaultOpen" style="--sidebar-width-mobile: 20rem;">
-      <div class="relative z-20 flex min-h-screen flex-col overflow-hidden">
+      <div class="relative z-20 flex w-full min-h-screen flex-col overflow-hidden">
         <GradientBackground v-if="!props.hideGradient" />
 
         <div class="relative z-10 flex flex-1 overflow-hidden">
