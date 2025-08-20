@@ -44,7 +44,6 @@ Rails.application.routes.draw do
   get '/about',  to: 'pages#about',  as: :about
   get '/docs', to: 'pages#docs', as: :docs
   get '/landing', to: 'pages#landing_page', as: :landing
-  get '/profil', to: 'pages#profil_page', as: :profil
   namespace :api do
     namespace :v1 do
       get '/me', to: 'users#me'

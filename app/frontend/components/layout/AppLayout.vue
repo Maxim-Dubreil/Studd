@@ -13,6 +13,7 @@ interface Props {
   hideTopNav?: boolean;
   hideToggle?: boolean;
   hideGradient?: boolean;
+  pageTitle?: string;
   user?: {
     name: string;
     email: string;
@@ -25,6 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
   hideTopNav: false,
   hideToggle: false,
   hideGradient: false,
+  pageTitle: '',
   user: () => ({
     name: 'Utilisateur',
     email: 'user@example.com',
@@ -34,7 +36,8 @@ const props = withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <SidebarProvider v-model:open="open" :defaultOpen="defaultOpen" style=" --sidebar-width: 20rem; --sidebar-width-mobile: 20rem;">
+  <SidebarProvider v-model:open="open" :defaultOpen="defaultOpen"
+    style=" --sidebar-width: 20rem; --sidebar-width-mobile: 20rem;">
 
     <div class="relative z-20 flex min-h-screen flex-col overflow-hidden">
       <!-- Gradient + Theme toggle -->
@@ -61,7 +64,18 @@ const props = withDefaults(defineProps<Props>(), {
 
           <!-- Slot (contenu des pages) -->
           <main class="min-h-screen flex-1 overflow-auto p-2">
-            <SidebarTrigger />
+            <header class="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+              <Separator orientation="vertical" class="mr-2 h-4" />
+              <Breadcrumb>
+                <BreadcrumbList>
+                  <BreadcrumbItem class="hidden md:block">
+                    <BreadcrumbLink href="#">
+                      <SidebarTrigger class="-ml-1" />
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+            </header>
             <slot />
           </main>
         </div>
