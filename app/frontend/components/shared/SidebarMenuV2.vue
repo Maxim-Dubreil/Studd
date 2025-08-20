@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Calendar, Grid3X3, Home, Inbox, BookOpen, Settings, FileText } from "lucide-vue-next"
-import { onMounted, ref, onUnmounted } from "vue";
-
+import { onMounted, ref, onUnmounted, toRefs } from "vue";
+import NavFooter from "./NavFooter.vue";
 import {
     Sidebar,
     SidebarContent,
@@ -12,8 +12,13 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarSeparator,
-    SidebarMenuSkeleton
+    SidebarFooter,
 } from '@/components/ui/sidebar'
+
+const props = defineProps<{
+    user?: { name: string; email: string; avatar?: string }
+}>()
+const { user } = toRefs(props)
 
 // Menu items avec tes routes
 const items = [
@@ -76,25 +81,24 @@ const isActive = (url: string) => activeItem.value === url;
 
 </script>
 <template>
-    <div class="px-3 py-5">
-        <Sidebar variant="floating" collapsible="icon" class="group" :style="{ '--sidebar-width': '248px' }">
-            <SidebarContent>
-                <SidebarGroup class="space-y-2">
-                    <SidebarGroupLabel class="px-4 pt-4 font-semibold text-neutral-900 dark:text-neutral-50 text-xl">
-                        StudyApp
-                    </SidebarGroupLabel>
-                    <SidebarSeparator class="my-3 w-3/4 mx-auto h-[2px] bg-border rounded-full
+    <Sidebar variant="floating" collapsible="icon" class="group">
+        <SidebarContent>
+            <SidebarGroup class="space-y-2">
+                <SidebarGroupLabel class="px-4 pt-4 font-semibold text-neutral-900 dark:text-neutral-50 text-xl">
+                    StudyApp
+                </SidebarGroupLabel>
+                <SidebarSeparator class="my-3 w-3/4 mx-auto h-[2px] bg-border rounded-full
                    group-data-[collapsible=icon]:hidden
                    group-data-[state=collapsed]:hidden
                    group-data-[collapsed=true]:hidden" />
 
-                    <SidebarGroupContent>
+                <SidebarGroupContent>
 
-                        <SidebarMenu class="gap-2">
+                    <SidebarMenu class="gap-2">
 
-                            <SidebarMenuItem v-for="item in items" :key="item.title">
+                        <SidebarMenuItem v-for="item in items" :key="item.title">
 
-                                <SidebarMenuButton asChild :isActive="isActive(item.url)" class="h-12 rounded-2xl px-4 text-sm font-medium tracking-wide
+                            <SidebarMenuButton asChild :isActive="isActive(item.url)" class="h-12 rounded-2xl px-4 text-sm font-medium tracking-wide
          bg-transparent text-gray-600 dark:text-gray-300 
          hover:bg-violet-100/70 dark:hover:bg-violet-900/30
          hover:text-violet-600
@@ -106,16 +110,18 @@ const isActive = (url: string) => activeItem.value === url;
          data-[active=true]:hover:brightness-105
          transition-colors
          gap-4">
-                                    <a :href="item.url" class="transition-all duration-300 hover:shadow-sm">
-                                        <component :is="item.icon" class="w-7 h-7 shrink-0" /> <span class="truncate">{{
-                                            item.title }}</span>
-                                    </a>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
-            </SidebarContent>
-        </Sidebar>
-    </div>
+                                <a :href="item.url" class="transition-all duration-300 hover:shadow-sm">
+                                    <component :is="item.icon" class="w-7 h-7 shrink-0" /> <span class="truncate">{{
+                                        item.title }}</span>
+                                </a>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarGroupContent>
+                <SidebarFooter>
+                    <NavFooter :user="user" />
+                </SidebarFooter>
+            </SidebarGroup>
+        </SidebarContent>
+    </Sidebar>
 </template>
