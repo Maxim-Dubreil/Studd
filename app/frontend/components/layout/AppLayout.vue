@@ -48,14 +48,18 @@ onMounted(() => {
   <!-- ====== BRANCHE AVEC SIDEBAR ====== -->
   <template v-if="!props.hideSidebar">
     <SidebarProvider v-model:open="open" :defaultOpen="defaultOpen" style="--sidebar-width-mobile: 20rem;">
-      <div class="relative z-20 flex w-full min-h-screen flex-col overflow-hidden">
+      <!-- Root: pleine largeur + hauteur, PAS de overflow-hidden -->
+      <div class="relative z-20 flex w-full min-h-screen flex-col">
         <GradientBackground v-if="!props.hideGradient" />
-
-        <div class="relative z-10 flex flex-1 overflow-hidden">
+        <!-- Conteneur split: DOIT avoir min-h-0 pour laisser scroller main -->
+        <div class="relative z-10 flex flex-1 min-h-0">
+          <!-- Sidebar -->
           <SidebarMenuV2 :user="props.user" />
-          <div class="flex flex-1 flex-col w-full min-w-0">
+          <!-- Colonne principale -->
+          <div class="flex min-w-0 flex-1 flex-col min-h-0">
             <AppHeader :hideCollapse="false" />
-            <main class="min-h-screen flex-1 overflow-auto p-1 w-full min-w-0">
+            <!-- Zone scrollable -->
+            <main class="flex-1 min-h-0 overflow-auto p-1 w-full min-w-0">
               <slot />
             </main>
           </div>
@@ -66,12 +70,12 @@ onMounted(() => {
 
   <!-- ====== BRANCHE SANS SIDEBAR (landing / login / autre page sans sidebar) ====== -->
   <template v-else>
-    <div class="relative z-20 flex min-h-screen flex-col overflow-hidden">
+    <div class="relative z-20 flex w-full min-h-screen flex-col">
       <GradientBackground v-if="!props.hideGradient" />
-      <div class="relative z-10 flex flex-1 overflow-hidden">
-        <div class="flex flex-1 flex-col w-full min-w-0">
+      <div class="relative z-10 flex flex-1 min-h-0">
+        <div class="flex min-w-0 flex-1 flex-col min-h-0">
           <AppHeader :hideCollapse="true" class="bg-none" />
-          <main class="min-h-screen flex-1 overflow-auto p-2 w-full min-w-0">
+          <main class="flex-1 min-h-0 overflow-auto p-2 w-full min-w-0">
             <slot />
           </main>
         </div>
