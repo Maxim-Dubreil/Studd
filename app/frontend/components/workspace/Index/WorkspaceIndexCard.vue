@@ -2,6 +2,8 @@
   import { Icon } from '@/components/ui/icon';
   import { useIconResolver } from '@/composables/useIconResolver';
   import { computed } from 'vue';
+  import { Button } from '@/components/ui/button'
+
 
   interface IconInfo {
     id: number;

@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useTheme } from '../../composables/useTheme';
 import DecoDialog from '../ui/alert-dialog/DecoDialog.vue';
 import UserAvatar from '../ui/avatar/UserAvatar.vue';
-import UserMenuModal from './UserMenuModal.vue';
+import UserMenuModal from './sidebar/UserMenuModal.vue';
 
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 
@@ -43,7 +43,7 @@ const logout = () => {
 };
 
 const handleProfileUpdated = (profile: any) => {
-  console.log('Profil mis à jour:', profile);
+  console.log('Profile update:', profile);
   // Logique pour traiter la mise à jour du profil
 };
 </script>

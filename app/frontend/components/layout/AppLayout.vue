@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import GradientBackground from '@/components/shared/GradientBackground.vue'
-import SidebarMenuV2 from '@/components/shared/SidebarMenuV2.vue'
+import SidebarMenuV2 from '@/components/shared/sidebar/SidebarMenuV2.vue'
 import AppHeader from '@/components/shared/AppHeader.vue'
 import { SidebarProvider } from '@/components/ui/sidebar'
 
@@ -34,7 +34,7 @@ const defaultOpen = true
           <SidebarMenuV2 :user="props.user" />
           <div class="flex flex-1 flex-col w-full min-w-0">
             <AppHeader :hideCollapse="false" />
-            <main class="min-h-screen flex-1 overflow-auto p-2 w-full min-w-0">
+            <main class="min-h-screen flex-1 overflow-auto p-1 w-full min-w-0">
               <slot />
             </main>
           </div>
