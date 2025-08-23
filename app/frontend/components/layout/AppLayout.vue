@@ -1,9 +1,9 @@
 <!-- AppLayout.vue (simplifié, propre) -->
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, onMounted, watch } from 'vue'
 import GradientBackground from '@/components/shared/GradientBackground.vue'
 import SidebarMenuV2 from '@/components/shared/sidebar/SidebarMenuV2.vue'
-import AppHeader from '@/components/shared/AppHeader.vue'
+import AppHeader from '@/components/shared/AppHeadar/AppHeader.vue'
 import { SidebarProvider } from '@/components/ui/sidebar'
 
 interface Props {
@@ -19,9 +19,30 @@ const props = withDefaults(defineProps<Props>(), {
   user: () => ({ name: 'Utilisateur', email: 'user@example.com' }),
 })
 
-const open = ref(true)
-const defaultOpen = true
+// Récupérer l'état depuis localStorage ou utiliser true par défaut
+const getSavedSidebarState = () => {
+  if (typeof window !== 'undefined') {
+    const saved = localStorage.getItem('sidebar-open')
+    return saved !== null ? JSON.parse(saved) : true
+  }
+  return true
+}
+
+const open = ref(getSavedSidebarState())
+const defaultOpen = getSavedSidebarState()
+
+watch(open, (newValue: boolean) => {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('sidebar-open', JSON.stringify(newValue))
+  }
+}, { immediate: false })
+
+// S'assurer que l'état est bien récupéré au montage
+onMounted(() => {
+  open.value = getSavedSidebarState()
+})
 </script>
+
 
 <template>
   <!-- ====== BRANCHE AVEC SIDEBAR ====== -->
@@ -49,7 +70,7 @@ const defaultOpen = true
       <GradientBackground v-if="!props.hideGradient" />
       <div class="relative z-10 flex flex-1 overflow-hidden">
         <div class="flex flex-1 flex-col w-full min-w-0">
-          <AppHeader :hideCollapse="true" />
+          <AppHeader :hideCollapse="true" class="bg-none" />
           <main class="min-h-screen flex-1 overflow-auto p-2 w-full min-w-0">
             <slot />
           </main>
