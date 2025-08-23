@@ -4,7 +4,6 @@
 #
 #  id         :integer          not null, primary key
 #  name       :string
-#  icon       :string
 #  user_id    :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -24,4 +23,5 @@ class Workspace < ApplicationRecord
   validates :name, presence: true, length: { minimum: 3 }
   validates :user_id, presence: true
   has_many :flash_cards_sets, dependent: :destroy
+  has_many :mindmaps, dependent: :destroy
 end
