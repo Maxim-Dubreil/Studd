@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import GradientBackground from '@/components/shared/GradientBackground.vue'
-import SidebarMenuV2 from '@/components/shared/sidebar/SidebarMenuV2.vue'
+import SidebarMenuV2 from '@/components/shared/sidebar/SidebarMenu.vue'
 import AppHeader from '@/components/shared/AppHeadar/AppHeader.vue'
 import { SidebarProvider } from '@/components/ui/sidebar'
 
