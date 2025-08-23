@@ -7,11 +7,12 @@ module Generators
 
     def initialize(content)
       @content = content
+      @shuffled_colors = PASTEL_PALETTE.shuffle
     end
 
     def call
       prompt       = PromptBuilder::Flashcard.new(@content).build
-      raw_response = AiClient.new(prompt: prompt).call
+      raw_response = Clients::AiClient.new(prompt: prompt).call
       parse_response(raw_response)
     end
 
@@ -26,7 +27,7 @@ module Generators
           id:         (idx += 1),                     # 1, 2, 3 …
           term:       plain_text(card['question']),   # libellé court
           definition: sanitize(card['answer']),       # HTML safe
-          color:      PASTEL_PALETTE[(idx - 1) % PASTEL_PALETTE.size]
+          color:      @shuffled_colors[(idx - 1) % @shuffled_colors.size]
         }
       end
     rescue JSON::ParserError => e
@@ -44,7 +45,7 @@ module Generators
     end
 
     def plain_text(html)
-      # On enlève toutes les balises pour n'avoir qu'une ligne « term »
+      # On enlève toutes les balises pour n'avoir qu'une ligne « term »
       ActionView::Base.full_sanitizer.sanitize(sanitize(html)).strip
     end
   end

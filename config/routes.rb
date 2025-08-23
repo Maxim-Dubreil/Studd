@@ -15,7 +15,8 @@ Rails.application.routes.draw do
   resources :workspaces, only: %i[index show] do
     # Si ton contrôleur est Workspaces::FlashcardsController :
     scope module: :workspaces do
-      resources :flashcards, only: %i[index show create]
+      resources :flashcards, only: %i[index show create destroy]
+      resource :mindmaps, only: %i[show create destroy update]
     end
   end
 
@@ -44,7 +45,6 @@ Rails.application.routes.draw do
   get '/about',  to: 'pages#about',  as: :about
   get '/docs', to: 'pages#docs', as: :docs
   get '/landing', to: 'pages#landing_page', as: :landing
-  get '/profil', to: 'pages#profil_page', as: :profil
   namespace :api do
     namespace :v1 do
       get '/me', to: 'users#me'

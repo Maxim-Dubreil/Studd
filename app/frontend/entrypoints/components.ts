@@ -9,8 +9,6 @@ const registry: Record<string, any> = {
     () => import('@/components/shared/GradientBackground.vue')
   ),
   ThemeToggle: defineAsyncComponent(() => import('@/components/shared/ThemeToggle.vue')),
-  SidebarMenu: defineAsyncComponent(() => import('@/components/shared/SidebarMenu.vue')),
-  TopNav: defineAsyncComponent(() => import('@/components/shared/TopNav.vue')),
 
   // UI Components
   UserAvatar: defineAsyncComponent(() => import('@/components/ui/avatar/UserAvatar.vue')),
@@ -46,6 +44,9 @@ const registry: Record<string, any> = {
   ),
   FlashCardSet: defineAsyncComponent(
     () => import('@/components/workspace/flashCard/FlashCardSet.vue')
+  ),
+  MindMapShow: defineAsyncComponent(
+    () => import('@/components/workspace/mind_map/MindMapShow.vue')
   ),
 
   // Auth
