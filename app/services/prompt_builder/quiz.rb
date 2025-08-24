@@ -4,8 +4,8 @@ module PromptBuilder
       Tu es un expert en création de quiz pédagogiques pour étudiants.
       Tes réponses doivent être prêtes à être parsées par un programme :
       — Pas de texte d'introduction ni de conclusion
-      — Pas de Markdown ni de balises
-      — Un seul objet JSON strict (UTF-8)
+      — Pas de Markdown ni de balises ni de backticks
+      — Un seul objet JSON strict (UTF-8), sans commentaires, sans virgules finales
     PROMPT
 
     EXAMPLE_JSON = <<~JSON.chomp
@@ -24,21 +24,14 @@ module PromptBuilder
               { "id": "c", "text": "git init nouvelle_branche" }
             ],
             "correctAnswers": ["a"],
-            "explanation": "On crée une branche avec `git branch <nom>`. La commande `git checkout` sert à changer de branche."
+            "explanation": "On crée une branche avec git branch <nom>. La commande git checkout sert à changer de branche."
           },
           {
             "id": "q2",
             "type": "true_false",
-            "question": "La commande `git clone` sert à créer un nouveau commit.",
+            "question": "La commande git clone sert à créer un nouveau commit.",
             "correctAnswers": ["false"],
-            "explanation": "`git clone` sert à copier un dépôt existant, pas à créer un commit."
-          },
-          {
-            "id": "q3",
-            "type": "fill_in_blank",
-            "question": "La commande pour voir l'historique des commits est `git _____`.",
-            "correctAnswers": ["log"],
-            "explanation": "`git log` permet d'afficher l'historique des commits."
+            "explanation": "git clone sert à copier un dépôt existant, pas à créer un commit."
           }
         ]
       }
@@ -66,30 +59,37 @@ module PromptBuilder
                   - "description" (string)
                   - "questions" (array)
               • Champs obligatoires pour chaque question :
-                  - "id" (string, format "qX" où X est un nombre)
-                  - "type" (string, l'un des suivants : "multiple_choice", "true_false", "fill_in_blank")
-                  - "question" (string)
+                  - "id" (string, format "qX" où X est un nombre, croissant et sans trous)
+                  - "type" (string, l'un des suivants : "multiple_choice", "true_false")
+                  - "question" (string, claire et autonome)
                   - "correctAnswers" (array de strings)
-                  - "explanation" (string)
+                  - "explanation" (string, claire et concise)
               • Champ obligatoire uniquement pour les questions de type "multiple_choice" :
-                  - "options" (array d'objets avec "id" et "text")
+                  - "options" (array d'objets { "id": "a|b|c|d", "text": "..." }) avec 3 à 4 options dont UNE SEULE correcte
 
-            ▸ Contraintes impératives :
-              1. Aucune ligne avant/après l'objet JSON.
-              2. Crée un quiz avec un titre pertinent basé sur le contenu fourni.
-              3. Adapte automatiquement le nombre de questions pour couvrir l'ensemble des notions importantes du contenu.
-              4. Identifie les concepts clés et crée des questions pertinentes pour chacun d'eux.
-              5. Choisis le type de question le plus approprié en fonction de la notion à tester :
-                 - "multiple_choice" pour les concepts avec plusieurs options possibles
-                 - "true_false" pour vérifier la compréhension d'affirmations
-                 - "fill_in_blank" pour tester la connaissance de termes spécifiques
-              6. Pour les questions à choix multiples, fournis 3 à 4 options dont une seule est correcte.
-              7. Pour les questions vrai/faux, les réponses correctes doivent être "true" ou "false".
-              8. Pour les questions à trous, utilise le symbole "_____" pour indiquer l'emplacement du mot manquant.
-              9. Chaque question doit avoir une explication claire et concise.
+            ▸ Objectif principal : couverture complète du sujet
+              1) Identifie tous les concepts clés, sous-concepts importants, bonnes pratiques et erreurs fréquentes à partir du contenu donné.
+              2) Crée **autant de questions que nécessaire** pour couvrir l'ensemble de ces éléments (aucune limite fixe).
+              3) Répartis les questions de façon proportionnée :
+                 - Concepts majeurs : au moins 1 question chacun (plus si le concept est central ou complexe).
+                 - Sous-concepts/variantes : inclure si cela améliore la couverture sans redondance.
+              4) Si le contenu est volumineux et hétérogène, assure une couverture équilibrée de chaque grande section thématique (sans ajouter de métadonnées de section dans la sortie).
+
+            ▸ Consignes de qualité et de cohérence :
+              5) Pas de texte en dehors de l'objet JSON. Pas de Markdown, pas de backticks, pas de balises HTML.
+              6) Les identifiants de questions sont continus ("q1" à "qN") et uniques.
+              7) Les options de "multiple_choice" ont des IDs parmi "a", "b", "c", "d" (sans doublon), avec exactement une bonne réponse listée dans "correctAnswers".
+              8) Pour "true_false", "correctAnswers" est soit ["true"] soit ["false"] (en minuscules).
+              9) Évite les redites : chaque question doit tester un angle ou un niveau différent.
+             10) Les explications doivent mentionner le **pourquoi** de la bonne réponse et, si utile, pourquoi les mauvaises sont incorrectes.
+             11) Utilise un langage simple, précis et sans jargon inutile. Pas de références au présent prompt dans la sortie.
+             12) Le titre et la description doivent être pertinents et refléter fidèlement le contenu et l'étendue de la couverture.
 
             ▸ Contenu source à transformer en quiz :
             #{@content}
+
+            ▸ Rappel important :
+            — La sortie doit être **uniquement** l'objet JSON final, strictement valide.
           CONTENT
         }
       ]
