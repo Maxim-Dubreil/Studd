@@ -96,7 +96,7 @@
       <button
         @click="handleLaunchQuiz"
         :disabled="!selectedMode"
-        class="inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300"
+        class="inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 mb-4"
         :class="[
           'disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none',
           selectedMode
@@ -107,6 +107,35 @@
         <Icon name="play" class="h-5 w-5" />
         {{ selectedMode ? `Lancer le ${selectedMode}` : 'Sélectionnez un mode' }}
       </button>
+
+      <!-- Bouton Générer un quizz avec modal de confirmation -->
+      <div class="mt-3">
+        <DecoDialog
+          title="Générer un quizz"
+          description="Êtes-vous sûr de vouloir générer un nouveau quizz ? Cette action entraînera la perte des statistiques de progression actuelles."
+          actionLabel="Générer"
+          cancelLabel="Annuler"
+          :onConfirm="generateNewQuiz"
+        >
+          <template #trigger>
+            <button
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground shadow-sm hover:shadow-md"
+            >
+              <Icon name="refresh-cw" class="h-4 w-4" />
+              Générer un quizz
+            </button>
+          </template>
+        </DecoDialog>
+      </div>
+    </div>
+    
+    <!-- Modal de chargement -->
+    <div v-if="isLoading" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div class="bg-background p-8 rounded-xl shadow-xl flex flex-col items-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+        <p class="text-lg font-medium">Génération du quiz en cours...</p>
+        <p class="text-sm text-muted-foreground mt-2">Veuillez patienter, cela peut prendre quelques instants.</p>
+      </div>
     </div>
   </div>
 </template>
@@ -114,6 +143,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import Icon from '@/components/ui/icon/Icon.vue';
+import DecoDialog from '@/components/ui/alert-dialog/DecoDialog.vue';
 
 // Définition des props
 const props = defineProps<{
@@ -127,6 +157,7 @@ const emit = defineEmits<{
 }>();
 
 const selectedMode = ref<'quiz' | 'test' | null>(null);
+const isLoading = ref<boolean>(false);
 
 const setSelectedMode = (mode: 'quiz' | 'test') => {
     if (mode === "test") {
@@ -140,4 +171,38 @@ const setSelectedMode = (mode: 'quiz' | 'test') => {
 const handleLaunchQuiz = () => {
     emit('launchQuiz');
 };
+
+const generateNewQuiz = async () => {
+  try {
+    // Afficher le modal de chargement
+    isLoading.value = true;
+    
+    const res = await fetch(`/workspaces/${props.workspaceId}/quiz`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-CSRF-Token': getCsrfToken(),
+      },
+      body: JSON.stringify({})
+    });
+
+    if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
+
+    // Recharger la page pour afficher le nouveau quiz
+    window.location.reload();
+  } catch (err) {
+    // Fermer le modal de chargement en cas d'erreur
+    isLoading.value = false;
+    console.error(err instanceof Error ? err.message : 'Erreur inconnue');
+    alert('Erreur lors de la génération du quiz');
+  }
+};
+
+// Fonction pour obtenir le token CSRF
+function getCsrfToken(): string {
+  const meta = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]');
+  if (!meta) throw new Error('Balise <meta name="csrf-token"> introuvable');
+  return meta.content;
+}
 </script>

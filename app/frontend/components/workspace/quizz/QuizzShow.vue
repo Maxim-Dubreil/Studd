@@ -115,20 +115,6 @@
                 </div>
               </div>
 
-              <!-- Questions à compléter -->
-              <div v-else-if="currentQuestion.type === 'fill_in_blank'" class="space-y-4">
-                <div class="p-4 bg-white border border-gray-200 rounded-xl shadow-sm" :class="{'opacity-80': questionValidated}">
-                  <input
-                    type="text"
-                    v-model="blankAnswer"
-                    class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    placeholder="Votre réponse..."
-                    @input="updateBlankAnswer"
-                    :disabled="questionValidated"
-                  />
-                </div>
-              </div>
-
               <!-- Explication de la réponse -->
               <div v-if="showExplanation" class="mt-8 p-4" :class="isCurrentAnswerCorrect ? 'bg-green-50 border border-green-200 rounded-lg' : 'bg-red-50 border border-red-200 rounded-lg'">
                 <h3 class="font-medium mb-2" :class="isCurrentAnswerCorrect ? 'text-green-800' : 'text-red-800'">{{ isCurrentAnswerCorrect ? 'Vrai' : 'Faux' }}</h3>
@@ -137,7 +123,7 @@
             </div>
 
             <!-- Résultats finaux -->
-            <div v-if="isCompleted && !testMode" class="text-center py-8 h-full flex flex-col items-center justify-center max-w-3xl mx-auto"> <!-- Ajout de max-w-3xl et mx-auto pour réduire la largeur -->
+            <div v-if="isCompleted && !testMode" class="text-center py-8 h-full flex flex-col items-center justify-center max-w-3xl mx-auto">
               <h2 class="text-2xl font-bold text-gray-800 mb-4">Quiz terminé !</h2>
               <p class="text-lg text-gray-700 mb-6">Votre score: {{ score }}/{{ quiz.questions.length }}</p>
               <div class="flex gap-4">
@@ -206,12 +192,7 @@
                 >
                   Retour à l'accueil
                 </button>
-                <button
-                  @click="generateNewQuiz"
-                  class="px-6 py-3 border border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition-colors"
-                >
-                  Générer un nouveau test
-                </button>
+                <!-- Le bouton "Générer un nouveau test" a été supprimé -->
               </div>
             </div>
         </div>
@@ -360,13 +341,6 @@ const timer = computed(() => {
   return `${minutes.toString().padStart(2, '0')}.${remainingSeconds.toString().padStart(2, '0')} Min`;
 });
 
-// Fonction pour obtenir le token CSRF
-function getCsrfToken(): string {
-  const meta = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]');
-  if (!meta) throw new Error('Balise <meta name="csrf-token"> introuvable');
-  return meta.content;
-}
-
 function setTestMode() {
   testMode.value = true;
 }
@@ -382,60 +356,19 @@ async function startQuiz(): Promise<void> {
       return;
     }
 
-    // Sinon, on génère un nouveau quiz
-    const res = await fetch(`/workspaces/${props.workspace_id}/quiz`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'X-CSRF-Token': getCsrfToken(),
-      },
-      body: JSON.stringify({})
-    });
-
-    if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
-
-    const data = await res.json();
-    quiz.value = data.quiz.content;
+    // Sinon, on utilise le quiz généré par QuizMenu
     isStartScreen.value = false;
     startTimer();
   } catch (err: unknown) {
     console.error(err instanceof Error ? err.message : 'Erreur inconnue');
-    alert('Erreur lors de la génération du quiz');
+    alert('Erreur lors du démarrage du quiz');
   } finally {
     isLoading.value = false;
   }
 }
 
-// Fonction pour générer un nouveau quiz depuis l'écran de résultats
-async function generateNewQuiz(): Promise<void> {
-  isLoading.value = true;
-  stopTimer();
-  try {
-    const res = await fetch(`/workspaces/${props.workspace_id}/quiz`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'X-CSRF-Token': getCsrfToken(),
-      },
-      body: JSON.stringify({})
-    });
+// Supprimer la fonction generateNewQuiz qui est maintenant gérée par QuizMenu
 
-    if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
-
-    const data = await res.json();
-    quiz.value = data.quiz.content;
-    resetQuizState();
-    isCompleted.value = false;
-    startTimer();
-  } catch (err: unknown) {
-    console.error(err instanceof Error ? err.message : 'Erreur inconnue');
-    alert('Erreur lors de la génération du quiz');
-  } finally {
-    isLoading.value = false;
-  }
-}
 
 function selectAnswer(answerId: string) {
   if (isMultipleAnswersQuestion.value) {
@@ -495,7 +428,7 @@ function triggerAnimation(isCorrect: boolean) {
   animationTimeout.value = window.setTimeout(() => {
     animationClass.value = '';
     animationTimeout.value = null;
-  }, 1500); // Durée de l'animation + un peu plus
+  }, 1500);
 }
 
 function nextQuestion() {
