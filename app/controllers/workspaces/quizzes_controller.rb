@@ -2,15 +2,7 @@ module Workspaces
   class QuizzesController < ApplicationController
     before_action :set_workspace
     before_action :set_quiz, only: %i[show destroy]
-    before_action :get_quizzes, only: %i[new]
     before_action :set_content, only: %i[create]
-
-    def index
-      @quizzes = @workspace.quizzes.order(created_at: :desc)
-    end
-
-    def new
-    end
 
     def show
     end
@@ -20,11 +12,16 @@ module Workspaces
         return render json: { error: "Aucun contenu trouvé pour ce workspace" }, status: :unprocessable_entity
       end
 
-      quiz_content = Generators::QuizGenerator.new(@raw_content_text, title: params[:title]).call
+      # Suppression des anciens quiz
+      @workspace.quizzes.destroy_all
 
+      # Génération du contenu du quiz sans titre spécifié (l'IA va générer un titre pertinent)
+      quiz_content = Generators::QuizGenerator.new(@raw_content_text).call
+
+      # Utilisation du titre et de la description générés par l'IA
       @quiz = @workspace.quizzes.build(
-        title: params[:title].presence || 'Nouveau quiz',
-        description: params[:description].presence || 'Quiz généré automatiquement',
+        title: quiz_content["title"],
+        description: quiz_content["description"],
         content: quiz_content
       )
 
@@ -39,12 +36,12 @@ module Workspaces
     def destroy
       if @quiz.destroy
         respond_to do |format|
-          format.html { redirect_to workspace_quizzes_path(@workspace), notice: 'Quiz supprimé avec succès.' }
+          format.html { redirect_to workspace_path(@workspace), notice: 'Quiz supprimé avec succès.' }
           format.json { head :no_content }
         end
       else
         respond_to do |format|
-          format.html { redirect_to workspace_quizzes_path(@workspace), alert: 'Erreur lors de la suppression.' }
+          format.html { redirect_to workspace_path(@workspace), alert: 'Erreur lors de la suppression.' }
           format.json { render json: { error: 'Erreur lors de la suppression' }, status: :unprocessable_entity }
         end
       end
@@ -60,21 +57,16 @@ module Workspaces
       @workspace = Workspace.find(params[:workspace_id])
     end
 
-    def get_quizzes
-      @quizzes = @workspace.quizzes.order(created_at: :desc)
-    end
-
     def set_quiz
-      @quiz = @workspace.quizzes.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      respond_to do |format|
-        format.html do
-          redirect_to workspace_quizzes_path(@workspace),
-                      alert: 'Quiz introuvable.'
-        end
-        format.json do
-          render json: { error: "Quiz introuvable : #{e.message}" },
-                status: :not_found
+      @quiz = @workspace.quizzes.order(created_at: :desc).first
+
+      unless @quiz
+        respond_to do |format|
+          format.html
+          format.json do
+            render json: { error: "Aucun quiz disponible" },
+                  status: :not_found
+          end
         end
       end
     end

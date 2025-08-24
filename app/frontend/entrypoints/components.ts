@@ -54,6 +54,8 @@ const registry: Record<string, any> = {
     () => import('@/components/workspace/quizz/QuizzShow.vue')
   ),
 
+  TestShow: defineAsyncComponent(() => import('@/components/workspace/quizz/TestShow.vue')),
+
   // Auth
   RegistrationForm: defineAsyncComponent(() => import('@/components/auth/RegistrationForm.vue')),
   LoginForm: defineAsyncComponent(() => import('@/components/auth/LoginForm.vue')),

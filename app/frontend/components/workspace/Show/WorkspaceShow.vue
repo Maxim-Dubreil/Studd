@@ -1,14 +1,14 @@
 <template>
   <AppLayout :hide-sidebar="true" :hide-top-nav="true" :hide-toggle="false" :hide-gradient="false">
     <section class="px-10 pb-16">
-      <div class="relative mb-10 text-center">
+      <div class="relative mb-10 text-center p-4">
         <a
           href="/workspaces"
           class="bg-card/50 hover:bg-card/80 absolute top-1/2 left-0 -translate-y-1/2 rounded-lg border p-2 backdrop-blur-sm"
         >
           <Icon name="arrow-left" class="h-6 w-6" />
         </a>
-        <div class="flex items-center justify-center gap-4">
+        <div class="flex items-center justify-center">
           <img
             v-if="props.workspace.icon"
             :src="getIconUrl(props.workspace.icon.path)"
@@ -35,6 +35,7 @@
           </div>
         </div>
       </div>
+
       <!-- 4 lignes sur desktop -->
       <WorkspaceGrid class="lg:grid-rows-4">
         <!-- Col 1 – lignes 1-3 -->
@@ -50,9 +51,9 @@
 
         <!-- Col 2 – lignes 1-4 -->
         <WorkspaceCard
-          name="Quizz et tests"
-          desc="Génère des quizz intelligents qui s’adaptent selon vos erreurs"
-          href="#"
+          name="Quiz"
+          desc="Apprenez votre sujet en testant vos connaissances"
+          :href="`${props.workspace.id}/quiz`"
           cta="Ouvrir"
           :Icon="HelpCircle"
           :bg-image="quizzIcon"
@@ -72,8 +73,8 @@
 
         <!-- Col 3 – lignes 2-4 -->
         <WorkspaceCard
-          name="Progression"
-          desc="Consulter votre progression et vos statistiques"
+          name="Test"
+          desc="Testez vos connaissances sur le sujet"
           href="#"
           cta="Voir"
           :Icon="LineChart"
@@ -108,6 +109,12 @@
   import quizzIcon from '@/images/quizz_icon.png';
   import { Calendar, Clipboard, HelpCircle, LineChart, SquareStack } from 'lucide-vue-next';
   import AppLayout from '../../layout/AppLayout.vue';
+  import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    type CarouselApi,
+  } from '@/components/ui/carousel';
 
   interface IconInfo {
     id: number;
