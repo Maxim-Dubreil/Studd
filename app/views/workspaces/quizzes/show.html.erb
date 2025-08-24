@@ -1,1 +1,5 @@
-<%= vue_component 'QuizzShow', {quizz: @quizz, workspace_id: @workspace.id} %>
+<% if @quiz %>
+  <%= vue_component 'QuizzShow', {quizData: @quiz.content, workspace_id: @workspace.id} %>
+<% else %>
+  <%= vue_component 'QuizzShow', {workspace_id: @workspace.id} %>
+<% end %>

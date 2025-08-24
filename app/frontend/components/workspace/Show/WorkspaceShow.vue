@@ -1,12 +1,12 @@
 <template>
   <AppLayout :hide-sidebar="true" :hide-top-nav="true" :hide-toggle="false" :hide-gradient="false">
     <section class="px-10 pb-16">
-      <div class="relative mb-10 text-center">
+      <div class="relative mb-10 text-center p-4">
         <a href="/workspaces"
           class="bg-card/50 hover:bg-card/80 absolute top-1/2 left-0 -translate-y-1/2 rounded-lg border p-2 backdrop-blur-sm">
           <Icon name="arrow-left" class="h-6 w-6" />
         </a>
-        <div class="flex items-center justify-center gap-4">
+        <div class="flex items-center justify-center">
           <img v-if="props.workspace.icon" :src="getIconUrl(props.workspace.icon.path)" :alt="props.workspace.icon.name"
             class="h-12 w-12 rounded-lg" />
           <h1 class="text-3xl font-semibold md:text-4xl">
@@ -26,16 +26,17 @@
           </div>
         </div>
       </div>
+
       <!-- 4 lignes sur desktop -->
       <WorkspaceGrid class="lg:grid-rows-4">
         <!-- Col 1 – lignes 1-3 -->
-        <WorkspaceCard name="Revision sheets" desc="Generates revision sheets from uploaded files" href="#"
-          cta="Ouvrir" :Icon="Clipboard" :bg-image="ficheDeRevisionsIcon"
+        <WorkspaceCard name="Revision sheets" desc="Generates revision sheets from uploaded files" href="#" cta="Ouvrir"
+          :Icon="Clipboard" :bg-image="ficheDeRevisionsIcon"
           cls="lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-4" />
 
         <!-- Col 2 – lignes 1-4 -->
-        <WorkspaceCard name="Quizzes & tests" desc="Generates smart quizzes that adapt based on your mistakes" href="#"
-          cta="Open" :Icon="HelpCircle" :bg-image="quizzIcon"
+        <WorkspaceCard name="Quizzes & tests" desc="Generates smart quizzes that adapt based on your mistakes"
+          :href="`${props.workspace.id}/quiz`" cta="Open" :Icon="HelpCircle" :bg-image="quizzIcon"
           cls="lg:col-start-2 lg:col-end-3 lg:row-start-1 lg:row-end-5" />
 
         <!-- Col 3 – ligne 1 -->
@@ -68,6 +69,12 @@ import progressionIcon from '@/images/mecha.png';
 import quizzIcon from '@/images/quizz_icon.png';
 import { Calendar, Clipboard, HelpCircle, LineChart, SquareStack } from 'lucide-vue-next';
 import AppLayout from '../../layout/AppLayout.vue';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from '@/components/ui/carousel';
 
 interface IconInfo {
   id: number;
