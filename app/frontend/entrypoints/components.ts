@@ -9,8 +9,6 @@ const registry: Record<string, any> = {
     () => import('@/components/shared/GradientBackground.vue')
   ),
   ThemeToggle: defineAsyncComponent(() => import('@/components/shared/ThemeToggle.vue')),
-  SidebarMenu: defineAsyncComponent(() => import('@/components/shared/SidebarMenu.vue')),
-  TopNav: defineAsyncComponent(() => import('@/components/shared/TopNav.vue')),
 
   // UI Components
   UserAvatar: defineAsyncComponent(() => import('@/components/ui/avatar/UserAvatar.vue')),

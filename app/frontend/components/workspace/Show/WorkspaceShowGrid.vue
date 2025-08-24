@@ -5,5 +5,4 @@
   </div>
 </template>
 <script setup lang="ts">
-/* Rien à déclarer : le composant ne possède pas de props */
 </script>

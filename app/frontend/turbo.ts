@@ -1,4 +1,5 @@
-// app/frontend/turbo.ts
+export {}; // Ensure this file is a module
+
 declare global {
   interface Window {
     Turbo: any;
@@ -7,8 +8,8 @@ declare global {
 }
 
 // Démarrer Turbo si disponible
-if (typeof window !== 'undefined' && window.Turbo) {
-  window.Turbo.start();
+if (typeof window !== 'undefined' && (window as any).Turbo) {
+  (window as any).Turbo.start();
 } else {
   // Import statique pour éviter les problèmes de résolution Vite
   try {
