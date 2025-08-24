@@ -8,6 +8,7 @@ interface NavItem {
   name: string;
   url: string;
   icon: string; // Nom de l'icône Lucide
+  id?: string; // Identifiant optionnel pour l'onglet
 }
 
 interface Props {
@@ -16,6 +17,11 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+// Définir les événements émis
+const emit = defineEmits<{
+  (e: 'tab-change', tabId: string): void
+}>();
 
 const activeTab = ref(props.items[0]?.name || '');
 const isMobile = ref(false);
@@ -30,8 +36,10 @@ onMounted(() => {
   return () => window.removeEventListener('resize', updateIsMobile);
 });
 
-const setActiveTab = (name: string) => {
-  activeTab.value = name;
+const setActiveTab = (item: NavItem) => {
+  activeTab.value = item.name;
+  // Émettre l'événement avec l'ID de l'onglet ou le nom si l'ID n'est pas défini
+  emit('tab-change', item.id || item.name.toLowerCase());
 };
 
 const containerClass = computed(() => {
@@ -44,13 +52,13 @@ const containerClass = computed(() => {
 
 <template>
   <div :class="containerClass">
-    <div class="flex items-center gap-3 bg-background/5 border border-border backdrop-blur-lg py-1 px-1 rounded-full shadow-lg">
+    <div class="flex items-center gap-3 bg-background/5 border border-border backdrop-blur-lg py-1 px-1 rounded-xl shadow-lg">
       <template v-for="item in props.items" :key="item.name">
         <a
           :href="item.url"
-          @click="setActiveTab(item.name)"
+          @click.prevent="setActiveTab(item)"
           :class="cn(
-            'relative cursor-pointer text-sm font-semibold px-6 py-2 rounded-full transition-colors',
+            'relative cursor-pointer text-sm font-semibold px-6 py-2 rounded-xl transition-colors',
             'text-foreground/80 hover:text-primary',
             activeTab === item.name && 'bg-muted text-primary'
           )"
@@ -64,7 +72,7 @@ const containerClass = computed(() => {
           <transition name="lamp" mode="out-in">
             <div
               v-if="activeTab === item.name"
-              class="absolute inset-0 w-full bg-primary/5 rounded-full -z-10 transition-all duration-300"
+              class="absolute inset-0 w-full bg-primary/5 rounded-xl -z-10 transition-all duration-300"
             >
               <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-primary rounded-t-full">
                 <div class="absolute w-12 h-6 bg-primary/20 rounded-full blur-md -top-2 -left-2"></div>
