@@ -3,13 +3,14 @@
     :class="[
       // Layout & base
       'group relative col-span-3 flex flex-col overflow-hidden rounded-xl',
-      'bg-white shadow-[0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]',
-      'dark:border dark:border-white/10 dark:bg-black dark:shadow-[inset_0_-20px_80px_-20px_#ffffff1f]',
+      'bg-white/80 shadow-[0_0_0_1px_rgba(0,0,0,.02),0_2px_4px_rgba(0,0,0,.03),0_12px_24px_rgba(0,0,0,.03)]',
+      'dark:border dark:border-white/5 dark:bg-black/80 dark:shadow-[inset_0_-20px_80px_-20px_#ffffff0f]',
+      'transition-all duration-300 border-2 border-transparent hover:border-violet-300 dark:hover:border-violet-500/50',
       cls,
     ]"
   >
     <!-- background décoratif -->
-    <div class="absolute inset-0 overflow-hidden rounded-xl">
+    <!-- <div class="absolute inset-0 overflow-hidden rounded-xl">
       <img
         v-if="bgImage"
         :src="bgImage"
@@ -17,7 +18,7 @@
         class="absolute inset-0 h-full w-full object-cover opacity-30 transition-opacity duration-300 group-hover:opacity-50"
       />
     </div>
-    <slot name="bg" />
+    <slot name="bg" /> -->
 
     <!-- Contenu principal -->
     <div

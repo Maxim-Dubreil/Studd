@@ -25,4 +25,5 @@ class Workspace < ApplicationRecord
   validates :user_id, presence: true
   has_many :flash_cards_sets, dependent: :destroy
   has_many :mindmaps, dependent: :destroy
+  has_many :quizzes, dependent: :destroy
 end

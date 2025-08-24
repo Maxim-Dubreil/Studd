@@ -12,17 +12,20 @@
     path: string;
   }
 
+  interface RawContent {
+    id: number;
+    content?: string | null;
+    content_type?: string | null;
+    file_name?: string | null;
+  }
+
   interface Workspace {
     id: number;
     name: string;
     icon?: IconInfo;
     created_at: string;
     updated_at: string;
-    raw_content?: {
-      content: string | null;
-      content_type: string | null;
-      file_name: string | null;
-    };
+    raw_content?: RawContent | null;
   }
 
   const props = defineProps<{
