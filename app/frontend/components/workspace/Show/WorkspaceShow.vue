@@ -3,10 +3,8 @@
     <!-- Ajout d'une classe pb-24 pour laisser de l'espace en bas pour la navbar -->
     <section class="px-10 pb-24">
       <div class="relative mb-8 text-center p-4">  <!-- Réduit la marge du bas de mb-10 à mb-8 -->
-        <a
-          href="/workspaces"
-          class="bg-card/50 hover:bg-card/80 absolute top-1/2 left-0 -translate-y-1/2 rounded-lg border p-2 backdrop-blur-sm"
-        >
+        <a href="/workspaces"
+          class="bg-card/50 hover:bg-card/80 absolute top-1/2 left-0 -translate-y-1/2 rounded-lg border p-2 backdrop-blur-sm">
           <Icon name="arrow-left" class="h-6 w-6" />
         </a>
         <div class="flex items-center justify-center">
