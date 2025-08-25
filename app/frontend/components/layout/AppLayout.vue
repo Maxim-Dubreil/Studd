@@ -59,7 +59,7 @@ onMounted(() => {
           <div class="flex min-w-0 flex-1 flex-col min-h-0">
             <AppHeader :hideCollapse="false" />
             <!-- Zone scrollable -->
-            <main class="flex-1 min-h-0 overflow-auto p-1 w-full min-w-0">
+            <main class="flex-1 min-h-0 overflow-auto w-full min-w-0">
               <slot />
             </main>
           </div>
