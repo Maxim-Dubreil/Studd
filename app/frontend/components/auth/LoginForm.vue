@@ -65,9 +65,9 @@ const submitForm = () => {
 
         <div class="grid gap-2 pb-15">
           <div class="flex items-center">
-            <Label for="password">Mot de passe</Label>
+            <Label for="password">Password</Label>
             <a :href="links.forgot" class="ml-auto inline-block text-sm underline">
-              Mot de passe oublié ?
+              Forgot password?
             </a>
 
           </div>
@@ -75,7 +75,7 @@ const submitForm = () => {
           <!-- Checkbox - remember -->
           <div className="flex items-center justify-center gap-2 pt-1">
             <Checkbox id="remember" v-model="rememberMe" :disabled="isSubmitting" />
-            <Label for="remember" class="">Se souvenir de moi</Label>
+            <Label for="remember" class="">Remember me</Label>
           </div>
         </div>
         <!-- Confirmation -->
@@ -86,7 +86,7 @@ const submitForm = () => {
               <path class="opacity-75" fill="currentColor"
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
             </svg>
-            {{ isSubmitting ? "Connexion..." : "Se connecter" }}
+            {{ isSubmitting ? "wait for connection..." : "Sign In" }}
           </Button>
         </div>
       </form>
@@ -95,7 +95,7 @@ const submitForm = () => {
       <div class="relative flex items-center justify-center">
         <div class="text-center text-white p-8">
           <h2 class="text-2xl mb-4">
-            <span>Bon retour sur </span>
+            <span>Welcome back to </span>
             <span class="font-bold">Study App !</span>
           </h2>
         </div>
@@ -103,8 +103,8 @@ const submitForm = () => {
     </template>
     <template #links>
       <div class="text-center text-sm">
-        Pas encore de compte ?
-        <a :href="links.register" class="underline underline-offset-4 hover:text-primary">S'inscrire</a>
+        Didn't have an account yet?
+        <a :href="links.register" class="underline underline-offset-4 hover:text-primary">Sign Up</a>
       </div>
     </template>
 

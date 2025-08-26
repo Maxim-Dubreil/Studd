@@ -50,7 +50,7 @@ const submitForm = () => {
 </script>
 
 <template>
-    <AuthLayout title="Créer votre compte" subtitle="" :show-sidebar="true">
+    <AuthLayout title="Create your account" subtitle="" :show-sidebar="true">
 
         <!-- Logo -->
         <template #logo>
@@ -65,22 +65,22 @@ const submitForm = () => {
                 <!-- Email -->
                 <div class="grid gap-2 pb-2">
                     <Label for="email">Email</Label>
-                    <Input id="email" v-model="email" type="email" placeholder="votre@email.com" required
+                    <Input id="email" v-model="email" type="email" placeholder="your@email.com" required
                         :disabled="isSubmitting" />
                 </div>
                 <!-- Mot de passe -->
                 <div class="grid gap-2 pb-2">
                     <Label for="password">
-                        Mot de passe
+                        Password
                         <span v-if="minimumPasswordLength" class="text-sm text-muted-foreground font-normal">
-                            ({{ minimumPasswordLength }} caractères minimum)
+                            ({{ minimumPasswordLength }} minimum characters)
                         </span>
                     </Label>
                     <Input id="password" v-model="password" type="password" required :disabled="isSubmitting" />
                 </div>
                 <!-- Confirmation -->
                 <div class="grid gap-2 pb-15">
-                    <Label for="password_confirmation">Confirmer le mot de passe</Label>
+                    <Label for="password_confirmation">Confirm Password</Label>
                     <Input id="password_confirmation" v-model="passwordConfirmation" type="password" required
                         :disabled="isSubmitting" />
                 </div>
@@ -94,7 +94,7 @@ const submitForm = () => {
                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                             </path>
                         </svg>
-                        {{ isSubmitting ? "Création en cours..." : "Créer mon compte" }}
+                        {{ isSubmitting ? "Creation..." : "Sign Up" }}
                     </Button>
                 </div>
             </form>
@@ -104,20 +104,20 @@ const submitForm = () => {
             <div class="relative flex items-center justify-center">
                 <div class="text-center text-white p-6">
                     <h2 class="text-3xl mb-4">
-                        <span>Bienvenue sur </span>
+                        <span>Welcome on </span>
                         <span class="font-bold">Study App !</span>
                     </h2>
                     <p class="px-8 text-md">
-                        La plateforme d'apprentissage qui révolutionne vos études
+                        The learning platform that revolutionizes your studies
                     </p>
                 </div>
             </div>
         </template>
         <template #links>
             <div class="text-center text-sm">
-                Déjà un compte ?
+                Already have an account ?
                 <a :href="links.login" class="underline underline-offset-4 hover:text-primary">
-                    Se connecter
+                    Sign In
                 </a>
             </div>
         </template>

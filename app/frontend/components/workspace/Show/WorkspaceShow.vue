@@ -20,6 +20,7 @@
             {{ props.workspace.name }}
           </h1>
         </div>
+
       </div>
 
       <!-- Contenu de l'onglet actif -->
@@ -35,7 +36,7 @@
   </AppLayout>
 </template>
 
-<script setup lang="ts">
+
   import { ref, computed } from 'vue';
   import Icon from '@/components/ui/icon/Icon.vue';
   import NavBar from '@/components/shared/NavBar.vue';
@@ -53,23 +54,24 @@
     path: string;
   }
 
-  interface RawContent {
-    id: number;
-    content?: string | null;
-    content_type?: string | null;
-    file_name?: string | null;
-  }
+interface RawContent {
+  id: number;
+  content?: string | null;
+  content_type?: string | null;
+  file_name?: string | null;
+}
 
-  interface Workspace {
-    id: number;
-    name: string;
-    icon?: IconInfo;
-    raw_content?: RawContent | null;
-  }
+interface Workspace {
+  id: number;
+  name: string;
+  icon?: IconInfo;
+  raw_content?: RawContent | null;
+}
 
-  const props = defineProps<{
-    workspace: Workspace;
-  }>();
+const props = defineProps<{
+  workspace: Workspace;
+}>();
+
 
   const { getIconUrl } = useIconResolver();
 

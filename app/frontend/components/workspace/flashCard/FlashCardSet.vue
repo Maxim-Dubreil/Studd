@@ -101,19 +101,19 @@
       </div>
 
       <div v-if="finished" class="flex flex-col items-center gap-4">
-        <p class="text-2xl font-semibold">Série terminée !</p>
+        <p class="text-2xl font-semibold">Series over!</p>
         <p>
-          {{ correctAnswers }} / {{ correctAnswers + wrongAnswers }} bonnes réponses ({{
+          {{ correctAnswers }} / {{ correctAnswers + wrongAnswers }} correct answers ({{
             correctAnswersPercentage
           }}
           %)
         </p>
         <div class="mt-6 flex flex-col items-center gap-4">
           <button class="rounded bg-indigo-600 px-6 py-2 text-white" @click="resetSeries">
-            Rejouer
+            Restart
           </button>
           <a :href="`/workspaces/${workspace_id}`" class="rounded bg-red-600 px-6 py-2 text-white">
-            Quitter
+            Quit
           </a>
         </div>
       </div>

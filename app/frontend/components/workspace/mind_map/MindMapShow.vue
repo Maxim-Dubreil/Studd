@@ -10,12 +10,12 @@
           size="sm"
           :disabled="isSaving"
         >
-          <span v-if="!isSaving">Sauvegarder</span>
+          <span v-if="!isSaving">Save</span>
           <span v-else class="flex items-center gap-2">
             <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
               <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="60" stroke-dashoffset="20" />
             </svg>
-            Sauvegarde...
+            Saving...
           </span>
         </Button>
         <Button
@@ -38,19 +38,19 @@
       <svg class="animate-spin h-12 w-12 mb-4" viewBox="0 0 24 24" fill="none">
         <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="60" stroke-dashoffset="20" />
       </svg>
-      <p class="text-lg">Génération de la mindmap en cours...</p>
+      <p class="text-lg">GGenerating mindmap...</p>
     </div>
     <!-- Bouton de génération si pas de mindmap -->
     <div v-else class="flex flex-col items-center justify-center h-[600px]">
-      <p class="text-lg mb-4">Aucune mindmap disponible</p>
+      <p class="text-lg mb-4">No mindmap available</p>
       <button @click="generate" :disabled="isLoading" class="px-4 py-2 rounded-xl text-white" :class="isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-500 hover:bg-red-600'"
       >
-        <span v-if="!isLoading">Générer une mindmap</span>
+        <span v-if="!isLoading">Generate mindmap</span>
         <span v-else class="flex items-center gap-2">
           <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
             <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="60" stroke-dashoffset="20" />
           </svg>
-          Chargement…
+          Loading...
         </span>
       </button>
     </div>
