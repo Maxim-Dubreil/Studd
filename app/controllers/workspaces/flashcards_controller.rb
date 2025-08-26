@@ -1,9 +1,10 @@
 module Workspaces
   class FlashcardsController < ::ApplicationController
+    include ContentExtractable
+    
     before_action :set_workspace
     before_action :set_flash_cards_set, only: %i[show destroy]
     before_action :get_flash_card_sets, only: %i[new]
-    before_action :set_content, only: %i[create]
 
     def index
 
@@ -18,13 +19,11 @@ module Workspaces
 
     end
 
-    def create
+      def create
+    content_text = extract_workspace_content
+    return unless content_text
 
-      if @raw_content_text.blank?
-        return render json: { error: "Aucun contenu trouvé pour ce workspace" }, status: :unprocessable_entity
-      end
-
-      flashcards = Generators::FlashcardGenerator.new(@raw_content_text).call
+    flashcards = Generators::FlashcardGenerator.new(content_text).call
 
       @flash_cards_set = @workspace.flash_cards_sets.build(
         name: params[:name].presence || 'Nouveau set',
@@ -81,14 +80,5 @@ module Workspaces
         end
       end
     end
-
-    def set_content
-      if @workspace.raw_content&.content.present?
-        @raw_content_text = @workspace.raw_content.content
-      else
-        @raw_content_text = ""
-      end
-    end
-
   end
 end

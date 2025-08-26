@@ -5,10 +5,3 @@ local:
 test:
   service: Disk
   root: <%= Rails.root.join("tmp/storage") %>
-
-cloudinary:
-  service: Cloudinary
-  # resource_type: 'raw'
-  upload:
-    use_filename: true
-    unique_filename: false

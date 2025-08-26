@@ -1,8 +1,9 @@
 module Workspaces
   class MindmapsController < ApplicationController
+    include ContentExtractable
+
     before_action :set_workspace
     before_action :set_mindmap, only: [:show, :destroy, :update]
-    before_action :set_content, only: [:create]
 
     def show
       @hide_navbar = true
@@ -10,25 +11,23 @@ module Workspaces
     end
 
     def create
+      content_text = extract_workspace_content
+      return unless content_text
 
-      if @raw_content_text.blank?
-        return render json: { error: "Aucun contenu trouvé pour ce workspace" }, status: :unprocessable_entity
-      end
+      mindmap_data = Generators::MindMapGenerator.new(content_text).call
 
-      mindmap_data = Generators::MindMapGenerator.new(@raw_content_text).call
+        # Création de l'enregistrement en base de données
+        @mindmapContent = @workspace.mindmaps.create!(
+          name: @workspace.name,
+          content: mindmap_data
+        )
 
-      # Création de l'enregistrement en base de données
-      @mindmapContent = @workspace.mindmaps.create!(
-        name: @workspace.name,
-        content: mindmap_data
-      )
-
-      if @mindmapContent.save
-        render json: { mindmap: @mindmapContent }, status: :created
-      else
-        render json: { errors: @mindmapContent.errors.full_messages },
-              status: :unprocessable_entity
-      end
+        if @mindmapContent.save
+          render json: { mindmap: @mindmapContent }, status: :created
+        else
+          render json: { errors: @mindmapContent.errors.full_messages },
+                status: :unprocessable_entity
+        end
     end
 
     def update
@@ -75,12 +74,6 @@ module Workspaces
       @mindmap = @workspace.mindmaps.order(id: :desc).first
     end
 
-    def set_content
-      if @workspace.raw_content&.content.present?
-        @raw_content_text = @workspace.raw_content.content
-      else
-        @raw_content_text = ""
-      end
-    end
+
   end
 end
