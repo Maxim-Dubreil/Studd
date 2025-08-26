@@ -119,7 +119,7 @@ const displayedWorkspaces = computed(() => localWorkspaces.value);
 <template>
   <AppLayout :hide-sidebar="false" :hide-gradient="false" :hide-collapse="false">
     <!-- Root page: pas de h-screen ici ! -->
-    <div class="relative w-full min-h-0">
+    <div class="relative w-full min-h-0 my-6">
       <div class="relative z-10 flex min-h-0">
         <div class="flex flex-1 min-w-0 flex-col">
           <!-- Contenu principal -->

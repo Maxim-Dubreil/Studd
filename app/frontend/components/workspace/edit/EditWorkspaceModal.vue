@@ -12,17 +12,20 @@ interface IconInfo {
   path: string;
 }
 
+interface RawContent {
+  id: number;
+  content?: string | null;
+  content_type?: string | null;
+  file_name?: string | null;
+}
+
 interface Workspace {
   id: number;
   name: string;
   icon?: IconInfo;
   created_at: string;
   updated_at: string;
-  raw_content?: {
-    content: string | null;
-    content_type: string | null;
-    file_name: string | null;
-  };
+  raw_content?: RawContent | null;
 }
 
 const props = defineProps<{
@@ -56,29 +59,15 @@ const fetchIcons = async () => {
     if (response.ok) {
       availableIcons.value = await response.json();
     } else {
-      console.error('Error loading icons');
+      console.error('Erreur lors du chargement des icônes');
     }
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Erreur:', error);
   }
 };
 
-
-  interface RawContent {
-    id: number;
-    content?: string | null;
-    content_type?: string | null;
-    file_name?: string | null;
-  }
-
-  interface Workspace {
-    id: number;
-    name: string;
-    icon?: IconInfo;
-    created_at: string;
-    updated_at: string;
-    raw_content?: RawContent | null;
-  }
+const handleUpdate = async () => {
+  if (!isChanged.value) return;
 
   const token = document.querySelector('[name="csrf-token"]')?.getAttribute('content');
   const payload = {
@@ -102,10 +91,10 @@ const fetchIcons = async () => {
       const updatedWorkspace = await response.json();
       emit('workspace-updated', updatedWorkspace);
     } else {
-      console.error('Error updating workspace');
+      console.error('Erreur lors de la mise à jour');
     }
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Erreur:', error);
   }
 };
 
@@ -123,10 +112,10 @@ const handleDelete = async () => {
     if (response.ok) {
       emit('workspace-deleted', props.workspace.id);
     } else {
-      console.error('Error deleting workspace');
+      console.error('Erreur lors de la suppression');
     }
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Erreur:', error);
   }
 };
 
