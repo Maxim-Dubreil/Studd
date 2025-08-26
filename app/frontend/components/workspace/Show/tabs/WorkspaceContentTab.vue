@@ -3,28 +3,95 @@
     <div class="rounded-xl border bg-card p-6 shadow-sm max-w-7xl w-full">
       <h2 class="text-2xl font-semibold mb-4">Contenu du workspace</h2>
 
-      <div v-if="workspace.raw_content" class="space-y-4">
-        <div class="flex items-center gap-2">
-          <Icon name="file-text" class="h-5 w-5 text-indigo-500" />
-          <span class="font-medium">Type de contenu:</span>
-          <span>{{ workspace.raw_content.content_type === 'text/plain' ? 'Texte' : 'Fichier' }}</span>
+      <div v-if="workspace.raw_content" class="space-y-6">
+        <div class="bg-muted rounded-lg p-4 border">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex items-center gap-3">
+              <div class="flex-shrink-0">
+                <Icon 
+                  :name="workspace.raw_content.content_type === 'text/plain' ? 'file-text' : 'file'" 
+                  class="h-5 w-5 text-primary" 
+                />
+              </div>
+              <div>
+                <span class="text-sm text-muted-foreground">Type de contenu</span>
+                <p class="font-medium text-foreground">
+                  {{ workspace.raw_content.content_type === 'text/plain' ? 'Texte brut' : 'Fichier' }}
+                  <span v-if="workspace.raw_content.content_type !== 'text/plain'" class="text-sm text-muted-foreground">
+                    ({{ getFileTypeLabel(workspace.raw_content.content_type) }})
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            <div v-if="workspace.raw_content.file_name" class="flex items-center gap-3">
+              <div class="flex-shrink-0">
+                <Icon name="file" class="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <span class="text-sm text-muted-foreground">Nom du fichier</span>
+                <p class="font-medium text-foreground">{{ workspace.raw_content.file_name }}</p>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div v-if="workspace.raw_content.file_name" class="flex items-center gap-2">
-          <Icon name="file" class="h-5 w-5 text-indigo-500" />
-          <span class="font-medium">Nom du fichier:</span>
-          <span>{{ workspace.raw_content.file_name }}</span>
-        </div>
-
-        <div v-if="workspace.raw_content.content" class="mt-6">
+        <div v-if="workspace.raw_content.content && workspace.raw_content.content_type === 'text/plain'" class="mt-6">
           <h3 class="text-lg font-medium mb-2">Aperçu du contenu:</h3>
           <div class="rounded-md bg-muted p-4 overflow-auto max-h-[400px]">
-            <pre class="text-sm">{{ workspace.raw_content.content }}</pre>
+            <div class="text-sm whitespace-pre-wrap break-words leading-relaxed">{{ workspace.raw_content.content }}</div>
+          </div>
+        </div>
+
+        <div v-if="workspace.raw_content.content_type !== 'text/plain'" class="mt-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-medium">Aperçu du fichier</h3>
+            <a 
+              v-if="workspace.raw_content.file_url"
+              :href="workspace.raw_content.file_url" 
+              target="_blank"
+              class="inline-flex items-center gap-2 px-3 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors">
+              <Icon name="external-link" class="h-4 w-4" />
+              Ouvrir en plein écran
+            </a>
+          </div>
+          
+          <div class="rounded-lg border overflow-hidden bg-card shadow-sm">
+            <div v-if="isPDF(workspace.raw_content.content_type) && workspace.raw_content.file_url">
+              <iframe 
+                :src="workspace.raw_content.file_url + '#view=FitH'"
+                class="w-full aspect-[4/3] border-0"
+                title="Aperçu PDF">
+              </iframe>
+            </div>
+            
+            <div v-else-if="workspace.raw_content.file_url" class="flex flex-col items-center justify-center p-12 text-muted-foreground">
+              <Icon name="file" class="h-16 w-16 mb-4 text-muted-foreground/50" />
+              <h4 class="text-lg font-medium mb-2 text-foreground">Aperçu non disponible</h4>
+              <p class="text-center mb-6 text-muted-foreground">
+                Ce type de fichier ne peut pas être prévisualisé dans le navigateur.
+              </p>
+              <a 
+                :href="workspace.raw_content.file_url" 
+                target="_blank"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted/80 text-foreground rounded-md transition-colors">
+                <Icon name="download" class="h-4 w-4" />
+                Télécharger le fichier
+              </a>
+            </div>
+            
+            <div v-else class="flex flex-col items-center justify-center p-12 text-destructive">
+              <Icon name="alert-triangle" class="h-16 w-16 mb-4 text-destructive/50" />
+              <h4 class="text-lg font-medium mb-2">Erreur de chargement</h4>
+              <p class="text-center text-destructive/80">
+                Impossible de charger le fichier. Veuillez contacter l'assistance.
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div v-else class="flex items-center gap-2 text-amber-500 justify-center p-8">
+      <div v-else class="flex items-center gap-2 text-muted-foreground justify-center p-8">
         <Icon name="alert-triangle" class="h-6 w-6" />
         <span class="text-lg">Aucun contenu n'a été ajouté à ce workspace</span>
       </div>
@@ -40,6 +107,7 @@
     content?: string | null;
     content_type?: string | null;
     file_name?: string | null;
+    file_url?: string | null;
   }
 
   interface Workspace {
@@ -51,4 +119,28 @@
   defineProps<{
     workspace: Workspace;
   }>();
+
+  // Fonction pour vérifier si le fichier est un PDF
+  const isPDF = (contentType?: string | null): boolean => {
+    return contentType === 'application/pdf';
+  };
+
+  // Fonction pour obtenir un label lisible du type de fichier
+  const getFileTypeLabel = (contentType?: string | null): string => {
+    if (!contentType) return 'Inconnu';
+    
+    const typeMap: Record<string, string> = {
+      'application/pdf': 'PDF',
+      'image/jpeg': 'Image JPEG',
+      'image/png': 'Image PNG',
+      'image/gif': 'Image GIF',
+      'text/plain': 'Texte',
+      'application/msword': 'Document Word',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Document Word',
+      'application/vnd.ms-excel': 'Feuille Excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'Feuille Excel',
+    };
+    
+    return typeMap[contentType] || contentType.split('/')[1]?.toUpperCase() || 'Fichier';
+  };
 </script>

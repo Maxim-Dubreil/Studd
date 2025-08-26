@@ -3,7 +3,7 @@
       workspace: @workspace.as_json(
         include: {
           icon: { only: [:id, :name, :path] },
-          raw_content: { only: [:id, :content, :file_name], methods: [:content_type] }
+          raw_content: { only: [:id, :content, :file_name], methods: [:content_type, :file_url] }
         }
       )
     }
