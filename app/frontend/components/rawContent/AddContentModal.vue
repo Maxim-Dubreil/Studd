@@ -8,7 +8,7 @@
 
       <div class="space-y-4">
         <div>
-          <Label class="text-muted-foreground">Téléverser un fichier</Label>
+          <Label class="text-muted-foreground">Ajouter un fichier</Label>
           <Input type="file" @change="handleFileUpload" class="mt-1" ref="fileInput" />
         </div>
 

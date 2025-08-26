@@ -1,22 +1,22 @@
 module Workspaces
   class QuizzesController < ApplicationController
+    include ContentExtractable
+    
     before_action :set_workspace
     before_action :set_quiz, only: %i[show destroy]
-    before_action :set_content, only: %i[create]
 
     def show
     end
 
-    def create
-      if @raw_content_text.blank?
-        return render json: { error: "Aucun contenu trouvé pour ce workspace" }, status: :unprocessable_entity
-      end
+      def create
+    content_text = extract_workspace_content
+    return unless content_text
 
-      # Suppression des anciens quiz
-      @workspace.quizzes.destroy_all
+    # Suppression des anciens quiz
+    @workspace.quizzes.destroy_all
 
-      # Génération du contenu du quiz sans titre spécifié (l'IA va générer un titre pertinent)
-      quiz_content = Generators::QuizGenerator.new(@raw_content_text).call
+    # Génération du contenu du quiz sans titre spécifié (l'IA va générer un titre pertinent)
+    quiz_content = Generators::QuizGenerator.new(content_text).call
 
       # Utilisation du titre et de la description générés par l'IA
       @quiz = @workspace.quizzes.build(
@@ -71,12 +71,6 @@ module Workspaces
       end
     end
 
-    def set_content
-      if @workspace.raw_content&.content.present?
-        @raw_content_text = @workspace.raw_content.content
-      else
-        @raw_content_text = ""
-      end
-    end
+
   end
 end
