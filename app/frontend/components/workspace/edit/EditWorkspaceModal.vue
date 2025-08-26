@@ -63,8 +63,22 @@ const fetchIcons = async () => {
   }
 };
 
-const handleUpdate = async () => {
-  if (!isChanged.value) return;
+
+  interface RawContent {
+    id: number;
+    content?: string | null;
+    content_type?: string | null;
+    file_name?: string | null;
+  }
+
+  interface Workspace {
+    id: number;
+    name: string;
+    icon?: IconInfo;
+    created_at: string;
+    updated_at: string;
+    raw_content?: RawContent | null;
+  }
 
   const token = document.querySelector('[name="csrf-token"]')?.getAttribute('content');
   const payload = {
