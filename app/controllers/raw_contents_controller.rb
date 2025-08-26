@@ -14,6 +14,7 @@ class RawContentsController < ApplicationController
   def create
     @workspace = current_user.workspaces.find(params[:workspace_id])
     @raw_content = @workspace.raw_content || @workspace.build_raw_content
+    handle_content_type_change
     if @raw_content.update(raw_content_params)
       render json: @raw_content.to_json(methods: [:content_type, :file_name, :file_url]), status: :ok
     else
@@ -24,6 +25,8 @@ class RawContentsController < ApplicationController
   def update
     @raw_content = RawContent.find(params[:id])
     authorize_user_for_workspace(@raw_content.workspace)
+
+    handle_content_type_change
 
     if @raw_content.update(raw_content_params)
       render json: @raw_content.to_json(methods: [:content_type, :file_name, :file_url]), status: :ok
@@ -37,6 +40,15 @@ class RawContentsController < ApplicationController
   def authorize_user_for_workspace(workspace)
     unless workspace.user == current_user
       render json: { error: "Not Authorized" }, status: :unauthorized
+    end
+  end
+
+  def handle_content_type_change
+    file_param = params[:raw_content][:file] if params[:raw_content]
+    content_param = params[:raw_content][:content] if params[:raw_content]
+
+    if content_param.present? && file_param.blank? && @raw_content.file.attached?
+      @raw_content.file.purge
     end
   end
 
