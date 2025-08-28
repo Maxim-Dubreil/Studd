@@ -3,44 +3,44 @@
   import { ref } from 'vue';
 
   const todos = ref([
-    { id: 1, text: "Finir l'exercice de JavaScript", completed: false, priority: 'high' },
-    { id: 2, text: 'Réviser les concepts de Vue.js', completed: true, priority: 'medium' },
-    { id: 3, text: 'Lire le chapitre 5 du cours', completed: false, priority: 'low' },
-    { id: 4, text: 'Préparer la présentation finale', completed: false, priority: 'high' },
-    { id: 5, text: 'Exercices CSS Grid', completed: false, priority: 'medium' },
+    { id: 1, text: "Complete the quiz", completed: false, priority: 'high' },
+    { id: 2, text: 'Review the concepts of Vue.js', completed: true, priority: 'medium' },
+    { id: 3, text: 'Read the chapter 5 of the course', completed: false, priority: 'low' },
+    { id: 4, text: 'Prepare the final presentation', completed: false, priority: 'high' },
+    { id: 5, text: 'Do the exercises of CSS Grid', completed: false, priority: 'medium' },
   ]);
 
   const notifications = ref([
     {
       id: 1,
       type: 'course',
-      title: 'Nouveau cours disponible',
-      subtitle: 'React Hooks avancés',
+      title: 'New course available',
+      subtitle: 'Advanced React Hooks',
       time: 'Il y a 2h',
       icon: 'book-open',
     },
     {
       id: 2,
       type: 'assignment',
-      title: 'Devoir à rendre demain',
-      subtitle: 'Projet Vue.js',
+      title: 'Assignment to submit tomorrow',
+      subtitle: 'Vue.js project',
       time: 'Il y a 4h',
       icon: 'clock',
     },
     {
       id: 3,
       type: 'message',
-      title: 'Message du professeur',
-      subtitle: "Changement d'horaire",
-      time: 'Il y a 1j',
+      title: 'Professor message',
+      subtitle: "Change of schedule",
+      time: '1 day ago',
       icon: 'mail',
     },
     {
       id: 4,
       type: 'grade',
-      title: 'Nouvelle note disponible',
+      title: 'New grade available',
       subtitle: 'CSS Grid - 17/20',
-      time: 'Il y a 2j',
+      time: '2 days ago',
       icon: 'star',
     },
   ]);
@@ -48,14 +48,14 @@
   const quickActions = ref([
     {
       id: 1,
-      title: 'Nouveau cours',
+      title: 'New course',
       icon: 'plus',
       color: 'text-blue-500',
       bg: 'bg-blue-100 dark:bg-blue-900/30',
     },
     {
       id: 2,
-      title: 'Planning',
+      title: 'Schedule',
       icon: 'calendar',
       color: 'text-green-500',
       bg: 'bg-green-100 dark:bg-green-900/30',
@@ -69,7 +69,7 @@
     },
     {
       id: 4,
-      title: 'Profil',
+      title: 'Profile',
       icon: 'users',
       color: 'text-orange-500',
       bg: 'bg-orange-100 dark:bg-orange-900/30',
@@ -112,7 +112,7 @@
       class="rounded-2xl border border-white/20 bg-white/80 p-6 shadow-lg backdrop-blur-xl transition-all duration-300 hover:shadow-xl dark:border-slate-700/50 dark:bg-slate-800/90 dark:shadow-xl dark:hover:shadow-slate-900/50"
     >
       <div class="mb-4 flex items-center justify-between">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Actions rapides</h3>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Quick actions</h3>
         <Icon name="zap" class="h-5 w-5 text-violet-500 dark:text-violet-400" />
       </div>
 
@@ -144,7 +144,7 @@
       class="rounded-2xl border border-white/20 bg-white/80 p-6 shadow-lg backdrop-blur-xl transition-all duration-300 hover:shadow-xl dark:border-slate-700/50 dark:bg-slate-800/90 dark:shadow-xl dark:hover:shadow-slate-900/50"
     >
       <div class="mb-4 flex items-center justify-between">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">À faire</h3>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">To do</h3>
         <div class="flex items-center space-x-2">
           <span class="text-xs text-gray-500 dark:text-gray-400">
             {{ todos.filter((t) => !t.completed).length }}/{{ todos.length }}
