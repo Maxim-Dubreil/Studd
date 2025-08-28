@@ -2,8 +2,10 @@
   vue_component 'Dashboard',
     {
       user: {
+        name: @user.email&.split('@')&.first&.capitalize || "User",
         email: @user.email,
         avatar: @user.respond_to?(:avatar) ? @user.avatar : nil
-      }
+      },
+      dashboard_stats: @dashboard_stats
     }
 %>
