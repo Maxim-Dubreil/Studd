@@ -119,11 +119,11 @@ const displayedWorkspaces = computed(() => localWorkspaces.value);
 <template>
   <AppLayout :hide-sidebar="false" :hide-gradient="false" :hide-collapse="false">
     <!-- Root page: pas de h-screen ici ! -->
-    <div class="relative w-full min-h-0">
+    <div class="relative w-full min-h-0 my-6">
       <div class="relative z-10 flex min-h-0">
         <div class="flex flex-1 min-w-0 flex-col">
           <!-- Contenu principal -->
-          <div class="flex flex-1 min-h-0 gap-6 p-6">
+          <div class="flex flex-1 min-h-0 gap-6 mx-2">
             <!-- Colonne gauche -->
             <div
               class="flex min-w-0 flex-1 flex-col rounded-2xl border border-white/20 bg-white/80 shadow-xl backdrop-blur-xl dark:border-slate-700/50 dark:bg-slate-800/90 dark:shadow-2xl">
@@ -188,7 +188,7 @@ const displayedWorkspaces = computed(() => localWorkspaces.value);
 
                 <div>
                   <h3 class="mb-3 text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Actions rapides
+                    Quick Actions :
                   </h3>
                   <div class="space-y-2">
                     <Button variant="outline" class="w-full">

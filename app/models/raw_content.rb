@@ -33,7 +33,9 @@ class RawContent < ApplicationRecord
   end
 
   def file_url
-    file.url if file.attached?
+    if file.attached?
+      Rails.application.routes.url_helpers.rails_blob_path(file, only_path: true)
+    end
   end
 
   private

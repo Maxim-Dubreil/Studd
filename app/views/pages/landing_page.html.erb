@@ -1,20 +1,20 @@
   <%= vue_component 'LandingPage',
       {
         left:   [  { label: 'StudyApp', url: root_path },
-                    { label: 'Docs',      url: "#"  }],
+                    { label: 'About',      url: "#about"  }],
         center: [
-          { label: 'Accueil', url: root_path },
-          { label: 'À-propos', url: "about_path" }
+          { label: 'Dashboard', url: "#dashboard" },
+          { label: 'Workspace', url: "#workspace" }
         ],
         right:  if user_signed_in?
                   [
                     { label: 'Dashboard', url: dashboard_path, variant: 'gradient' },
-                    { label: 'Déconnexion', url: logout_path, variant: 'outline', data: { 'data-turbo-method': :delete } }
+                    { label: 'Deconexion', url: logout_path, variant: 'outline', data: { 'data-turbo-method': :delete } }
                   ]
                 else
                   [
-                    { label: 'Inscription', url: signup_path, variant: 'gradient' },
-                    { label: 'Connexion',   url: login_path,  variant: 'outline'  }
+                    { label: 'Sign Up', url: signup_path, variant: 'gradient' },
+                    { label: 'Sign In',   url: login_path,  variant: 'outline'  }
                   ]
                 end
       } do %>

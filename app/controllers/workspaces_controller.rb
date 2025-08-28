@@ -10,7 +10,17 @@ class WorkspacesController < ApplicationController
 
   def show
     @workspace = current_user.workspaces.find(params[:id])
+  end
 
+  def stats
+    @workspace = current_user.workspaces.find(params[:id])
+    stats_service = QuizStatsService.new(@workspace, current_user)
+    @stats = stats_service.call
+
+    respond_to do |format|
+      format.html
+      format.json { render json: { stats: @stats } }
+    end
   end
 
   def create

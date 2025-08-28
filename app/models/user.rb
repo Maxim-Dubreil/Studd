@@ -4,4 +4,5 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   has_many :workspaces, dependent: :destroy
+  has_many :quiz_sessions, dependent: :destroy
 end

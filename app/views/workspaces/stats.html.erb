@@ -1,0 +1,6 @@
+<%= vue_component 'WorkspaceStats',
+    {
+      workspace: @workspace.as_json(only: [:id, :name]),
+      stats: @stats
+    }
+%>

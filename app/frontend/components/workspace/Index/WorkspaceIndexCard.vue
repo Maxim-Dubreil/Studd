@@ -81,14 +81,14 @@ const openEditModal = (event: Event) => {
       <div class="space-y-2">
         <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
           <Icon name="calendar" class="mr-2 h-4 w-4" />
-          <span>Créé le {{ createdDate }}</span>
+          <span>Created on {{ createdDate }}</span>
         </div>
 
         <!-- Indicateur d'activité -->
         <div class="flex items-center justify-between">
           <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
             <div class="mr-2 h-2 w-2 animate-pulse rounded-full bg-green-400"></div>
-            <span>Actif</span>
+            <span>Active</span>
           </div>
 
           <!-- Badge -->
@@ -104,7 +104,7 @@ const openEditModal = (event: Event) => {
     <div
       class="mt-4 border-t border-gray-100 pt-4 opacity-0 transition-all duration-300 group-hover:opacity-100 dark:border-slate-600/50">
       <div class="flex items-center justify-between">
-        <span class="text-sm text-gray-500 dark:text-gray-400">Cliquez pour ouvrir</span>
+        <span class="text-sm text-gray-500 dark:text-gray-400">Click to open</span>
         <Icon name="arrow"
           class="h-4 w-4 transform text-violet-500 transition-transform duration-300 group-hover:translate-x-1 dark:text-violet-400" />
       </div>
