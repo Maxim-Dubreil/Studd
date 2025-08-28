@@ -321,6 +321,7 @@ const questionValidated = ref(false);
 const testMode = ref(false);
 const animationClass = ref('');
 const animationTimeout = ref<number | null>(null);
+const currentQuizSessionId = ref<number | null>(null);
 
 const currentQuestion = computed(() => {
   return quiz.value.questions[currentQuestionIndex.value];
@@ -353,12 +354,14 @@ async function startQuiz(): Promise<void> {
     if (props.quizData) {
       isStartScreen.value = false;
       startTimer();
+      await createQuizSession();
       return;
     }
 
     // Sinon, on utilise le quiz généré par QuizMenu
     isStartScreen.value = false;
     startTimer();
+    await createQuizSession();
   } catch (err: unknown) {
     console.error(err instanceof Error ? err.message : 'Erreur inconnue');
     alert('Erreur lors du démarrage du quiz');
@@ -473,7 +476,7 @@ function loadQuestionState() {
   }
 }
 
-function finishQuiz() {
+async function finishQuiz() {
   // En mode test, on s'assure que toutes les questions ont été répondues
   if (testMode.value) {
     const allQuestionsAnswered = quiz.value.questions.every(question =>
@@ -489,6 +492,8 @@ function finishQuiz() {
   calculateScore();
   isCompleted.value = true;
   stopTimer();
+  
+  await updateQuizSession();
 }
 
 function isAnswerCorrect(question: Question): boolean {
@@ -534,6 +539,7 @@ function resetQuizState() {
   seconds.value = 0;
   questionsForReview.value = [];
   questionValidated.value = false;
+  currentQuizSessionId.value = null;
 }
 
 function restartQuiz() {
@@ -595,5 +601,127 @@ const isMultipleAnswersQuestion = computed(() => {
          currentQuestion.value.correctAnswers.length > 1;
 });
 
+function getCsrfToken(): string {
+  const meta = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]');
+  if (!meta) throw new Error('Balise <meta name="csrf-token"> introuvable');
+  return meta.content;
+}
+
+async function createQuizSession(): Promise<void> {
+  try {
+    const response = await fetch(`/workspaces/${props.workspace_id}/quiz_sessions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-CSRF-Token': getCsrfToken(),
+      },
+      body: JSON.stringify({
+        quiz_session: {
+          quiz_id: props.quizData?.id || quiz.value.id || 1,
+          quiz_mode: testMode.value ? 'test' : 'quiz',
+          session_type: 'standard',
+          total_questions: quiz.value.questions.length,
+          metadata: {
+            quiz_title: quiz.value.title,
+            quiz_description: quiz.value.description
+          }
+        }
+      })
+    });
+
+    if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
+
+    const data = await response.json();
+    currentQuizSessionId.value = data.quiz_session.id;
+  } catch (error) {
+    console.error('Erreur lors de la création de la session:', error);
+  }
+}
+
+async function updateQuizSession(): Promise<void> {
+  if (!currentQuizSessionId.value) return;
+
+  try {
+    const quiz_session_answers_attributes = quiz.value.questions.map((question: any) => {
+      const userAnswer = userAnswers.value[question.id] || [];
+      const isCorrect = isAnswerCorrectForQuestion(question);
+      
+      const safeUserAnswers = userAnswer.length > 0 ? userAnswer : ['non_répondu'];
+      const safeCorrectAnswers = question.correctAnswers && question.correctAnswers.length > 0 
+        ? question.correctAnswers 
+        : ['inconnu'];
+      
+      return {
+        question_id: question.id,
+        question_text: question.question,
+        question_type: question.type,
+        user_answers: safeUserAnswers,
+        correct_answers: safeCorrectAnswers,
+        is_correct: isCorrect,
+        time_spent_seconds: Math.floor(seconds.value / quiz.value.questions.length),
+        attempts_count: 1,
+        analytics_data: {
+          question_index: quiz.value.questions.indexOf(question)
+        }
+      };
+    });
+
+    const response = await fetch(`/workspaces/${props.workspace_id}/quiz_sessions/${currentQuizSessionId.value}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-CSRF-Token': getCsrfToken(),
+      },
+      body: JSON.stringify({
+        quiz_session: {
+          completed_at: new Date().toISOString(),
+          duration_seconds: seconds.value,
+          score: score.value,
+          accuracy_percentage: (score.value / quiz.value.questions.length * 100).toFixed(2),
+          metadata: {
+            quiz_title: quiz.value.title,
+            final_score: score.value,
+            total_questions: quiz.value.questions.length
+          },
+          quiz_session_answers_attributes: quiz_session_answers_attributes
+        }
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Erreur de sauvegarde:', errorData);
+      throw new Error(`Erreur HTTP ${response.status}: ${JSON.stringify(errorData)}`);
+    }
+    
+    console.log('Session sauvegardée avec succès');
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour de la session:', error);
+    console.error('Données envoyées:', {
+      completed_at: new Date().toISOString(),
+      duration_seconds: seconds.value,
+      score: score.value,
+      accuracy_percentage: (score.value / quiz.value.questions.length * 100).toFixed(2),
+      quiz_session_answers_attributes: quiz.value.questions.map((q: any) => ({
+        question_id: q.id,
+        user_answers: userAnswers.value[q.id] || [],
+        correct_answers: q.correctAnswers
+      }))
+    });
+  }
+}
+
+function isAnswerCorrectForQuestion(question: Question): boolean {
+  const userAnswer = userAnswers.value[question.id] || [];
+
+  if (question.type === 'fill_in_blank') {
+    return userAnswer[0]?.toLowerCase() === question.correctAnswers[0].toLowerCase();
+  } else {
+    return userAnswer.length === question.correctAnswers.length &&
+      userAnswer.every(answer => question.correctAnswers.includes(answer));
+  }
+}
 
 </script>

@@ -15,10 +15,8 @@ const registry: Record<string, any> = {
   Icon: defineAsyncComponent(() => import('@/components/ui/icon/Icon.vue')),
 
   // Pages components
-    // Landing Page
-  LandingPage: defineAsyncComponent(
-    () => import('@/components/pages/landingPage/LandingPage.vue')
-  ),
+  // Landing Page
+  LandingPage: defineAsyncComponent(() => import('@/components/pages/landingPage/LandingPage.vue')),
   NavbarLanding: defineAsyncComponent(
     () => import('@/components/pages/landingPage/NavbarLanding.vue')
   ),
@@ -48,9 +46,7 @@ const registry: Record<string, any> = {
   MindMapShow: defineAsyncComponent(
     () => import('@/components/workspace/mind_map/MindMapShow.vue')
   ),
-  QuizzShow: defineAsyncComponent(
-    () => import('@/components/workspace/quizz/QuizzShow.vue')
-  ),
+  QuizzShow: defineAsyncComponent(() => import('@/components/workspace/quizz/QuizzShow.vue')),
 
   TestShow: defineAsyncComponent(() => import('@/components/workspace/quizz/TestShow.vue')),
 

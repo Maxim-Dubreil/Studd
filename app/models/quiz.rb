@@ -17,4 +17,5 @@
 
 class Quiz < ApplicationRecord
   belongs_to :workspace
+  has_many :quiz_sessions, dependent: :destroy
 end

@@ -4,7 +4,6 @@
 #
 #  id         :integer          not null, primary key
 #  name       :string
-#  icon       :string
 #  user_id    :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

@@ -18,6 +18,11 @@ Rails.application.routes.draw do
       resources :flashcards, only: %i[index show create destroy]
       resource :mindmaps, only: %i[show create destroy update]
       resource :quiz, only: %i[show create destroy] # Changé de resources à resource
+      resources :quiz_sessions, only: %i[create update]
+    end
+    
+    member do
+      get :stats
     end
   end
 

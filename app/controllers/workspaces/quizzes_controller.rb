@@ -26,7 +26,7 @@ module Workspaces
       )
 
       if @quiz.save
-        render json: { quiz: @quiz }, status: :created
+        render json: { quiz: @quiz.as_json.merge('content' => @quiz.content.merge('id' => @quiz.id)) }, status: :created
       else
         render json: { errors: @quiz.errors.full_messages },
               status: :unprocessable_entity
