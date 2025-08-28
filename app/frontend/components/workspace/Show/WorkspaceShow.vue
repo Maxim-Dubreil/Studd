@@ -9,7 +9,7 @@
         <div class="flex items-center justify-center">
           <img v-if="props.workspace.icon" :src="getIconUrl(props.workspace.icon.path)" :alt="props.workspace.icon.name"
             class="h-12 w-12 rounded-lg" />
-          <h1 class="text-3xl font-semibold md:text-4xl">
+          <h1 class="text-3xl font-semibold md:text-4xl px-4">
             {{ props.workspace.name }}
           </h1>
         </div>
@@ -67,19 +67,19 @@ const activeTab = ref('tools'); // Onglet par défaut
 // Définition des éléments de navigation pour la NavBar
 const navItems = [
   {
-    name: "Outils",
+    name: "Tools",
     url: `#tools`,
     icon: "tool",
     id: "tools"
   },
   {
-    name: "Contenu",
+    name: "Content",
     url: `#content`,
     icon: "file-text",
     id: "content"
   },
   {
-    name: "Progression",
+    name: "Progress",
     url: `#progression`,
     icon: "bar-chart",
     id: "progression"
