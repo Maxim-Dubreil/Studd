@@ -100,7 +100,7 @@
                 <input id="flashcard-count" v-model.number="flashcardCount" type="number" min="1" max="50"
                   class="w-full rounded-md border px-4 py-3 shadow-sm focus:border-violet-500 focus:ring-violet-500 focus:outline-none"
                   placeholder="10" />
-                <p class="mt-1 text-sm text-gray-500">Entre 1 et 50 flashcards</p>
+                <p class="mt-1 text-sm text-gray-500">Between 1 and 50 flashcards</p>
               </div>
               <div v-if="error" class="rounded-md bg-red-50 p-3">
                 <p class="text-sm text-red-800">{{ error }}</p>
