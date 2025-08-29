@@ -1,27 +1,19 @@
 {
-  // utilise la base officielle Vue pour éviter de tout réécrire
-  "extends": "@vue/tsconfig/tsconfig.dom.json", // :contentReference[oaicite:0]{index=0}
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
-    /* cibles et résolutions */
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Node",
-
-    /* sécurité / performance */
     "strict": true,
     "isolatedModules": true,
     "skipLibCheck": true,
-
-    /* alias pour shadcn-vue et ton code front */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["app/frontend/*"] // adapte si tu changes d’arbo
+      "@/*": ["app/frontend/*"]
     },
 
-    /* types globaux (Vite) */
     "types": ["vite/client"]
   },
 
-  /* fichiers pris en compte */
   "include": ["app/frontend/**/*"]
 }

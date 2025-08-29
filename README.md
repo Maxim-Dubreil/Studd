@@ -117,18 +117,6 @@ Si vous avez des warnings avec les gems :
 gem cleanup stringio
 ```
 
-## Lancement de l'application
-
-### 🐳 Avec Docker
-
-```bash
-# Démarrer l'application (première fois ou après modifications)
-docker compose -f docker/docker-compose.yml up --build
-
-# Démarrer en arrière-plan
-docker compose -f docker/docker-compose.yml up -d
-```
-
 Accès :
 
 - **Application** : [http://localhost:3000](http://localhost:3000)
@@ -268,10 +256,12 @@ bundle exec rubocop -a
 
 ├── app/
 │ ├── controllers/ # Contrôleurs Rails
+│ ├── helpers/
 │ ├── models/ # Modèles ActiveRecord
 │ ├── views/ # Vues ERB
 │ ├── frontend/ # Code frontend (TS/Vue)
-│ └── assets/ # _A CHANGER LES CSS ET DANS STYLE FRONTEND ET AJOUTER LES ASSETS AUSSI DEDANS_
+│ ├── Service/
+│ └── assets/ # _Vide assets présent /frontend/images/ _
 ├── config/ # Configuration Rails
 ├── db/ # Migrations et schéma DB
 ├── spec/ # Tests RSpec
@@ -284,7 +274,6 @@ bundle exec rubocop -a
 
 ## Notes
 
-- L'application utilise Vite pour le frontend moderne
-- Tailwind CSS est configuré avec un watcher automatique
+- L'application utilise Vue Tailwind CSS, ainsi que la lib Shad/Cn pour un frontend moderne
 - Devise est configuré pour l'authentification
 - PostgreSQL est utilisé en développement et production
