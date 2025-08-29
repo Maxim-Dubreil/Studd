@@ -5,13 +5,14 @@ module Generators
       #AEDFF7 #E6F7E6 #F6D6FF #FFEDB8 #F9B4AC
     ].freeze
 
-    def initialize(content)
+    def initialize(content, count = 10)
       @content = content
+      @count = count
       @shuffled_colors = PASTEL_PALETTE.shuffle
     end
 
     def call
-      prompt       = PromptBuilder::Flashcard.new(@content).build
+      prompt       = PromptBuilder::Flashcard.new(@content, @count).build
       raw_response = Clients::AiClient.new(prompt: prompt).call
       parse_response(raw_response)
     end
