@@ -1,258 +1,376 @@
 <template>
   <AppLayout :hideSidebar="true" :hideTopNav="true" :hideToggle="true">
-    <!-- Structure principale -->
+    <!-- Main Structure -->
     <div class="flex flex-col h-screen">
-      <!-- Header (visible uniquement pendant le quiz) -->
-      <div v-if="!isStartScreen && !isCompleted" class="h-24 max-w-6xl w-full mx-auto p-6">
+      <!-- Header (visible only during quiz) -->
+      <div v-if="!isStartScreen && !isCompleted" class="max-w-6xl w-full mx-auto p-6">
         <a
           :href="`/workspaces/${props.workspace_id}`"
-          class="bg-card/50 hover:bg-card/80 absolute top-2 left-2 rounded-lg border p-2 backdrop-blur-sm"
+          class="bg-card/50 hover:bg-card/80 absolute top-4 left-4 rounded-lg border p-2 backdrop-blur-sm z-10 transition-all"
         >
-          <Icon name="arrow-left" class="h-6 w-6" />
+          <Icon name="arrow-left" class="h-5 w-5" />
         </a>
-        <div class="flex items-center justify-between">
-          <div class="flex flex-col">
-            <h1 class="text-xl font-semibold text-gray-700">{{ quiz.title }}</h1>
-            <p class="text-sm text-gray-500">Session {{ currentSession }}</p>
-          </div>
+        
+        <!-- Quiz Info -->
+        <div class="text-center mb-6">
+          <h1 class="text-xl font-semibold text-foreground mb-1">{{ quiz.title }}</h1>
+          <p class="text-sm text-muted-foreground">Session {{ currentSession }}</p>
+        </div>
 
-          <div class="flex-grow mx-4">
-            <div class="flex items-center">
-              <span class="text-sm font-medium text-purple-600 mr-2">{{ progressPercentage }}%</span>
-              <div class="w-3/4 bg-gray-200 rounded-full h-2">
-                <div
-                  class="bg-purple-600 h-2 rounded-full"
-                  :style="{ width: progressPercentage + '%' }"
-                ></div>
-              </div>
+        <!-- Progress and Timer -->
+        <div class="max-w-2xl mx-auto">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <Icon name="clock" class="h-4 w-4 text-muted-foreground" />
+              <span class="text-sm font-medium text-foreground">{{ timer }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-muted-foreground">Question {{ currentQuestionIndex + 1 }} of {{ quiz.questions.length }}</span>
+              <span class="text-sm font-medium text-foreground">{{ progressPercentage }}%</span>
             </div>
           </div>
-          <div class="flex flex-col items-end">
-            <span class="text-sm font-medium text-purple-600">{{ timer }}</span>
+          <div class="w-full bg-muted rounded-full h-2">
+            <div
+              class="bg-primary h-2 rounded-full transition-all duration-500 ease-out"
+              :style="{ width: progressPercentage + '%' }"
+            ></div>
           </div>
         </div>
       </div>
 
-      <!-- Conteneur principal -->
+      <!-- Main Container -->
       <div class="flex-1 flex items-center justify-center py-4">
-        <!-- Écran de départ avec QuizMenu -->
+        <!-- Start Screen with QuizMenu -->
         <div v-if="isStartScreen" class="flex flex-col items-center justify-center min-h-screen p-6">
-          <!-- Affichage du loader pendant la génération -->
+          <!-- Loading display during generation -->
           <div v-if="isLoading" class="flex flex-col items-center justify-center h-[600px]">
             <svg class="animate-spin h-12 w-12 mb-4" viewBox="0 0 24 24" fill="none">
               <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="60" stroke-dashoffset="20" />
             </svg>
-            <p class="text-lg">Génération du quizz en cours...</p>
+            <p class="text-lg">Generating quiz...</p>
           </div>
 
-          <!-- QuizMenu à la place du bouton démarrer -->
+          <!-- QuizMenu instead of start button -->
           <div v-else>
             <QuizMenu
               :workspaceId="props.workspace_id"
+              :hasQuiz="hasQuiz"
               @launchQuiz="startQuiz()"
               @testMode="setTestMode"
+              @quizGenerated="handleQuizGenerated"
             />
           </div>
         </div>
 
-        <!-- Reste du contenu inchangé -->
-        <div v-else class="max-w-6xl w-full mx-auto h-[500px] bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col"
-             :class="[animationClass]">
-          <div class="p-6 bg-gray-50 flex-grow overflow-y-auto">
-            <!-- Affichage des questions -->
-            <div v-if="currentQuestion && !isCompleted" class="max-w-5xl mx-auto">
-              <h2 class="text-xl font-bold text-gray-800 mb-2">Question {{ currentQuestionIndex + 1 }}</h2>
-              <p class="text-lg text-gray-700 mb-4">{{ currentQuestion.question }}</p>
+        <!-- Quiz Content -->
+        <div v-else class="w-full max-w-6xl mx-auto flex flex-col" style="height: calc(100vh - 180px);">
+          <div class="bg-white rounded-3xl shadow-xl flex-1 flex flex-col overflow-hidden" :class="[animationClass]">
+            <div class="flex-1 flex flex-col overflow-hidden">
+              <!-- Question Display -->
+              <div v-if="currentQuestion && !isCompleted" class="flex-1 flex flex-col p-6">
+                <div class="mb-6">
+                  <h2 class="text-xl font-bold text-foreground mb-3">Question {{ currentQuestionIndex + 1 }}</h2>
+                  <p class="text-lg text-foreground leading-relaxed">{{ currentQuestion.question }}</p>
+                </div>
 
-              <!-- Séparateur entre la question et les réponses -->
-              <div class="h-px bg-gray-200 w-full my-10"></div>
+                <!-- Navigation Buttons -->
+                <div class="flex items-center justify-center gap-3 mb-6">
+                  <Button
+                    @click="previousQuestion"
+                    variant="outline"
+                    size="sm"
+                    :disabled="currentQuestionIndex === 0"
+                  >
+                    <Icon name="chevron-left" class="h-4 w-4 mr-1" />
+                    Previous
+                  </Button>
 
-              <!-- Questions à choix multiples -->
-              <div v-if="currentQuestion.type === 'multiple_choice'" class="space-y-4">
-                <div
-                  v-for="option in currentQuestion.options"
-                  :key="option.id"
-                  class="flex items-center p-4 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer shadow-sm"
-                  :class="{
-                    'border-purple-500 bg-purple-50 shadow-md shadow-purple-200': selectedAnswers.includes(option.id),
-                    'border-gray-200': !selectedAnswers.includes(option.id),
-                    'opacity-80': questionValidated
-                  }"
-                  @click="!questionValidated && selectAnswer(option.id)"
-                >
-                  <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center mr-3"
-                    :class="{
-                      'border-purple-500': selectedAnswers.includes(option.id),
-                      'border-gray-300': !selectedAnswers.includes(option.id)
-                    }">
-                    <div v-if="selectedAnswers.includes(option.id)" class="w-3 h-3 rounded-full bg-purple-500"></div>
+                  <Button
+                    v-if="!isLastQuestion && !testMode"
+                    @click="questionValidated ? nextQuestion() : validateQuestion()"
+                    variant="default"
+                    size="sm"
+                  >
+                    {{ questionValidated ? 'Next' : 'Validate' }}
+                    <Icon :name="questionValidated ? 'chevron-right' : 'check'" class="h-4 w-4 ml-1" />
+                  </Button>
+
+                  <Button
+                    v-if="!isLastQuestion && testMode"
+                    @click="nextQuestion"
+                    variant="default"
+                    size="sm"
+                    :disabled="!hasAnsweredCurrentQuestion"
+                  >
+                    Next
+                    <Icon name="chevron-right" class="h-4 w-4 ml-1" />
+                  </Button>
+
+                  <Button
+                    v-if="isLastQuestion && !testMode"
+                    @click="questionValidated ? finishQuiz() : validateQuestion()"
+                    variant="default"
+                    size="sm"
+                  >
+                    {{ questionValidated ? 'Finish' : 'Validate' }}
+                    <Icon :name="questionValidated ? 'flag' : 'check'" class="h-4 w-4 ml-1" />
+                  </Button>
+
+                  <Button
+                    v-if="isLastQuestion && testMode"
+                    @click="finishQuiz"
+                    variant="default"
+                    size="sm"
+                    :disabled="!hasAnsweredCurrentQuestion"
+                  >
+                    Finish
+                    <Icon name="flag" class="h-4 w-4 ml-1" />
+                  </Button>
+                </div>
+
+                <!-- Separator between navigation and answers -->
+                <div class="h-px bg-border w-full mb-6"></div>
+
+                <!-- Multiple Choice Questions -->
+                <div v-if="currentQuestion.type === 'multiple_choice'" class="flex-1 overflow-y-auto">
+                  <div class="space-y-4 pb-4">
+                    <div
+                      v-for="option in currentQuestion.options"
+                      :key="option.id"
+                      class="flex items-start p-4 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer shadow-sm"
+                      :class="{
+                        'border-purple-500 bg-purple-50 shadow-md shadow-purple-200': selectedAnswers.includes(option.id),
+                        'border-gray-200': !selectedAnswers.includes(option.id),
+                        'opacity-80': questionValidated
+                      }"
+                      @click="!questionValidated && selectAnswer(option.id)"
+                    >
+                      <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0"
+                        :class="{
+                          'border-purple-500': selectedAnswers.includes(option.id),
+                          'border-gray-300': !selectedAnswers.includes(option.id)
+                        }">
+                        <div v-if="selectedAnswers.includes(option.id)" class="w-3 h-3 rounded-full bg-purple-500"></div>
+                      </div>
+                      <span class="leading-relaxed">{{ option.text }}</span>
+                    </div>
                   </div>
-                  <span>{{ option.text }}</span>
+                </div>
+
+                <!-- True/False Questions -->
+                <div v-else-if="currentQuestion.type === 'true_false'" class="flex-1 overflow-y-auto">
+                  <div class="space-y-4 pb-4">
+                    <div
+                      v-for="option in [{id: 'true', text: 'True'}, {id: 'false', text: 'False'}]"
+                      :key="option.id"
+                      class="flex items-center p-4 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer shadow-sm"
+                      :class="{
+                        'border-purple-500 bg-purple-50 shadow-md shadow-purple-200': selectedAnswers.includes(option.id),
+                        'border-gray-200': !selectedAnswers.includes(option.id),
+                        'opacity-80': questionValidated
+                      }"
+                      @click="!questionValidated && selectAnswer(option.id)"
+                    >
+                      <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center mr-3 flex-shrink-0"
+                        :class="{
+                          'border-purple-500': selectedAnswers.includes(option.id),
+                          'border-gray-300': !selectedAnswers.includes(option.id)
+                        }">
+                        <div v-if="selectedAnswers.includes(option.id)" class="w-3 h-3 rounded-full bg-purple-500"></div>
+                      </div>
+                      <span class="leading-relaxed">{{ option.text }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Answer Explanation -->
+                <div v-if="showExplanation" class="mt-6 p-4 rounded-lg border" :class="isCurrentAnswerCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'">
+                  <h3 class="font-medium mb-2" :class="isCurrentAnswerCorrect ? 'text-green-800' : 'text-red-800'">
+                    {{ isCurrentAnswerCorrect ? 'Correct!' : 'Incorrect' }}
+                  </h3>
+                  <p class="leading-relaxed" :class="isCurrentAnswerCorrect ? 'text-green-700' : 'text-red-700'">
+                    {{ currentQuestion.explanation }}
+                  </p>
                 </div>
               </div>
 
-              <!-- Questions vrai/faux -->
-              <div v-else-if="currentQuestion.type === 'true_false'" class="space-y-4">
-                <div
-                  v-for="option in [{id: 'true', text: 'Vrai'}, {id: 'false', text: 'Faux'}]"
-                  :key="option.id"
-                  class="flex items-center p-4 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer shadow-sm"
-                  :class="{
-                    'border-purple-500 bg-purple-50 shadow-md shadow-purple-200': selectedAnswers.includes(option.id),
-                    'border-gray-200': !selectedAnswers.includes(option.id),
-                    'opacity-80': questionValidated
-                  }"
-                  @click="!questionValidated && selectAnswer(option.id)"
-                >
-                  <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center mr-3"
-                    :class="{
-                      'border-purple-500': selectedAnswers.includes(option.id),
-                      'border-gray-300': !selectedAnswers.includes(option.id)
-                    }">
-                    <div v-if="selectedAnswers.includes(option.id)" class="w-3 h-3 rounded-full bg-purple-500"></div>
+              <!-- Learning Mode Results -->
+              <div v-if="isCompleted && !testMode" class="flex-1 flex flex-col items-center justify-center p-6">
+                <div class="max-w-2xl w-full">
+                  <!-- Success Animation & Icon -->
+                  <div class="text-center mb-8">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4">
+                      <Icon name="check-circle" class="w-10 h-10 text-green-600" />
+                    </div>
+                    <h2 class="text-3xl font-bold text-foreground mb-2">Learning Complete!</h2>
+                    <p class="text-muted-foreground text-lg">Great job on completing the learning session</p>
                   </div>
-                  <span>{{ option.text }}</span>
+
+                  <!-- Score Card -->
+                  <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6 mb-6">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <h3 class="text-lg font-semibold text-green-800 mb-1">Your Performance</h3>
+                        <p class="text-green-600 text-sm">Questions answered correctly</p>
+                      </div>
+                      <div class="text-right">
+                        <div class="text-3xl font-bold text-green-700">{{ score }}</div>
+                        <div class="text-sm text-green-600">out of {{ quiz.questions.length }}</div>
+                      </div>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div class="mt-4">
+                      <div class="flex justify-between text-sm text-green-600 mb-2">
+                        <span>Accuracy</span>
+                        <span>{{ Math.round((score / quiz.questions.length) * 100) }}%</span>
+                      </div>
+                      <div class="w-full bg-green-200 rounded-full h-2">
+                        <div 
+                          class="bg-green-600 h-2 rounded-full transition-all duration-500" 
+                          :style="{ width: Math.round((score / quiz.questions.length) * 100) + '%' }"
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Action Buttons -->
+                  <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <Button
+                      @click="goToWorkspace"
+                      variant="default"
+                      size="lg"
+                      class="flex-1 sm:flex-none"
+                    >
+                      <Icon name="check" class="w-4 h-4 mr-2" />
+                      End
+                    </Button>
+                    <Button
+                      @click="retryQuiz"
+                      variant="outline"
+                      size="lg"
+                      class="flex-1 sm:flex-none"
+                    >
+                      <Icon name="refresh-cw" class="w-4 h-4 mr-2" />
+                      Try Again
+                    </Button>
+                  </div>
                 </div>
-              </div>
-
-              <!-- Explication de la réponse -->
-              <div v-if="showExplanation" class="mt-8 p-4" :class="isCurrentAnswerCorrect ? 'bg-green-50 border border-green-200 rounded-lg' : 'bg-red-50 border border-red-200 rounded-lg'">
-                <h3 class="font-medium mb-2" :class="isCurrentAnswerCorrect ? 'text-green-800' : 'text-red-800'">{{ isCurrentAnswerCorrect ? 'Vrai' : 'Faux' }}</h3>
-                <p :class="isCurrentAnswerCorrect ? 'text-green-700' : 'text-red-700'">{{ currentQuestion.explanation }}</p>
-              </div>
-            </div>
-
-            <!-- Résultats finaux -->
-            <div v-if="isCompleted && !testMode" class="text-center py-8 h-full flex flex-col items-center justify-center max-w-3xl mx-auto">
-              <h2 class="text-2xl font-bold text-gray-800 mb-4">Quiz terminé !</h2>
-              <p class="text-lg text-gray-700 mb-6">Votre score: {{ score }}/{{ quiz.questions.length }}</p>
-              <div class="flex gap-4">
-                <button
-                  @click="goToStartScreen"
-                  class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-                >
-                  Suivant
-                </button>
               </div>
             </div>
           </div>
-          <!-- Résultats finaux avec explications -->
-            <div v-if="isCompleted && testMode" class="py-8 h-full flex flex-col items-center justify-center max-w-3xl mx-auto">
-              <h2 class="text-2xl font-bold text-gray-800 mb-4">Test terminé !</h2>
-              <p class="text-lg text-gray-700 mb-6">Votre score: {{ score }}/{{ quiz.questions.length }}</p>
+          <!-- Exam Mode Results with Explanations -->
+          <div v-if="isCompleted && testMode" class="flex-1 flex flex-col p-6">
+            <!-- Header with Score -->
+            <div class="text-center mb-6">
+              <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4" :class="getScoreColor().bg">
+                <Icon :name="getScoreIcon()" class="w-8 h-8" :class="getScoreColor().text" />
+              </div>
+              <h2 class="text-3xl font-bold text-foreground mb-2">Exam Completed!</h2>
+              <div class="inline-flex items-center gap-4 bg-card rounded-lg border p-4">
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-foreground">{{ score }}/{{ quiz.questions.length }}</div>
+                  <div class="text-sm text-muted-foreground">Score</div>
+                </div>
+                <div class="h-10 w-px bg-border"></div>
+                <div class="text-center">
+                  <div class="text-2xl font-bold" :class="getScoreColor().text">{{ Math.round((score / quiz.questions.length) * 100) }}%</div>
+                  <div class="text-sm text-muted-foreground">Accuracy</div>
+                </div>
+              </div>
+            </div>
 
-              <!-- Résumé des réponses avec explications -->
-              <div class="w-full mb-8 space-y-6 max-h-[70vh] overflow-y-auto pr-2">
-                <h3 class="text-xl font-semibold text-gray-700 mb-4 sticky top-0 bg-white py-2 z-10">Résumé des réponses</h3>
-
-                <div v-for="(question, index) in quiz.questions" :key="question.id" class="border border-gray-200 rounded-lg p-4">
-                  <h4 class="font-medium text-gray-800 mb-2">Question {{ index + 1 }}: {{ question.question }}</h4>
-
-                  <!-- Affichage de la réponse de l'utilisateur -->
-                  <div class="mb-2">
-                    <span class="font-medium">Votre réponse: </span>
-                    <span v-if="question.type === 'fill_in_blank'">
-                      {{ userAnswers[question.id]?.[0] || 'Non répondu' }}
-                    </span>
-                    <span v-else-if="question.type === 'true_false'">
-                      {{ userAnswers[question.id]?.[0] === 'true' ? 'Vrai' : userAnswers[question.id]?.[0] === 'false' ? 'Faux' : 'Non répondu' }}
-                    </span>
-                    <span v-else>
-                      {{ userAnswers[question.id] ?
-                        question.options?.filter(opt => userAnswers[question.id].includes(opt.id)).map(opt => opt.text).join(', ') :
-                        'Non répondu' }}
-                    </span>
+            <!-- Answer Summary with Explanations -->
+            <div class="flex-1 overflow-hidden">
+              <h3 class="text-xl font-semibold text-foreground mb-4 flex items-center">
+                <Icon name="list" class="w-5 h-5 mr-2" />
+                Detailed Review
+              </h3>
+              
+              <div class="h-full overflow-y-auto pr-2 space-y-4">
+                <div v-for="(question, index) in quiz.questions" :key="question.id" class="bg-card border rounded-xl p-4 transition-all hover:shadow-md">
+                  <!-- Question Header -->
+                  <div class="flex items-start gap-3 mb-4">
+                    <div class="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium" :class="isAnswerCorrect(question) ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'">
+                      {{ index + 1 }}
+                    </div>
+                    <div class="flex-1">
+                      <h4 class="font-medium text-foreground mb-2">{{ question.question }}</h4>
+                    </div>
+                    <Icon :name="isAnswerCorrect(question) ? 'check-circle' : 'x-circle'" class="w-5 h-5" :class="isAnswerCorrect(question) ? 'text-green-500' : 'text-red-500'" />
                   </div>
 
-                  <!-- Affichage de la réponse correcte -->
-                  <div class="mb-2">
-                    <span class="font-medium">Réponse correcte: </span>
-                    <span v-if="question.type === 'fill_in_blank'">
-                      {{ question.correctAnswers[0] }}
-                    </span>
-                    <span v-else-if="question.type === 'true_false'">
-                      {{ question.correctAnswers[0] === 'true' ? 'Vrai' : 'Faux' }}
-                    </span>
-                    <span v-else>
-                      {{ question.options?.filter(opt => question.correctAnswers.includes(opt.id)).map(opt => opt.text).join(', ') }}
-                    </span>
+                  <!-- Answers Comparison -->
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <!-- Your Answer -->
+                    <div class="space-y-2">
+                      <div class="text-sm font-medium text-muted-foreground">Your Answer</div>
+                      <div class="p-3 rounded-lg bg-muted/50">
+                        <span v-if="question.type === 'fill_in_blank'" class="text-sm">
+                          {{ userAnswers[question.id]?.[0] || 'Not answered' }}
+                        </span>
+                        <span v-else-if="question.type === 'true_false'" class="text-sm">
+                          {{ userAnswers[question.id]?.[0] === 'true' ? 'True' : userAnswers[question.id]?.[0] === 'false' ? 'False' : 'Not answered' }}
+                        </span>
+                        <span v-else class="text-sm">
+                          {{ userAnswers[question.id] ?
+                            question.options?.filter((opt: Option) => userAnswers[question.id].includes(opt.id)).map((opt: Option) => opt.text).join(', ') :
+                            'Not answered' }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <!-- Correct Answer -->
+                    <div class="space-y-2">
+                      <div class="text-sm font-medium text-muted-foreground">Correct Answer</div>
+                      <div class="p-3 rounded-lg bg-green-50 border border-green-200">
+                        <span v-if="question.type === 'fill_in_blank'" class="text-sm text-green-700">
+                          {{ question.correctAnswers[0] }}
+                        </span>
+                        <span v-else-if="question.type === 'true_false'" class="text-sm text-green-700">
+                          {{ question.correctAnswers[0] === 'true' ? 'True' : 'False' }}
+                        </span>
+                        <span v-else class="text-sm text-green-700">
+                          {{ question.options?.filter((opt: Option) => question.correctAnswers.includes(opt.id)).map((opt: Option) => opt.text).join(', ') }}
+                        </span>
+                      </div>
+                    </div>
                   </div>
 
-                  <!-- Explication -->
-                  <div class="mt-2 p-3" :class="isAnswerCorrect(question) ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'">
-                    <p>{{ question.explanation }}</p>
+                  <!-- Explanation -->
+                  <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <div class="flex items-start gap-2">
+                      <Icon name="info" class="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                      <p class="text-sm text-blue-700 leading-relaxed">{{ question.explanation }}</p>
+                    </div>
                   </div>
                 </div>
               </div>
-
-              <div class="flex gap-4 mt-auto">
-                <button
-                  @click="goToStartScreen"
-                  class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-                >
-                  Retour à l'accueil
-                </button>
-                <!-- Le bouton "Générer un nouveau test" a été supprimé -->
-              </div>
             </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 justify-center mt-6 pt-4 border-t">
+              <Button
+                @click="goToWorkspace"
+                variant="default"
+                size="lg"
+                class="flex-1 sm:flex-none"
+              >
+                <Icon name="check" class="w-4 h-4 mr-2" />
+                End
+              </Button>
+              <Button
+                @click="retryQuiz"
+                variant="outline"
+                size="lg"
+                class="flex-1 sm:flex-none"
+              >
+                <Icon name="refresh-cw" class="w-4 h-4 mr-2" />
+                Retake Exam
+              </Button>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <!-- Footer avec navigation (visible uniquement pendant le quiz) -->
-      <div v-if="!isStartScreen && !isCompleted" class="h-24 max-w-6xl w-full mx-auto p-6 flex justify-between">
-        <button
-          @click="previousQuestion"
-          class="flex items-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
-          :disabled="currentQuestionIndex === 0"
-          :class="{ 'opacity-50 cursor-not-allowed': currentQuestionIndex === 0 }"
-        >
-          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-          </svg>
-          Previous
-        </button>
-
-        <button
-          v-if="!isLastQuestion && !testMode"
-          @click="questionValidated ? nextQuestion() : validateQuestion()"
-          class="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-        >
-          {{ questionValidated ? 'Next' : 'Valider' }}
-          <svg v-if="questionValidated" class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-          </svg>
-        </button>
-
-        <button
-          v-if="!isLastQuestion && testMode"
-          @click="nextQuestion"
-          class="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-          :disabled="!hasAnsweredCurrentQuestion"
-          :class="{ 'opacity-50 cursor-not-allowed': !hasAnsweredCurrentQuestion }"
-        >
-          Suivant
-          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-          </svg>
-        </button>
-
-        <button
-          v-if="isLastQuestion && !testMode"
-          @click="questionValidated ? finishQuiz() : validateQuestion()"
-          class="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-        >
-          {{ questionValidated ? 'Finish' : 'Valider' }}
-        </button>
-
-        <button
-          v-if="isLastQuestion && testMode"
-          @click="finishQuiz"
-          class="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-          :disabled="!hasAnsweredCurrentQuestion"
-          :class="{ 'opacity-50 cursor-not-allowed': !hasAnsweredCurrentQuestion }"
-        >
-          Terminer
-        </button>
       </div>
     </div>
   </AppLayout>
@@ -290,15 +408,17 @@ interface Quiz {
 interface Props {
   quizData?: Quiz;
   workspace_id: number;
+  hasQuiz?: boolean;
 }
 
 const props = defineProps<Props>();
 
-// État pour l'écran de départ
+// State for start screen
 const isStartScreen = ref(true);
 const isLoading = ref(false);
+const hasQuiz = ref(props.hasQuiz ?? !!props.quizData);
 
-// État du quiz
+// Quiz state
 const quiz = ref<Quiz>(props.quizData || {
   quizId: '',
   title: '',
@@ -346,11 +466,16 @@ function setTestMode() {
   testMode.value = true;
 }
 
-// Fonction pour démarrer ou générer un quiz
+// Function to start or generate a quiz
 async function startQuiz(): Promise<void> {
+  if (!hasQuiz.value) {
+    alert('Please generate a quiz first');
+    return;
+  }
+  
   isLoading.value = true;
   try {
-    // Si un quiz existe déjà dans les props, on l'utilise directement
+    // If a quiz already exists in props, use it directly
     if (props.quizData) {
       isStartScreen.value = false;
       startTimer();
@@ -358,19 +483,24 @@ async function startQuiz(): Promise<void> {
       return;
     }
 
-    // Sinon, on utilise le quiz généré par QuizMenu
+    // Otherwise, use the quiz generated by QuizMenu
     isStartScreen.value = false;
     startTimer();
     await createQuizSession();
   } catch (err: unknown) {
-    console.error(err instanceof Error ? err.message : 'Erreur inconnue');
-    alert('Erreur lors du démarrage du quiz');
+    console.error(err instanceof Error ? err.message : 'Unknown error');
+    alert('Error starting quiz');
   } finally {
     isLoading.value = false;
   }
 }
 
-// Supprimer la fonction generateNewQuiz qui est maintenant gérée par QuizMenu
+// Function to handle quiz generation
+function handleQuizGenerated(): void {
+  hasQuiz.value = true;
+}
+
+// generateNewQuiz function is now handled by QuizMenu
 
 
 function selectAnswer(answerId: string) {
@@ -468,7 +598,9 @@ function loadQuestionState() {
     } else {
       selectedAnswers.value = [...userAnswers.value[questionId]];
     }
-    questionValidated.value = true;
+    // En mode Learning, ne pas valider automatiquement pour permettre de revoir les explications
+    // En mode Test, les questions sont déjà validées automatiquement
+    questionValidated.value = testMode.value;
   } else {
     selectedAnswers.value = [];
     blankAnswer.value = '';
@@ -539,6 +671,7 @@ function resetQuizState() {
   seconds.value = 0;
   questionsForReview.value = [];
   questionValidated.value = false;
+  testMode.value = false;
   currentQuizSessionId.value = null;
 }
 
@@ -548,7 +681,17 @@ function restartQuiz() {
   startTimer();
 }
 
-// Nouvelle fonction pour retourner à l'écran de démarrage
+// Function to go back to workspace
+function goToWorkspace() {
+  window.location.href = `/workspaces/${props.workspace_id}`;
+}
+
+// Function to retry the quiz (go back to quiz show)
+function retryQuiz() {
+  window.location.href = `/workspaces/${props.workspace_id}/quiz`;
+}
+
+// Function to return to start screen
 function goToStartScreen() {
   resetQuizState();
   isCompleted.value = false;
@@ -618,7 +761,7 @@ async function createQuizSession(): Promise<void> {
       },
       body: JSON.stringify({
         quiz_session: {
-          quiz_id: props.quizData?.id || quiz.value.id || 1,
+          quiz_id: (props.quizData as any)?.id || (quiz.value as any).id || 1,
           quiz_mode: testMode.value ? 'test' : 'quiz',
           session_type: 'standard',
           total_questions: quiz.value.questions.length,
@@ -721,6 +864,31 @@ function isAnswerCorrectForQuestion(question: Question): boolean {
   } else {
     return userAnswer.length === question.correctAnswers.length &&
       userAnswer.every(answer => question.correctAnswers.includes(answer));
+  }
+}
+
+// Helper functions for score display
+function getScoreColor() {
+  const percentage = Math.round((score.value / quiz.value.questions.length) * 100);
+  
+  if (percentage >= 80) {
+    return { bg: 'bg-green-100', text: 'text-green-600' };
+  } else if (percentage >= 60) {
+    return { bg: 'bg-yellow-100', text: 'text-yellow-600' };
+  } else {
+    return { bg: 'bg-red-100', text: 'text-red-600' };
+  }
+}
+
+function getScoreIcon() {
+  const percentage = Math.round((score.value / quiz.value.questions.length) * 100);
+  
+  if (percentage >= 80) {
+    return 'trophy';
+  } else if (percentage >= 60) {
+    return 'award';
+  } else {
+    return 'target';
   }
 }
 

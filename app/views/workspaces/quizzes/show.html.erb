@@ -1,5 +1,5 @@
 <% if @quiz %>
-  <%= vue_component 'QuizzShow', {quizData: @quiz.content.merge(id: @quiz.id), workspace_id: @workspace.id} %>
+  <%= vue_component 'QuizzShow', {quizData: @quiz.content.merge(id: @quiz.id), workspace_id: @workspace.id, hasQuiz: true} %>
 <% else %>
-  <%= vue_component 'QuizzShow', {workspace_id: @workspace.id} %>
+  <%= vue_component 'QuizzShow', {workspace_id: @workspace.id, hasQuiz: false} %>
 <% end %>
