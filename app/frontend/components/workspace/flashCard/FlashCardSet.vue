@@ -9,6 +9,9 @@
   import { ArrowLeft, RotateCcw } from 'lucide-vue-next';
   import { computed, ref, watch } from 'vue';
   import AppLayout from '../../../components/layout/AppLayout.vue';
+  import { Button } from '@/components/ui/button';
+  import { Card } from '@/components/ui/card';
+  import Icon from '@/components/ui/icon/Icon.vue';
 
   interface props {
     content: Flashcard[];
@@ -65,8 +68,15 @@
   //   console.log(wrongAnswers.value)
   // }
 
-  watch(current, (index) => {
-    finished.value = index >= total.value - 1;
+  // On ne met plus finished à true automatiquement quand on arrive à la dernière carte
+  // watch(current, (index) => {
+  //   finished.value = index >= total.value - 1;
+  // });
+  
+  // Plutôt, on vérifie si on a répondu à toutes les questions
+  watch([correctAnswers, wrongAnswers], () => {
+    const totalAnswered = correctAnswers.value + wrongAnswers.value;
+    finished.value = totalAnswered >= total.value && total.value > 0;
   });
 
   interface Flashcard {
@@ -100,21 +110,98 @@
         </button>
       </div>
 
-      <div v-if="finished" class="flex flex-col items-center gap-4">
-        <p class="text-2xl font-semibold">Series over!</p>
-        <p>
-          {{ correctAnswers }} / {{ correctAnswers + wrongAnswers }} correct answers ({{
-            correctAnswersPercentage
-          }}
-          %)
-        </p>
-        <div class="mt-6 flex flex-col items-center gap-4">
-          <button class="rounded bg-indigo-600 px-6 py-2 text-white" @click="resetSeries">
-            Restart
-          </button>
-          <a :href="`/workspaces/${workspace_id}`" class="rounded bg-red-600 px-6 py-2 text-white">
-            Quit
-          </a>
+      <div v-if="finished" class="flex flex-col items-center justify-center min-h-screen px-4">
+        <div class="text-center max-w-md mx-auto">
+          <div class="mb-8">
+            <div v-if="correctAnswersPercentage >= 80" 
+                 class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 flex items-center justify-center animate-bounce">
+              <Icon name="ShieldCheck" class="w-12 h-12 text-white" />
+            </div>
+            <div v-else-if="correctAnswersPercentage >= 60" 
+                 class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center">
+              <Icon name="Smile" class="w-12 h-12 text-white" />
+            </div>
+            <div v-else 
+                 class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-r from-red-400 to-pink-500 flex items-center justify-center">
+              <Icon name="BookOpen" class="w-12 h-12 text-white" />
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <h2 v-if="correctAnswersPercentage >= 80" 
+                class="text-4xl font-bold text-green-600 mb-2">
+              Excellent! 🎉
+            </h2>
+            <h2 v-else-if="correctAnswersPercentage >= 60" 
+                class="text-4xl font-bold text-yellow-600 mb-2">
+              Well done! 👍
+            </h2>
+            <h2 v-else 
+                class="text-4xl font-bold text-red-500 mb-2">
+              Keep going! 💪
+            </h2>
+            
+            <p v-if="correctAnswersPercentage >= 80" 
+               class="text-lg text-gray-600 dark:text-gray-300">
+              Perfect! You have mastered the subject.
+            </p>
+            <p v-else-if="correctAnswersPercentage >= 60" 
+               class="text-lg text-gray-600 dark:text-gray-300">
+              Good work! Just a little more effort for perfection.
+            </p>
+            <p v-else 
+               class="text-lg text-gray-600 dark:text-gray-300">
+              Don't get discouraged, practice makes perfect!
+            </p>
+          </div>
+
+          <Card class="p-6 mb-8">
+            <div class="grid grid-cols-3 gap-4 text-center">
+              <div>
+                <div class="text-2xl font-bold text-green-600">{{ correctAnswers }}</div>
+                <div class="text-sm text-muted-foreground">Correct</div>
+              </div>
+              <div>
+                <div class="text-2xl font-bold text-red-500">{{ wrongAnswers }}</div>
+                <div class="text-sm text-muted-foreground">Wrong</div>
+              </div>
+              <div>
+                <div class="text-2xl font-bold text-primary">{{ correctAnswersPercentage }}%</div>
+                <div class="text-sm text-muted-foreground">Score</div>
+              </div>
+            </div>
+            
+            <div class="mt-4">
+              <div class="w-full bg-secondary rounded-full h-3">
+                <div class="h-3 rounded-full transition-all duration-500 ease-out"
+                     :class="{
+                       'bg-gradient-to-r from-green-400 to-emerald-500': correctAnswersPercentage >= 80,
+                       'bg-gradient-to-r from-yellow-400 to-orange-500': correctAnswersPercentage >= 60 && correctAnswersPercentage < 80,
+                       'bg-gradient-to-r from-red-400 to-pink-500': correctAnswersPercentage < 60
+                     }"
+                     :style="`width: ${correctAnswersPercentage}%`">
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button 
+              variant="secondary" 
+              size="lg"
+              as="a"
+              :href="`/workspaces/${workspace_id}/flashcards`">
+              <Icon name="ArrowLeft" size="sm" class="mr-2" />
+              Back to collections
+            </Button>
+            <Button 
+              variant="default" 
+              size="lg"
+              @click="resetSeries">
+              <Icon name="RotateCcw" size="sm" class="mr-2" />
+              Restart
+            </Button>
+          </div>
         </div>
       </div>
 

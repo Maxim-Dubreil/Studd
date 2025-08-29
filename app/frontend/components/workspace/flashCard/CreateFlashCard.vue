@@ -93,6 +93,18 @@
                   class="w-full rounded-md border px-4 py-3 shadow-sm focus:border-violet-500 focus:ring-violet-500 focus:outline-none"
                   placeholder="Ex: French Vocabulary" />
               </div>
+              <div>
+                <label for="flashcard-count" class="mb-2 block text-sm font-medium text-gray-700">
+                  Number of flashcards
+                </label>
+                <input id="flashcard-count" v-model.number="flashcardCount" type="number" min="1" max="50"
+                  class="w-full rounded-md border px-4 py-3 shadow-sm focus:border-violet-500 focus:ring-violet-500 focus:outline-none"
+                  placeholder="10" />
+                <p class="mt-1 text-sm text-gray-500">Entre 1 et 50 flashcards</p>
+              </div>
+              <div v-if="error" class="rounded-md bg-red-50 p-3">
+                <p class="text-sm text-red-800">{{ error }}</p>
+              </div>
             </div>
 
             <AlertDialogFooter>
@@ -190,6 +202,7 @@ const flashcards = ref<Flashcard[]>([]);
 const error = ref<string | null>(null);
 const isLoading = ref(false);
 const setName = ref('');
+const flashcardCount = ref(10);
 const isDialogOpen = ref(false);
 const isDeleteDialogOpen = ref(false);
 const isDeleteLoading = ref(false);
@@ -205,6 +218,11 @@ function getCsrfToken(): string {
 /* ---------- Actions ---------- */
 const generate = async (): Promise<void> => {
   if (!setName.value.trim()) return;
+  
+  if (flashcardCount.value < 1 || flashcardCount.value > 50) {
+    error.value = 'Le nombre de flashcards doit être entre 1 et 50';
+    return;
+  }
 
   error.value = null;
   isLoading.value = true;
@@ -220,6 +238,7 @@ const generate = async (): Promise<void> => {
       body: JSON.stringify({
         name: setName.value.trim(),
         workspace_id: props.workspace_id,
+        count: flashcardCount.value,
       }),
     });
 

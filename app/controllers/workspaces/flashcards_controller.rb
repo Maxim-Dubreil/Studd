@@ -19,11 +19,13 @@ module Workspaces
 
     end
 
-      def create
-    content_text = extract_workspace_content
-    return unless content_text
+    def create
+      content_text = extract_workspace_content
+      return unless content_text
 
-    flashcards = Generators::FlashcardGenerator.new(content_text).call
+      count = params[:count].to_i
+      count = 10 unless count.between?(1, 50)
+      flashcards = Generators::FlashcardGenerator.new(content_text, count).call
 
       @flash_cards_set = @workspace.flash_cards_sets.build(
         name: params[:name].presence || 'Nouveau set',
@@ -31,10 +33,10 @@ module Workspaces
       )
 
       if @flash_cards_set.save
-        render json: { flash_cards_set: @flash_cards_set }, status: :created
+        render json: { flashcards: @flash_cards_set.content }, status: :created
       else
         render json: { errors: @flash_cards_set.errors.full_messages },
-              status: :unprocessable_entity
+               status: :unprocessable_entity
       end
     end
 
