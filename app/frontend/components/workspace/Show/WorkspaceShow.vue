@@ -1,19 +1,31 @@
 <template>
   <AppLayout :hide-sidebar="true" :hide-top-nav="true" :hide-toggle="false" :hide-gradient="false">
-    <section class="px-10 pb-24">
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute inset-0 bg-gradient-to-br from-violet-50/30 via-indigo-50/20 to-purple-50/30"></div>
+      <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-200/20 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+      <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-indigo-200/20 rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2"></div>
+      <div class="absolute top-3/4 left-3/4 w-64 h-64 bg-purple-200/15 rounded-full blur-2xl transform -translate-x-1/2 -translate-y-1/2"></div>
+    </div>
+    
+    <section class="relative z-10 px-10 pb-24">
       <div class="relative mb-8 text-center p-4">
         <a href="/workspaces"
-          class="bg-card/50 hover:bg-card/80 absolute top-1/2 left-0 -translate-y-1/2 rounded-lg border p-2 backdrop-blur-sm">
-          <Icon name="arrow-left" class="h-6 w-6" />
+          class="bg-white/80 hover:bg-white/90 absolute top-1/2 left-0 -translate-y-1/2 rounded-xl border border-violet-200/50 p-3 backdrop-blur-sm shadow-lg transition-all hover:shadow-xl hover:scale-105">
+          <Icon name="arrow-left" class="h-5 w-5 text-violet-600" />
         </a>
         <div class="flex items-center justify-center">
-          <img v-if="props.workspace.icon" :src="getIconUrl(props.workspace.icon.path)" :alt="props.workspace.icon.name"
-            class="h-12 w-12 rounded-lg" />
-          <h1 class="text-3xl font-semibold md:text-4xl px-4">
+          <div class="relative">
+            <div class="absolute inset-0 bg-gradient-to-r from-violet-400 to-indigo-400 rounded-xl blur opacity-75"></div>
+            <img v-if="props.workspace.icon" :src="getIconUrl(props.workspace.icon.path)" :alt="props.workspace.icon.name"
+              class="relative h-14 w-14 rounded-xl border-2 border-white shadow-lg" />
+            <div v-else class="relative h-14 w-14 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-500 flex items-center justify-center border-2 border-white shadow-lg">
+              <Icon name="folder" class="h-7 w-7 text-white" />
+            </div>
+          </div>
+          <h1 class="text-3xl font-bold md:text-4xl px-6 bg-gradient-to-r from-violet-700 via-indigo-700 to-purple-700 bg-clip-text text-transparent">
             {{ props.workspace.name }}
           </h1>
         </div>
-
       </div>
       <component :is="activeTabComponent" :workspace="props.workspace" :workspace-id="props.workspace.id" />
     </section>
