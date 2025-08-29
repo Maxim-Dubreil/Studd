@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module PromptBuilder
+module Outlines
   class Outline
     SYSTEM_PROMPT = <<~SYS
       Tu structues un cours dense en chapitres, notions et (si utile) détails.
@@ -54,16 +54,26 @@ module PromptBuilder
       @content = content
     end
 
-    def request_payload(model: ENV.fetch("OPENAI_MINDMAP_MODEL", "gpt-4.1-mini"),
+    def request_payload(model: ENV.fetch("OPENAI_MINDMAP_MODEL", "gpt-4o-2024-08-06"),
                         temperature: 0.2,
                         max_output_tokens: 3000)
       {
         model: model,
-        response_format: { type: "json_schema", json_schema: JSON_SCHEMA },
+        instructions: SYSTEM_PROMPT,
         input: [
-          { role: "system", content: SYSTEM_PROMPT },
-          { role: "user",   content: user_prompt }
+          {
+            role: "user",
+            content: [
+              { type: "input_text", text: user_prompt }
+            ]
+          }
         ],
+        text: {
+          format: {
+            type: "json_schema",
+            json_schema: JSON_SCHEMA
+          }
+        },
         temperature: temperature,
         max_output_tokens: max_output_tokens
       }
@@ -81,9 +91,9 @@ module PromptBuilder
 
         PRINCIPES DE DÉCOUPAGE (important)
         • Ne te fie pas au mot-clé "Chapitre" : déduis les chapitres par thèmes/segments logiques du texte.
-        • Conserve l’ORDRE d’apparition des idées ; ne réarrange pas arbitrairement.
-        • Couvre TOUTES les idées majeures (pas d’omission), évite les doublons.
-        • Titre de chapitre : court, informatif, fidèle au contenu (tu peux reprendre un titre existant s’il est présent).
+        • Conserve l'ORDRE d'apparition des idées ; ne réarrange pas arbitrairement.
+        • Couvre TOUTES les idées majeures (pas d'omission), évite les doublons.
+        • Titre de chapitre : court, informatif, fidèle au contenu (tu peux reprendre un titre existant s'il est présent).
         • Chaque chapitre comporte AU MOINS 2 notions (phrases synthétiques).
         • Choix de la profondeur par chapitre :
           – depth=2 si le contenu est synthétique (notions uniquement) ;

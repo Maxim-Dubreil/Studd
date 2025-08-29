@@ -8,15 +8,15 @@ module Workspaces
     def show
     end
 
-      def create
-    content_text = extract_workspace_content
-    return unless content_text
+    def create
+      content_text = extract_workspace_content
+      return unless content_text
 
-    # Suppression des anciens quiz
-    @workspace.quizzes.destroy_all
+      # Suppression des anciens quiz
+      @workspace.quizzes.destroy_all
 
-    # Génération du contenu du quiz sans titre spécifié (l'IA va générer un titre pertinent)
-    quiz_content = Generators::QuizGenerator.new(content_text).call
+      # Génération du contenu du quiz sans titre spécifié (l'IA va générer un titre pertinent)
+      quiz_content = Generators::QuizGenerator.new(content_text).call
 
       # Utilisation du titre et de la description générés par l'IA
       @quiz = @workspace.quizzes.build(
@@ -70,7 +70,5 @@ module Workspaces
         end
       end
     end
-
-
   end
 end
