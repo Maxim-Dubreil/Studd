@@ -1,13 +1,6 @@
 <template>
   <AppLayout :hideSidebar="true" :hideTopNav="true" :hideToggle="true">
-    <div class="absolute top-8 left-8 z-10 flex items-center gap-4">
-      <a
-        :href="`/workspaces/${props.workspace_id}`"
-        class="rounded-full bg-gray-800/50 p-2 text-white transition-colors hover:bg-gray-800/80"
-      >
-        <ArrowLeft class="h-6 w-6" />
-      </a>
-    </div>
+    <BackButton :href="`/workspaces/${props.workspace_id}/flashcards`" />
 
     <section class="mx-auto w-full max-w-screen-xl px-4 py-8 font-sans sm:px-8 sm:py-16 lg:py-8">
       <div class="mb-16 text-center">
@@ -210,7 +203,8 @@
     AlertDialogTrigger,
   } from '@/components/ui/alert-dialog';
   import { Button } from '@/components/ui/button';
-  import { ArrowLeft, Trash2 } from 'lucide-vue-next';
+  import BackButton from '@/components/ui/button/BackButton.vue';
+  import { Trash2 } from 'lucide-vue-next';
   import { ref } from 'vue';
   import AppLayout from '../../../components/layout/AppLayout.vue';
 

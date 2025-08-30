@@ -6,8 +6,9 @@
       class="relative flex min-h-screen items-center justify-center"
     >
       <div id="map" class="h-[600px] w-300 rounded-xl"></div>
-      <div class="absolute top-2 right-2 flex gap-2">
-        <Button @click="saveMindmap" variant="default" size="sm" :disabled="isSaving">
+      <div class="absolute top-25 right-90 flex gap-2">
+        <Button @click="saveMindmap" variant="default" :disabled="isSaving">
+          <Icon name="save" class="h-4 w-4" />
           <span v-if="!isSaving">Save</span>
           <span v-else class="flex items-center gap-2">
             <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
@@ -25,14 +26,12 @@
             Saving...
           </span>
         </Button>
-        <Button @click="deleteMindmap" variant="destructive" size="sm">Supprimer</Button>
+        <Button @click="deleteMindmap" variant="destructive">
+          <Icon name="save" class="h-4 w-4" />
+          Delete
+        </Button>
       </div>
-      <a
-        :href="`/workspaces/${props.workspace_id}`"
-        class="bg-card/50 hover:bg-card/80 absolute top-2 left-2 rounded-lg border p-2 backdrop-blur-sm"
-      >
-        <Icon name="arrow-left" class="h-6 w-6" />
-      </a>
+      <BackButton :href="`/workspaces/${props.workspace_id}`" />
     </div>
     <!-- Affichage du loader pendant la génération -->
     <div class="flex h-[600px] flex-col items-center justify-center">
@@ -74,6 +73,7 @@
   import 'mind-elixir/style.css';
   import { onMounted, ref } from 'vue';
   import AppLayout from '../../../components/layout/AppLayout.vue';
+  import BackButton from '@/components/ui/button/BackButton.vue';
 
   interface props {
     workspace_id: number;

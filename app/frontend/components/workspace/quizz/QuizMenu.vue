@@ -1,11 +1,6 @@
 <!-- QuizMenu.vue -->
 <template>
-  <a
-    :href="`/workspaces/${workspaceId}`"
-    class="bg-card/50 hover:bg-card/80 absolute top-2 left-2 rounded-lg border p-2 backdrop-blur-sm"
-  >
-    <Icon name="arrow-left" class="h-6 w-6" />
-  </a>
+  <BackButton :href="`/workspaces/${workspaceId}`" />
   <div class="bg-background relative mx-auto max-w-3xl rounded-2xl border p-8 shadow-lg">
     <!-- Header -->
     <div class="mb-8 text-center">
@@ -218,6 +213,7 @@
 
 <script setup lang="ts">
   import DecoDialog from '@/components/ui/alert-dialog/DecoDialog.vue';
+  import BackButton from '@/components/ui/button/BackButton.vue';
   import Button from '@/components/ui/button/Button.vue';
   import Icon from '@/components/ui/icon/Icon.vue';
   import { ref } from 'vue';
