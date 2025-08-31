@@ -1,7 +1,7 @@
 module Workspaces
   class QuizzesController < ApplicationController
     include ContentExtractable
-    
+
     before_action :set_workspace
     before_action :set_quiz, only: %i[show destroy]
 
