@@ -5,7 +5,7 @@
       <WorkspaceCard
         name="Study Sheets"
         desc="Generate study sheets from your uploaded files"
-        href="#"
+        :href="`${workspaceId}/study_sheets`"
         cta="Open"
         :Icon="Clipboard"
         :bg-image="ficheDeRevisionsIcon"
