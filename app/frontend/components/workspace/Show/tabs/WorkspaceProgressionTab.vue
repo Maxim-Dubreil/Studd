@@ -121,7 +121,7 @@
                        :class="getPerformanceColor(session.performance_level)"></div>
                   <div>
                     <div class="flex items-center gap-2">
-                      <p class="text-sm font-medium text-foreground">{{ session.quiz_mode === 'quiz' ? 'Quiz' : 'Test' }}</p>
+                      <p class="text-sm font-medium text-foreground">{{ session.quiz_mode === 'quiz' ? 'Learning' : 'Exam' }}</p>
                       <span class="text-xs bg-muted px-2 py-1 rounded-full text-muted-foreground">
                         {{ session.duration }}
                       </span>

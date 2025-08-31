@@ -1,11 +1,14 @@
+# frozen_string_literal: true
+require "json"
+
 module PromptBuilder
   class Quiz
     SYSTEM_PROMPT = <<~PROMPT
       Tu es un expert en création de quiz pédagogiques pour étudiants.
       Tes réponses doivent être prêtes à être parsées par un programme :
       — Pas de texte d'introduction ni de conclusion
-      — Pas de Markdown ni de balises ni de backticks
-      — Un seul objet JSON strict (UTF-8), sans commentaires, sans virgules finales
+      — Pas de Markdown, de balises HTML, ni de backticks
+      — Un seul objet JSON strict (UTF-8), sans commentaires ni virgules finales
     PROMPT
 
     EXAMPLE_JSON = <<~JSON.chomp
@@ -37,62 +40,130 @@ module PromptBuilder
       }
     JSON
 
-    def initialize(content, title: "Quiz")
-      @content = content
-      @title = title
+    # Schéma strict compatible structured-output de /responses :
+    # - pas de oneOf/allOf/if/then/else
+    # - toutes les clés de properties doivent figurer dans required
+    JSON_SCHEMA = {
+      "name"   => "quiz",
+      "strict" => true,
+      "schema" => {
+        "type"                 => "object",
+        "additionalProperties" => false,
+        "required"             => ["quizId", "title", "description", "questions"],
+        "properties"           => {
+          "quizId"      => { "type" => "string", "minLength" => 1 },
+          "title"       => { "type" => "string", "minLength" => 1 },
+          "description" => { "type" => "string", "minLength" => 1 },
+          "questions"   => {
+            "type"     => "array",
+            "minItems" => 1,
+            "items"    => {
+              "type"                 => "object",
+              "additionalProperties" => false,
+              # IMPORTANT : toutes les clés de properties sont listées ici (incluant "options")
+              "required"             => ["id", "type", "question", "correctAnswers", "explanation", "options"],
+              "properties"           => {
+                "id"           => { "type" => "string", "pattern" => "^q[1-9]\\d*$" },
+                "type"         => { "type" => "string", "enum" => ["multiple_choice", "true_false"] },
+                "question"     => { "type" => "string", "minLength" => 1 },
+                "explanation"  => { "type" => "string", "minLength" => 1 },
+                "correctAnswers"=> {
+                  "type"     => "array",
+                  "minItems" => 1,
+                  "maxItems" => 1,
+                  "items"    => { "type" => "string", "enum" => ["a","b","c","d","true","false"] }
+                },
+                # Requise mais nullable → satisfait la contrainte "required ⊇ properties"
+                # et permet true_false (options = null) vs multiple_choice (options = array 3..4)
+                "options"      => {
+                  "anyOf" => [
+                    { "type" => "null" },
+                    {
+                      "type"     => "array",
+                      "minItems" => 3,
+                      "maxItems" => 4,
+                      "items"    => {
+                        "type"                 => "object",
+                        "additionalProperties" => false,
+                        "required"             => ["id", "text"],
+                        "properties"           => {
+                          "id"   => { "type" => "string", "enum" => ["a","b","c","d"] },
+                          "text" => { "type" => "string", "minLength" => 1 }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }.freeze
+
+    DEFAULT_MODEL = ENV.fetch("OPENAI_QUIZ_MODEL", "gpt-4o-2024-08-06")
+
+    def initialize(raw_content:, title: "Quiz")
+      @raw_content = raw_content
+      @title       = title
     end
 
-    def build
-      [
-        { role: "system", content: SYSTEM_PROMPT },
-        {
-          role: "user",
-          content: <<~CONTENT
-            Génère **exactement** un quiz au format JSON strict correspondant à l'exemple :
+    # Enveloppe harmonisée avec Mindmap/Flashcards
+    def request_payload(model: DEFAULT_MODEL, temperature: 0.2, max_output_tokens: 8_000)
+      prompt_text = <<~CONTENT
+        Génère un **quiz JSON strict** qui couvre l'ensemble des concepts clés, sous-concepts, bonnes pratiques et erreurs fréquentes contenus dans la source.
 
-            #{EXAMPLE_JSON}
+        Exigences de couverture :
+          • Crée autant de questions que nécessaire (pas de limite fixe) pour couvrir tout le contenu utile.
+          • Répartis les questions proportionnellement à l'importance/complexité des notions.
+          • Évite les redites ; chaque question doit tester un angle différent.
 
-            ▸ Schéma à respecter :
-              • Champs obligatoires au niveau racine :
-                  - "quizId" (string, format "quiz_XXX")
-                  - "title" (string)
-                  - "description" (string)
-                  - "questions" (array)
-              • Champs obligatoires pour chaque question :
-                  - "id" (string, format "qX" où X est un nombre, croissant et sans trous)
-                  - "type" (string, l'un des suivants : "multiple_choice", "true_false")
-                  - "question" (string, claire et autonome)
-                  - "correctAnswers" (array de strings)
-                  - "explanation" (string, claire et concise)
-              • Champ obligatoire uniquement pour les questions de type "multiple_choice" :
-                  - "options" (array d'objets { "id": "a|b|c|d", "text": "..." }) avec 3 à 4 options dont UNE SEULE correcte
+        Contraintes de structure :
+          • Racine : { "quizId", "title", "description", "questions" }.
+          • "quizId" : une chaîne (ex. "quiz_001").
+          • "title" : "#{@title}" (ou plus précis si nécessaire).
+          • "questions" : tableau de questions.
+          • Chaque question : { "id", "type", "question", "correctAnswers", "explanation", "options" }.
+              - "id" : "q1"…"qN" sans trous.
+              - "type" : "multiple_choice" ou "true_false".
+              - "correctAnswers" : exactement 1 élément.
+                  · multiple_choice : une lettre "a"…"d".
+                  · true_false      : "true" ou "false".
+              - "options" :
+                  · multiple_choice → tableau de 3 à 4 items { id: "a|b|c|d", text } (OBLIGATOIRE, non-null).
+                  · true_false      → null (OBLIGATOIREMENT null).
 
-            ▸ Objectif principal : couverture complète du sujet
-              1) Identifie tous les concepts clés, sous-concepts importants, bonnes pratiques et erreurs fréquentes à partir du contenu donné.
-              2) Crée **autant de questions que nécessaire** pour couvrir l'ensemble de ces éléments (aucune limite fixe).
-              3) Répartis les questions de façon proportionnée :
-                 - Concepts majeurs : au moins 1 question chacun (plus si le concept est central ou complexe).
-                 - Sous-concepts/variantes : inclure si cela améliore la couverture sans redondance.
-              4) Si le contenu est volumineux et hétérogène, assure une couverture équilibrée de chaque grande section thématique (sans ajouter de métadonnées de section dans la sortie).
+        Règles de qualité :
+          • Questions claires, autonomes et focalisées ; options plausibles.
+          • Explication concise qui justifie la bonne réponse (et, si utile, pourquoi les autres sont fausses).
+          • Sortie = uniquement l'objet JSON final, strictement valide (pas de Markdown, pas de backticks).
+      CONTENT
 
-            ▸ Consignes de qualité et de cohérence :
-              5) Pas de texte en dehors de l'objet JSON. Pas de Markdown, pas de backticks, pas de balises HTML.
-              6) Les identifiants de questions sont continus ("q1" à "qN") et uniques.
-              7) Les options de "multiple_choice" ont des IDs parmi "a", "b", "c", "d" (sans doublon), avec exactement une bonne réponse listée dans "correctAnswers".
-              8) Pour "true_false", "correctAnswers" est soit ["true"] soit ["false"] (en minuscules).
-              9) Évite les redites : chaque question doit tester un angle ou un niveau différent.
-             10) Les explications doivent mentionner le **pourquoi** de la bonne réponse et, si utile, pourquoi les mauvaises sont incorrectes.
-             11) Utilise un langage simple, précis et sans jargon inutile. Pas de références au présent prompt dans la sortie.
-             12) Le titre et la description doivent être pertinents et refléter fidèlement le contenu et l'étendue de la couverture.
-
-            ▸ Contenu source à transformer en quiz :
-            #{@content}
-
-            ▸ Rappel important :
-            — La sortie doit être **uniquement** l'objet JSON final, strictement valide.
-          CONTENT
+      {
+        model: model,
+        temperature: temperature,
+        max_output_tokens: max_output_tokens,
+        instructions: SYSTEM_PROMPT,
+        input: [
+          {
+            role: "user",
+            content: [
+              { type: "input_text", text: prompt_text },
+              { type: "input_text", text: "Exemple (à titre indicatif) :" },
+              { type: "input_text", text: EXAMPLE_JSON },
+              { type: "input_text", text: "CONTENU à analyser et transformer en quiz :" },
+              { type: "input_text", text: @raw_content }
+            ]
+          }
+        ],
+        text: {
+          format: {
+            name: "quiz",
+            type: "json_schema",
+            schema: JSON_SCHEMA["schema"]
+          }
         }
-      ]
+      }
     end
   end
 end

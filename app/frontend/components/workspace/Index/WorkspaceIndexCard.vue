@@ -56,7 +56,7 @@ const openEditModal = (event: Event) => {
     <!-- Header avec icône et menu -->
     <div class="mb-4 flex items-start justify-between">
       <div class="flex items-center">
-        <img v-if="customIconUrl" :src="customIconUrl" :alt="props.workspace.icon.name"
+        <img v-if="customIconUrl" :src="customIconUrl" :alt="props.workspace.icon?.name || 'icon'"
           class="h-16 w-16 rounded-lg object-contain dark:invert" />
         <div v-else class="flex h-16 w-16 items-center justify-center rounded-lg bg-gray-200 dark:bg-slate-800">
           <Icon name="grid" class="h-8 w-8 text-gray-400 dark:text-gray-500" />

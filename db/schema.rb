@@ -144,6 +144,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_200918) do
 
   create_table "workspaces", force: :cascade do |t|
     t.string "name"
+    t.string "icon"
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -29,7 +29,9 @@ const registry: Record<string, any> = {
   DashboardWidgets: defineAsyncComponent(
     () => import('@/components/dashboard/DashboardWidgets.vue')
   ),
-
+  PerformanceChart: defineAsyncComponent(
+    () => import('@/components/dashboard/PerformanceChart.vue')
+  ),
   // Workspace
   WorkspaceShow: defineAsyncComponent(
     () => import('@/components/workspace/Show/WorkspaceShow.vue')

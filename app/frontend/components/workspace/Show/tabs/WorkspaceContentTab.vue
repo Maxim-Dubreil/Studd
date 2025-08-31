@@ -17,7 +17,7 @@
               <div>
                 <span class="text-sm text-muted-foreground">Content type</span>
                 <p class="font-medium text-foreground">
-                  {{ workspace.raw_content.content_type === 'text/plain' ? 'Texte brut' : 'Fichier' }}
+                  {{ workspace.raw_content.content_type === 'text/plain' ? 'Plain Text' : 'File' }}
                   <span v-if="workspace.raw_content.content_type !== 'text/plain'" class="text-sm text-muted-foreground">
                     ({{ getFileTypeLabel(workspace.raw_content.content_type) }})
                   </span>
@@ -85,7 +85,7 @@
               <Icon name="alert-triangle" class="h-16 w-16 mb-4 text-destructive/50" />
               <h4 class="text-lg font-medium mb-2">Error loading the file</h4>
               <p class="text-center text-destructive/80">
-                Impossible to load the file. Please contact the support.
+                Unable to load the file. Please contact support.
               </p>
             </div>
           </div>
@@ -128,20 +128,20 @@
 
   // Fonction pour obtenir un label lisible du type de fichier
   const getFileTypeLabel = (contentType?: string | null): string => {
-    if (!contentType) return 'Inconnu';
+    if (!contentType) return 'Unknown';
     
     const typeMap: Record<string, string> = {
       'application/pdf': 'PDF',
-      'image/jpeg': 'Image JPEG',
-      'image/png': 'Image PNG',
-      'image/gif': 'Image GIF',
-      'text/plain': 'Texte',
-      'application/msword': 'Document Word',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Document Word',
-      'application/vnd.ms-excel': 'Feuille Excel',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'Feuille Excel',
+      'image/jpeg': 'JPEG Image',
+      'image/png': 'PNG Image',
+      'image/gif': 'GIF Image',
+      'text/plain': 'Text',
+      'application/msword': 'Word Document',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Word Document',
+      'application/vnd.ms-excel': 'Excel Spreadsheet',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'Excel Spreadsheet',
     };
     
-    return typeMap[contentType] || contentType.split('/')[1]?.toUpperCase() || 'Fichier';
+    return typeMap[contentType] || contentType.split('/')[1]?.toUpperCase() || 'File';
   };
 </script>
