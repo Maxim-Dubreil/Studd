@@ -16,12 +16,12 @@ Projet de fin d'année - Application Rails avec Vite et Tailwind CSS
 
 ## Prérequis
 
-### Option 1 : Environnement Docker (recommandé)
+### Option A : Environnement Docker (recommandé)
 
 - **Docker** et **Docker Compose v2**
 - **Git**
 
-### Option 2 : Installation locale
+### Option B : Installation locale
 
 - **Ruby** (version 3.2.2 recommandée)
 - **Node.js** (version 20.19.0+ ou 22.12.0+)
