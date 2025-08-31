@@ -4,7 +4,6 @@
 #
 #  id         :integer          not null, primary key
 #  name       :string
-#  icon       :string
 #  user_id    :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -27,4 +26,5 @@ class Workspace < ApplicationRecord
   has_many :mindmaps, dependent: :destroy
   has_many :quizzes, dependent: :destroy
   has_many :quiz_sessions, dependent: :destroy
+  has_many :study_sheets_sets, dependent: :destroy
 end

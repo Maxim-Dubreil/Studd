@@ -12,7 +12,7 @@
     SidebarMenuItem,
     SidebarSeparator,
   } from '@/components/ui/sidebar';
-  import { Grid3X3, Home, Settings } from 'lucide-vue-next';
+  import { Book, Contact, Grid3X3, Home } from 'lucide-vue-next';
   import { onMounted, onUnmounted, ref, toRefs } from 'vue';
   import logoLight from '../../../images/logo/logoLight.png';
   import NavFooter from './NavFooter.vue';
@@ -34,25 +34,16 @@
       url: '/workspaces',
       icon: Grid3X3,
     },
-    // {
-    //     title: "Blog",
-    //     url: "/blog",
-    //     icon: FileText,
-    // },
-    // {
-    //     title: "Courses",
-    //     url: "/courses",
-    //     icon: BookOpen,
-    // },
-    // {
-    //     title: "Calendar",
-    //     url: "/calendar",
-    //     icon: Calendar,
-    // },
+
     {
-      title: 'Settings',
-      url: '/settings',
-      icon: Settings,
+      title: 'Docs',
+      url: '/docs',
+      icon: Book,
+    },
+    {
+      title: 'Contact',
+      url: '/contact',
+      icon: Contact,
     },
   ];
 
@@ -83,9 +74,7 @@
   <Sidebar variant="floating" collapsible="icon" class="group">
     <SidebarContent>
       <SidebarGroup class="space-y-2">
-        <SidebarGroupLabel
-          class="text-xl pt-4 font-semibold text-neutral-900 dark:text-neutral-50"
-        >
+        <SidebarGroupLabel class="pt-4 text-xl font-semibold text-neutral-900 dark:text-neutral-50">
           <a
             href="/"
             class="flex items-center gap-2 text-sm font-medium transition-colors duration-200 hover:text-indigo-600 dark:hover:text-indigo-400"

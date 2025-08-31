@@ -21,18 +21,26 @@ class PagesController < ApplicationController
 
   def build_nav_props
     left = [
-      { label: 'Docs',     url: docs_path },
-      { label: 'Contact',  url: contact_path }
+      { label: '',     url: docs_path },
+      { label: '',  url: contact_path }
     ]
-    center = [
-      { label: 'Dashboard', url: '#dashboard' },
-      { label: 'Workspace', url: '#workspace' }
-    ]
+    center   =    
+    if user_signed_in?
+        [
+          { label: 'Dashboard',  url: dashboard_path, variant: 'gradient', },
+          { label: 'Workspaces', url: workspaces_path, variant: 'default',
+            data: { 'data-turbo-method': :delete } }
+        ]
+      else
+        [
+          { label: 'Docs', url: docs_path, variant: 'gradient' },
+          { label: 'Contact', url: contact_path,  variant: 'outline'  }
+        ]
+      end
     right  =
       if user_signed_in?
         [
-          { label: 'Dashboard',  url: dashboard_path, variant: 'gradient' },
-          { label: 'Déconnexion', url: logout_path,    variant: 'outline',
+          { label: 'Deconnexion', url: logout_path,    variant: 'destructive',
             data: { 'data-turbo-method': :delete } }
         ]
       else

@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       resource :mindmaps, only: %i[show create destroy update]
       resource :quiz, only: %i[show create destroy] # Changé de resources à resource
       resources :quiz_sessions, only: %i[create update]
+      resources :study_sheets, only: %i[index show create destroy]
     end
     
     member do

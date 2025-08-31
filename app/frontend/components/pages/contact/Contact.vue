@@ -82,7 +82,7 @@
 </script>
 
 <template>
-  <AppLayout :hideSidebar="true" :hideToggle="false" :hideGradient="false">
+  <AppLayout :hideSidebar="true" :hideToggle="false" :hideHelper="true" :hideGradient="false">
     <!-- NAVBAR -->
     <div class="flex justify-center px-4">
       <NavbarLanding :left="props.left" :center="props.center" :right="props.right" />

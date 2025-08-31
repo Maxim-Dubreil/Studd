@@ -12,6 +12,7 @@ Projet de fin d'année - Application Rails avec Vite et Tailwind CSS
 - **Vue.js 3** - Framework JavaScript frontend
 - **Tailwind CSS** - Framework CSS utilitaire
 - **Devise** - Authentification utilisateur
+- **OpenAI API** - Génération de mind-maps, quiz et flashcards
 
 ## Prérequis
 
@@ -26,6 +27,27 @@ Projet de fin d'année - Application Rails avec Vite et Tailwind CSS
 - **Node.js** (version 20.19.0+ ou 22.12.0+)
 - **PostgreSQL**
 - **Git**
+
+## ⚠️ Configuration de l'API OpenAI
+
+**IMPORTANT** : Cette application nécessite une clé API OpenAI pour fonctionner correctement. Sans cette configuration, les fonctionnalités de génération de mind-maps, quiz et flashcards ne seront pas disponibles.
+
+### Étapes de configuration
+
+1. Créez un fichier `.env` à la racine du projet (au même niveau que le fichier README.md)
+
+2. Ajoutez votre clé API OpenAI et les modèles à utiliser dans ce fichier au format suivant :
+
+OPENAI_API_KEY=votre_cle_api
+
+3. **Obtention de la clé API** : Pour obtenir une clé API valide, veuillez contacter l'équipe du projet. Dans le contexte de l'évaluation de ce projet, les frais d'utilisation de l'API sont pris en charge par l'équipe, c'est pourquoi vous ne devez pas utiliser votre propre clé personnelle.
+
+### Remarques importantes
+
+- Le fichier `.env` est déjà configuré pour être ignoré par Git (via `.gitignore`), ce qui garantit que votre clé API ne sera pas partagée accidentellement dans le dépôt.
+- En cas de problème d'accès à l'API, vérifiez d'abord que votre fichier `.env` est correctement configuré et que la clé API est valide.
+- Les modèles spécifiés (gpt-4o-2024-08-06) sont recommandés pour des performances optimales, mais peuvent être modifiés si nécessaire.
+- **Note importante** : Cette approche de gestion des clés API est spécifique au contexte de projet scolaire. Dans un environnement de production réel, les clés API et autres secrets seraient gérés différemment, généralement via des services de gestion de secrets sécurisés (comme AWS Secrets Manager, HashiCorp Vault, etc.) ou des variables d'environnement configurées au niveau de l'infrastructure, et jamais partagées directement entre utilisateurs.
 
 ## Installation et Setup
 

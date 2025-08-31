@@ -39,7 +39,7 @@
 </script>
 
 <template>
-  <AppLayout :hideSidebar="true" :hideTopNav="true" :hideToggle="false" :hideGradient="false">
+  <AppLayout :hideSidebar="true" :hideToggle="false" :hideGradient="false" :hideHelper="false">
     <section class="relative overflow-hidden">
       <!-- NAVBAR EXISTANTE (inchangée) -->
       <div class="flex justify-center px-4">
@@ -177,8 +177,12 @@
       <div class="mx-auto flex max-w-screen-xl items-center justify-between gap-4 px-4 py-8">
         <p class="text-muted-foreground text-xs">© {{ new Date().getFullYear() }} Studd</p>
         <div class="flex items-center gap-4 text-xs">
-          <p> an <span class="text-blue-500">{Epitech}</span> Project</p>
-          <p> | </p>
+          <p>
+            an
+            <span class="text-blue-500">{Epitech}</span>
+            Project
+          </p>
+          <p>|</p>
           <a href="/contact" class="hover:underline">Contact</a>
         </div>
       </div>

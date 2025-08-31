@@ -4,7 +4,6 @@
 #
 #  id         :integer          not null, primary key
 #  name       :string
-#  icon       :string
 #  user_id    :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -19,5 +18,27 @@
 require 'rails_helper'
 
 RSpec.describe Workspace, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'model definition' do
+    it 'has the correct class name' do
+      expect(Workspace.name).to eq('Workspace')
+    end
+
+    it 'inherits from ApplicationRecord' do
+      expect(Workspace.superclass.name).to eq('ApplicationRecord')
+    end
+  end
+
+  describe 'constants and methods' do
+    it 'responds to name attribute' do
+      expect(Workspace.new).to respond_to(:name)
+    end
+
+    it 'responds to user_id attribute' do
+      expect(Workspace.new).to respond_to(:user_id)
+    end
+
+    it 'responds to icon_id attribute' do
+      expect(Workspace.new).to respond_to(:icon_id)
+    end
+  end
 end
