@@ -1,6 +1,6 @@
 <template>
   <AppLayout :hideSidebar="true" :hideTopNav="true" :hideToggle="true">
-    <BackButton :href="`/workspaces/${props.workspace_id}/flashcards`" />
+    <BackButton :href="`/workspaces/${props.workspace_id}`" />
 
     <section class="mx-auto w-full max-w-screen-xl px-4 py-8 font-sans sm:px-8 sm:py-16 lg:py-8">
       <div class="mb-16 text-center">
