@@ -131,9 +131,9 @@
           <span
             class="motion-safe:animate-shimmer inline-block bg-gradient-to-r from-fuchsia-500 via-violet-500 to-indigo-500 [background-size:260%_100%] bg-clip-text align-middle text-transparent"
           >
-            Quiz
+            Collection :
           </span>
-          <span class="mx-2 font-semibold text-slate-800 dark:text-slate-200">:</span>
+          <span class="mx-2 font-semibold text-slate-800 dark:text-slate-200"></span>
           <span
             v-for="(ch, i) in titleLetters"
             :key="i"
