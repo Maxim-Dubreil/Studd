@@ -45,6 +45,12 @@ const registry: Record<string, any> = {
   FlashCardSet: defineAsyncComponent(
     () => import('@/components/workspace/flashCard/FlashCardSet.vue')
   ),
+  CreateStudySheet: defineAsyncComponent(
+    () => import('@/components/workspace/studySheet/CreateStudySheet.vue')
+  ),
+  StudySheetShow: defineAsyncComponent(
+    () => import('@/components/workspace/studySheet/StudySheetShow.vue')
+  ),
   MindMapShow: defineAsyncComponent(
     () => import('@/components/workspace/mind_map/MindMapShow.vue')
   ),
