@@ -1,15 +1,16 @@
 require 'rails_helper'
 
-# Specs in this file have access to a helper object that includes
-# the IconsHelper. For example:
-#
-# describe IconsHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
 RSpec.describe IconsHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'module definition' do
+    it 'is defined as a module' do
+      expect(IconsHelper).to be_a(Module)
+    end
+
+    it 'can be included in a class' do
+      test_class = Class.new do
+        include IconsHelper
+      end
+      expect(test_class.new).to be_a_kind_of(IconsHelper)
+    end
+  end
 end
