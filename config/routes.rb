@@ -43,14 +43,13 @@ Rails.application.routes.draw do
   resources :workspaces, only: [:index, :show, :create, :update, :destroy]
   resources :raw_contents, only: [:create, :update]
   resources :icons, only: [:index]
-  get '/blog', to: 'pages#blog', as: :blog
-  get '/courses', to: 'pages#courses', as: :courses
-  get '/calendar', to: 'pages#calendar', as: :calendar
 
-  # Pages statiques temporaires
-  get '/about',  to: 'pages#about',  as: :about
+
+  # Pages statiques 
+  get '/contact',  to: 'pages#contact',  as: :contact
   get '/docs', to: 'pages#docs', as: :docs
   get '/landing', to: 'pages#landing_page', as: :landing
+  get '/settings', to: 'pages#settings', as: :settings
   namespace :api do
     namespace :v1 do
       get '/me', to: 'users#me'
