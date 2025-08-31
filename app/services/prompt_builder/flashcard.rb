@@ -18,8 +18,9 @@ module PromptBuilder
       }
     JSON
 
-    def initialize(content)
+    def initialize(content, count = 10)
       @content = content
+      @count = count
     end
 
     def build
@@ -28,7 +29,7 @@ module PromptBuilder
         {
           role: "user",
           content: <<~CONTENT
-            Génère **exactement** 10 flash-cards à partir du contenu ci-dessous.
+            Génère **exactement** #{@count} flash-cards à partir du contenu ci-dessous.
 
             • Le résultat doit être **un objet JSON strict** (UTF-8), identique au format d’exemple ci-après :
             #{EXAMPLE_JSON}

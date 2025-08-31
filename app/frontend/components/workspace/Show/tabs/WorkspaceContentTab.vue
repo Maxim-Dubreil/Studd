@@ -1,7 +1,8 @@
 <template>
   <div class="p-4 flex justify-center">
     <div class="rounded-xl border bg-card p-6 shadow-sm max-w-7xl w-full">
-      <h2 class="text-2xl font-semibold mb-4">Contenu du workspace</h2>
+      <h2 class="text-2xl font-semibold mb-4">Content of your Workspace</h2>
+      <p class="text-muted-foreground mb-4">Generations will be based on that content</p>
 
       <div v-if="workspace.raw_content" class="space-y-6">
         <div class="bg-muted rounded-lg p-4 border">
@@ -14,9 +15,9 @@
                 />
               </div>
               <div>
-                <span class="text-sm text-muted-foreground">Type de contenu</span>
+                <span class="text-sm text-muted-foreground">Content type</span>
                 <p class="font-medium text-foreground">
-                  {{ workspace.raw_content.content_type === 'text/plain' ? 'Texte brut' : 'Fichier' }}
+                  {{ workspace.raw_content.content_type === 'text/plain' ? 'Plain Text' : 'File' }}
                   <span v-if="workspace.raw_content.content_type !== 'text/plain'" class="text-sm text-muted-foreground">
                     ({{ getFileTypeLabel(workspace.raw_content.content_type) }})
                   </span>
@@ -29,7 +30,7 @@
                 <Icon name="file" class="h-5 w-5 text-primary" />
               </div>
               <div>
-                <span class="text-sm text-muted-foreground">Nom du fichier</span>
+                <span class="text-sm text-muted-foreground">File name</span>
                 <p class="font-medium text-foreground">{{ workspace.raw_content.file_name }}</p>
               </div>
             </div>
@@ -37,7 +38,7 @@
         </div>
 
         <div v-if="workspace.raw_content.content && workspace.raw_content.content_type === 'text/plain'" class="mt-6">
-          <h3 class="text-lg font-medium mb-2">Aperçu du contenu:</h3>
+          <h3 class="text-lg font-medium mb-2">Preview of the content:</h3>
           <div class="rounded-md bg-muted p-4 overflow-auto max-h-[400px]">
             <div class="text-sm whitespace-pre-wrap break-words leading-relaxed">{{ workspace.raw_content.content }}</div>
           </div>
@@ -45,14 +46,14 @@
 
         <div v-if="workspace.raw_content.content_type !== 'text/plain'" class="mt-6">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-medium">Aperçu du fichier</h3>
+            <h3 class="text-lg font-medium">Preview of the file</h3>
             <a 
               v-if="workspace.raw_content.file_url"
               :href="workspace.raw_content.file_url" 
               target="_blank"
               class="inline-flex items-center gap-2 px-3 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors">
               <Icon name="external-link" class="h-4 w-4" />
-              Ouvrir en plein écran
+              Open in full screen
             </a>
           </div>
           
@@ -61,30 +62,30 @@
               <iframe 
                 :src="workspace.raw_content.file_url + '#view=FitH'"
                 class="w-full aspect-[4/3] border-0"
-                title="Aperçu PDF">
+                title="PDF preview">
               </iframe>
             </div>
             
             <div v-else-if="workspace.raw_content.file_url" class="flex flex-col items-center justify-center p-12 text-muted-foreground">
               <Icon name="file" class="h-16 w-16 mb-4 text-muted-foreground/50" />
-              <h4 class="text-lg font-medium mb-2 text-foreground">Aperçu non disponible</h4>
+              <h4 class="text-lg font-medium mb-2 text-foreground">Preview not available</h4>
               <p class="text-center mb-6 text-muted-foreground">
-                Ce type de fichier ne peut pas être prévisualisé dans le navigateur.
+                This file type cannot be previewed in the browser.
               </p>
               <a 
                 :href="workspace.raw_content.file_url" 
                 target="_blank"
                 class="inline-flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted/80 text-foreground rounded-md transition-colors">
                 <Icon name="download" class="h-4 w-4" />
-                Télécharger le fichier
+                Download the file
               </a>
             </div>
             
             <div v-else class="flex flex-col items-center justify-center p-12 text-destructive">
               <Icon name="alert-triangle" class="h-16 w-16 mb-4 text-destructive/50" />
-              <h4 class="text-lg font-medium mb-2">Erreur de chargement</h4>
+              <h4 class="text-lg font-medium mb-2">Error loading the file</h4>
               <p class="text-center text-destructive/80">
-                Impossible de charger le fichier. Veuillez contacter l'assistance.
+                Unable to load the file. Please contact support.
               </p>
             </div>
           </div>
@@ -93,7 +94,7 @@
 
       <div v-else class="flex items-center gap-2 text-muted-foreground justify-center p-8">
         <Icon name="alert-triangle" class="h-6 w-6" />
-        <span class="text-lg">Aucun contenu n'a été ajouté à ce workspace</span>
+        <span class="text-lg">No content has been added to this workspace</span>
       </div>
     </div>
   </div>
@@ -127,20 +128,20 @@
 
   // Fonction pour obtenir un label lisible du type de fichier
   const getFileTypeLabel = (contentType?: string | null): string => {
-    if (!contentType) return 'Inconnu';
+    if (!contentType) return 'Unknown';
     
     const typeMap: Record<string, string> = {
       'application/pdf': 'PDF',
-      'image/jpeg': 'Image JPEG',
-      'image/png': 'Image PNG',
-      'image/gif': 'Image GIF',
-      'text/plain': 'Texte',
-      'application/msword': 'Document Word',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Document Word',
-      'application/vnd.ms-excel': 'Feuille Excel',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'Feuille Excel',
+      'image/jpeg': 'JPEG Image',
+      'image/png': 'PNG Image',
+      'image/gif': 'GIF Image',
+      'text/plain': 'Text',
+      'application/msword': 'Word Document',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Word Document',
+      'application/vnd.ms-excel': 'Excel Spreadsheet',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'Excel Spreadsheet',
     };
     
-    return typeMap[contentType] || contentType.split('/')[1]?.toUpperCase() || 'Fichier';
+    return typeMap[contentType] || contentType.split('/')[1]?.toUpperCase() || 'File';
   };
 </script>

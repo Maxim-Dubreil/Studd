@@ -26,4 +26,5 @@ class Workspace < ApplicationRecord
   has_many :flash_cards_sets, dependent: :destroy
   has_many :mindmaps, dependent: :destroy
   has_many :quizzes, dependent: :destroy
+  has_many :quiz_sessions, dependent: :destroy
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_19_180757) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_26_200918) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -69,6 +69,49 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_19_180757) do
     t.index ["workspace_id"], name: "index_mindmaps_on_workspace_id"
   end
 
+  create_table "quiz_session_answers", force: :cascade do |t|
+    t.bigint "quiz_session_id", null: false
+    t.string "question_id", null: false
+    t.text "question_text", null: false
+    t.string "question_type", null: false
+    t.json "user_answers", null: false
+    t.json "correct_answers", null: false
+    t.boolean "is_correct", null: false
+    t.integer "time_spent_seconds"
+    t.integer "attempts_count", default: 1
+    t.text "explanation_shown"
+    t.json "analytics_data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["is_correct"], name: "index_quiz_session_answers_on_is_correct"
+    t.index ["question_type"], name: "index_quiz_session_answers_on_question_type"
+    t.index ["quiz_session_id", "question_id"], name: "index_quiz_session_answers_on_quiz_session_id_and_question_id"
+    t.index ["quiz_session_id"], name: "index_quiz_session_answers_on_quiz_session_id"
+  end
+
+  create_table "quiz_sessions", force: :cascade do |t|
+    t.bigint "workspace_id", null: false
+    t.bigint "quiz_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "started_at", null: false
+    t.datetime "completed_at"
+    t.integer "duration_seconds", default: 0
+    t.integer "score", default: 0
+    t.integer "total_questions", null: false
+    t.decimal "accuracy_percentage", precision: 5, scale: 2
+    t.string "quiz_mode", null: false
+    t.string "session_type", default: "standard"
+    t.json "metadata"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["completed_at"], name: "index_quiz_sessions_on_completed_at"
+    t.index ["quiz_id"], name: "index_quiz_sessions_on_quiz_id"
+    t.index ["user_id", "quiz_mode"], name: "index_quiz_sessions_on_user_id_and_quiz_mode"
+    t.index ["user_id"], name: "index_quiz_sessions_on_user_id"
+    t.index ["workspace_id", "created_at"], name: "index_quiz_sessions_on_workspace_id_and_created_at"
+    t.index ["workspace_id"], name: "index_quiz_sessions_on_workspace_id"
+  end
+
   create_table "quizzes", force: :cascade do |t|
     t.bigint "workspace_id", null: false
     t.string "title"
@@ -114,6 +157,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_19_180757) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "flash_cards_sets", "workspaces"
   add_foreign_key "mindmaps", "workspaces"
+  add_foreign_key "quiz_session_answers", "quiz_sessions"
+  add_foreign_key "quiz_sessions", "quizzes"
+  add_foreign_key "quiz_sessions", "users"
+  add_foreign_key "quiz_sessions", "workspaces"
   add_foreign_key "quizzes", "workspaces"
   add_foreign_key "raw_contents", "workspaces"
   add_foreign_key "workspaces", "icons"
