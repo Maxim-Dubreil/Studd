@@ -38,6 +38,8 @@ Projet de fin d'année - Application Rails avec Vite et Tailwind CSS
 
 2. Ajoutez votre clé API OpenAI et les modèles à utiliser dans ce fichier au format suivant :
 
+OPENAI_API_KEY=votre_cle_api
+
 3. **Obtention de la clé API** : Pour obtenir une clé API valide, veuillez contacter l'équipe du projet. Dans le contexte de l'évaluation de ce projet, les frais d'utilisation de l'API sont pris en charge par l'équipe, c'est pourquoi vous ne devez pas utiliser votre propre clé personnelle.
 
 ### Remarques importantes
