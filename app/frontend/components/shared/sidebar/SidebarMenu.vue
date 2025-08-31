@@ -37,7 +37,7 @@
 
     {
       title: 'Docs',
-      url: '/Docs',
+      url: '/docs',
       icon: Book,
     },
     {
