@@ -1,34 +1,36 @@
 <script setup lang="ts">
-import { Card, CardContent } from '@/components/ui/card';
-import AppLayout from '../../layout/AppLayout.vue';
-interface Props {
-  title: string;
-  subtitle?: string;
-  showSidebar?: boolean; 
-  showTerms?: boolean;
-}
+  import { Card, CardContent } from '@/components/ui/card';
+  import AppLayout from '../../layout/AppLayout.vue';
+  interface Props {
+    title: string;
+    subtitle?: string;
+    showSidebar?: boolean;
+    showTerms?: boolean;
+  }
 
-withDefaults(defineProps<Props>(), {
-  showSidebar: true,
-  showTerms: true,
-});
+  withDefaults(defineProps<Props>(), {
+    showSidebar: true,
+    showTerms: true,
+  });
 </script>
 
 <template>
-  <AppLayout :hideSidebar="true" :hideTopNav="true" :hideToggle="false">
-    <div class="flex flex-col gap-6 max-w-4xl justify-center items-center h-screen w-full mx-auto px-4 overflow-hidden">
+  <AppLayout :hideSidebar="true" :hideToggle="false" :hideHelper="false">
+    <div
+      class="mx-auto flex h-screen w-full max-w-4xl flex-col items-center justify-center gap-6 overflow-hidden px-4"
+    >
       <!-- Card principale -->
-      <Card class="overflow-hidden w-full max-h-[90vh]">
+      <Card class="max-h-[90vh] w-full overflow-hidden">
         <CardContent class="grid p-0" :class="showSidebar ? 'md:grid-cols-2' : 'md:grid-cols-1'">
           <!-- Formulaire principal -->
-          <div class="p-6 md:p-8 overflow-y-auto">
+          <div class="overflow-y-auto p-6 md:p-8">
             <div class="flex flex-col gap-6">
               <!-- Header -->
-              <div class="flex flex-col items-center text-center pb-6 pt-4">
+              <div class="flex flex-col items-center pt-4 pb-6 text-center">
                 <!-- Logo par défaut -->
 
                 <h1 class="text-3xl font-bold">{{ title }}</h1>
-                <p v-if="subtitle" class="text-balance text-muted-foreground max-w-md">
+                <p v-if="subtitle" class="text-muted-foreground max-w-md text-balance">
                   {{ subtitle }}
                 </p>
               </div>
@@ -41,20 +43,23 @@ withDefaults(defineProps<Props>(), {
             </div>
           </div>
           <!-- Sidebar avec image (optionnelle) -->
-          <div v-if="showSidebar" class="relative overflow-hidden flex items-center justify-center"
-            style="background: linear-gradient(90deg, #c2c3ff 0%, #4d51ff 100%)">
+          <div
+            v-if="showSidebar"
+            class="relative flex items-center justify-center overflow-hidden"
+            style="background: linear-gradient(90deg, #c2c3ff 0%, #4d51ff 100%)"
+          >
             <!-- Bulles stylisées -->
             <div
-              class="absolute w-44 h-44 rounded-full bg-gradient-to-tr from-fuchsia-400 via-blue-400 to-green-300 top-6 right-6 opacity-50 blur-lg shadow-2xl border-2 border-white/30">
-            </div>
+              class="absolute top-6 right-6 h-44 w-44 rounded-full border-2 border-white/30 bg-gradient-to-tr from-fuchsia-400 via-blue-400 to-green-300 opacity-50 shadow-2xl blur-lg"
+            ></div>
 
             <div
-              class="absolute w-32 h-32 rounded-full bg-gradient-to-tr from-cyan-300 via-pink-300 to-purple-400 bottom-16 left-16 opacity-50 blur-md shadow-xl border border-white/20">
-            </div>
+              class="absolute bottom-16 left-16 h-32 w-32 rounded-full border border-white/20 bg-gradient-to-tr from-cyan-300 via-pink-300 to-purple-400 opacity-50 shadow-xl blur-md"
+            ></div>
 
             <div
-              class="absolute w-24 h-24 rounded-full bg-gradient-to-tr from-yellow-200 via-orange-300 to-pink-400 bottom-10 right-36 opacity-50 blur-md shadow-lg border border-white/20">
-            </div>
+              class="absolute right-36 bottom-10 h-24 w-24 rounded-full border border-white/20 bg-gradient-to-tr from-yellow-200 via-orange-300 to-pink-400 opacity-50 shadow-lg blur-md"
+            ></div>
             <slot name="sidebar"></slot>
           </div>
         </CardContent>
