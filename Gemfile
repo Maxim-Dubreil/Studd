@@ -24,7 +24,14 @@ group :development, :test do
   gem 'debug', platforms: %i[mri windows], require: 'debug/prelude'
   gem 'dotenv-rails'
   gem 'rspec-rails'
+  gem 'factory_bot_rails'
+  gem 'faker'
+  gem 'shoulda-matchers'
+  gem 'database_cleaner-active_record'
+  gem 'rails-controller-testing'
 end
+
+
 
 gem 'vite_rails', '~> 3.0', group: :development
 
