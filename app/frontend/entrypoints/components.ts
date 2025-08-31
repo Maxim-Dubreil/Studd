@@ -1,3 +1,4 @@
+import Settings from '@/components/pages/settings/Settings.vue';
 import { createApp, defineAsyncComponent } from 'vue';
 
 const registry: Record<string, any> = {
@@ -56,6 +57,11 @@ const registry: Record<string, any> = {
   RegistrationForm: defineAsyncComponent(() => import('@/components/auth/RegistrationForm.vue')),
   LoginForm: defineAsyncComponent(() => import('@/components/auth/LoginForm.vue')),
   PasswordResetForm: defineAsyncComponent(() => import('@/components/auth/PasswordResetForm.vue')),
+
+  // Contact
+  Contact: defineAsyncComponent(() => import('@/components/pages/contact/Contact.vue')),
+  Docs: defineAsyncComponent(() => import('@/components/pages/docs/Docs.vue')),
+  Settings: defineAsyncComponent(() => import('@/components/pages/settings/Settings.vue'))
 };
 
 function mountIslands() {
