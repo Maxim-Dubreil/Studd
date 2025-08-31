@@ -158,6 +158,7 @@ module PromptBuilder
       prompt_text = <<~CONTENT
         Génère exactement une structure de mind-map au format JSON correspondant à l'exemple.
         Tu dois ANALYSER le CONTENU fourni et le transformer en une hiérarchie de nœuds.
+        IMPORTANT, tu dois couvrir l'ensemble du contenu.
 
         ▸ Schéma fonctionnel à respecter (guidelines) :
           • Clé racine obligatoire : "mindmap"
