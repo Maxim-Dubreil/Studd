@@ -1,10 +1,12 @@
 <template>
-  <AppLayout :hideSidebar="true" :hideTopNav="true" :hideToggle="true">
+  <AppLayout :hideSidebar="true" :hideToggle="true">
     <!-- Main Structure -->
-    <div class="flex h-screen flex-col">
+    <div class="flex align-center justify-center flex-col">
       <!-- Header (visible only during quiz) -->
       <div v-if="!isStartScreen && !isCompleted" class="mx-auto w-full max-w-6xl p-6">
-        <BackButton :href="`/workspaces/${props.workspace_id}`" />
+        <BackButton :href="`/workspaces/${props.workspace_id}/quiz`" />
+        <HomeButton :href="`/dashboard`" />
+
         <!-- Quiz Info -->
         <div class="mb-6 text-center">
           <h1 class="text-foreground mb-1 text-xl font-semibold">{{ quiz.title }}</h1>
@@ -35,14 +37,14 @@
       </div>
 
       <!-- Main Container -->
-      <div class="flex flex-1 items-center justify-center py-4">
+      <div class="py-10 flex items-center justify-center">
         <!-- Start Screen with QuizMenu -->
         <div
           v-if="isStartScreen"
           class="flex min-h-screen flex-col items-center justify-center p-6"
         >
           <!-- Loading display during generation -->
-          <div v-if="isLoading" class="flex h-[600px] flex-col items-center justify-center">
+          <div v-if="isLoading" class="flex flex-col items-center justify-center">
             <svg class="mb-4 h-12 w-12 animate-spin" viewBox="0 0 24 24" fill="none">
               <circle
                 cx="12"
@@ -71,23 +73,21 @@
         </div>
 
         <!-- Quiz Content -->
-        <div
-          v-else
-          class="mx-auto flex w-full max-w-6xl flex-col"
-          style="height: calc(100vh - 180px)"
-        >
+        <div v-else class="] mx-auto flex flex-col">
           <div
-            class="flex flex-1 flex-col overflow-hidden rounded-3xl bg-white shadow-xl"
+            class="flex flex-col overflow-hidden rounded-3xl bg-white shadow-xl"
             :class="[animationClass]"
           >
             <div class="flex flex-1 flex-col overflow-hidden">
               <!-- Question Display -->
-              <div v-if="currentQuestion && !isCompleted" class="flex flex-1 flex-col p-6">
+              <div v-if="currentQuestion && !isCompleted" class="flex flex-col p-6">
                 <div class="mb-6">
                   <h2 class="text-foreground mb-3 text-xl font-bold">
-                    Question {{ currentQuestionIndex + 1 }}
+                    Q. {{ currentQuestionIndex + 1 }}
                   </h2>
-                  <p class="text-foreground text-lg leading-relaxed">
+                  <p
+                    class="text-foreground mx-auto w-full max-w-xl text-lg leading-relaxed break-words"
+                  >
                     {{ currentQuestion.question }}
                   </p>
                 </div>
@@ -243,7 +243,7 @@
                     {{ isCurrentAnswerCorrect ? 'Correct!' : 'Incorrect' }}
                   </h3>
                   <p
-                    class="leading-relaxed"
+                    class="mx-auto w-full max-w-xl leading-relaxed break-words"
                     :class="isCurrentAnswerCorrect ? 'text-green-700' : 'text-red-700'"
                   >
                     {{ currentQuestion.explanation }}
@@ -252,11 +252,8 @@
               </div>
 
               <!-- Learning Mode Results -->
-              <div
-                v-if="isCompleted && !testMode"
-                class="flex flex-1 flex-col items-center justify-center p-6"
-              >
-                <div class="w-full max-w-2xl">
+              <div v-if="isCompleted && !testMode" class="py-10 flex flex-col p-6">
+                <div class="max-w-xl">
                   <!-- Success Animation & Icon -->
                   <div class="mb-8 text-center">
                     <div
@@ -303,24 +300,14 @@
                   </div>
 
                   <!-- Action Buttons -->
-                  <div class="flex flex-col justify-center gap-3 sm:flex-row">
-                    <Button
-                      @click="goToWorkspace"
-                      variant="default"
-                      size="lg"
-                      class="flex-1 sm:flex-none"
-                    >
-                      <Icon name="check" class="mr-2 h-4 w-4" />
-                      End
+                  <div class="flex flex-col justify-center gap-4 sm:flex-row">
+                    <Button @click="goToWorkspace" variant="default">
+                      <Icon name="check" />
+                      <span>End</span>
                     </Button>
-                    <Button
-                      @click="retryQuiz"
-                      variant="outline"
-                      size="lg"
-                      class="flex-1 sm:flex-none"
-                    >
-                      <Icon name="refresh-cw" class="mr-2 h-4 w-4" />
-                      Try Again
+                    <Button @click="retryQuiz" variant="outline">
+                      <Icon name="refresh-cw" />
+                      <span>Try Again</span>
                     </Button>
                   </div>
                 </div>
@@ -356,13 +343,13 @@
             </div>
 
             <!-- Answer Summary with Explanations -->
-            <div class="flex-1 overflow-hidden">
-              <h3 class="text-foreground mb-4 flex items-center text-xl font-semibold">
-                <Icon name="list" class="mr-2 h-5 w-5" />
-                Detailed Review
+            <div>
+              <h3 class="text-foreground mb-4 flex items-center pl-4 text-xl font-semibold">
+                <Icon name="list" />
+                <span class="pl-2">Detailed Review</span>
               </h3>
 
-              <div class="h-full space-y-4 overflow-y-auto pr-2">
+              <div class="grid w-full max-w-6xl grid-cols-1 gap-6 pb-4 md:grid-cols-2">
                 <div
                   v-for="(question, index) in quiz.questions"
                   :key="question.id"
@@ -380,7 +367,7 @@
                     >
                       {{ index + 1 }}
                     </div>
-                    <div class="flex-1">
+                    <div class="">
                       <h4 class="text-foreground mb-2 font-medium">{{ question.question }}</h4>
                     </div>
                     <Icon
@@ -391,7 +378,7 @@
                   </div>
 
                   <!-- Answers Comparison -->
-                  <div class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div class="mb-4 grid grid-cols-1 gap-4 p-4 md:grid-cols-2">
                     <!-- Your Answer -->
                     <div class="space-y-2">
                       <div class="text-muted-foreground text-sm font-medium">Your Answer</div>
@@ -455,7 +442,7 @@
                   <div class="rounded-lg border border-blue-200 bg-blue-50 p-3">
                     <div class="flex items-start gap-2">
                       <Icon name="info" class="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-600" />
-                      <p class="text-sm leading-relaxed text-blue-700">
+                      <p class="text-sm leading-relaxed break-words text-blue-700">
                         {{ question.explanation }}
                       </p>
                     </div>
@@ -465,19 +452,14 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="mt-6 flex flex-col justify-center gap-3 border-t pt-4 sm:flex-row">
-              <Button
-                @click="goToWorkspace"
-                variant="default"
-                size="lg"
-                class="flex-1 sm:flex-none"
-              >
-                <Icon name="check" class="mr-2 h-4 w-4" />
-                End
+            <div class="m-10 flex flex-col justify-center gap-3 border-t py-4 sm:flex-row">
+              <Button @click="goToWorkspace" variant="default">
+                <Icon name="check" />
+                <span>End</span>
               </Button>
-              <Button @click="retryQuiz" variant="outline" size="lg" class="flex-1 sm:flex-none">
-                <Icon name="refresh-cw" class="mr-2 h-4 w-4" />
-                Retake Exam
+              <Button @click="retryQuiz" variant="outline" class="sm:flex-none">
+                <Icon name="refresh-cw" />
+                <span>Retake Exam</span>
               </Button>
             </div>
           </div>
@@ -489,12 +471,14 @@
 
 <script setup lang="ts">
   import { Button } from '@/components/ui/button';
+  import BackButton from '@/components/ui/button/BackButton.vue';
+  import HomeButton from '@/components/ui/button/HomeButton.vue';
+
   import Icon from '@/components/ui/icon/Icon.vue';
   import { computed, onMounted, onUnmounted, ref } from 'vue';
   import AppLayout from '../../../components/layout/AppLayout.vue';
   import QuizMenu from './QuizMenu.vue';
   import './animations.css';
-  import BackButton from '@/components/ui/button/BackButton.vue';
 
   interface Option {
     id: string;

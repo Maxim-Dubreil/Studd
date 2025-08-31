@@ -1,7 +1,7 @@
 <template>
   <AppLayout :hideSidebar="true" :hideTopNav="true" :hideToggle="true">
     <BackButton :href="`/workspaces/${props.workspace_id}`" />
-
+    <HomeButton :href="`/dashboard`" />
     <section class="mx-auto w-full max-w-screen-xl px-4 py-8 font-sans sm:px-8 sm:py-16 lg:py-8">
       <div class="mb-16 text-center">
         <h2
@@ -43,7 +43,7 @@
           </button>
 
           <!-- Zone cliquable pour redirection -->
-          <div @click="handleRedirect(set.id)" class="flex h-full w-full flex-col">
+          <div @click="handleRedirect(set.id, set.name)" class="flex h-full w-full flex-col">
             <!-- Mini‑cartes empilées ------------------------------------------>
             <div class="relative mb-8 flex flex-grow items-center justify-center">
               <!-- Carte arrière -->
@@ -204,6 +204,7 @@
   } from '@/components/ui/alert-dialog';
   import { Button } from '@/components/ui/button';
   import BackButton from '@/components/ui/button/BackButton.vue';
+  import HomeButton from '@/components/ui/button/HomeButton.vue';
   import { Trash2 } from 'lucide-vue-next';
   import { ref } from 'vue';
   import AppLayout from '../../../components/layout/AppLayout.vue';
@@ -293,8 +294,8 @@
     }
   };
 
-  function handleRedirect(id: number) {
-    window.location.href = `/workspaces/${props.workspace_id}/flashcards/${id}`;
+  function handleRedirect(id: number, name: string) {
+    window.location.href = `/workspaces/${props.workspace_id}/flashcards/${id}?name=${encodeURIComponent(name)}`;
   }
 
   function confirmDelete(id: number) {

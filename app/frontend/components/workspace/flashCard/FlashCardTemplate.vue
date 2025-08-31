@@ -1,16 +1,34 @@
 <template>
   <!-- L’ensemble prend la classe `flipped` quand on clique -->
   <div
-    class="flashcard h-[25rem] w-[48rem] cursor-pointer select-none"
+    class="flashcard h-[30rem] w-[25rem] cursor-pointer select-none"
     :class="{ flipped }"
     @click="flipped = !flipped"
   >
-    <div class="flashcard-inner h-full w-full rounded-xl">
+    <div class="flashcard-inner border-accent h-full w-full rounded-xl border shadow-xl">
       <!-- Face avant -->
+
       <div
-        class="flashcard-front flex items-center justify-center rounded-xl bg-white p-4 text-4xl font-extrabold text-neutral-700 shadow-lg"
+        class="flashcard-front align-justify flex items-center justify-center bg-white p-8 text-justify text-xl font-extrabold text-neutral-700 shadow-lg"
         :style="{ backgroundColor: color }"
       >
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Icon
+                name="message-circle-question-mark"
+                size="lg"
+                class="absolute top-4 right-4 text-purple-600"
+              />
+              <TooltipContent side="left">Click to turn the card, and respond !</TooltipContent>
+            </TooltipTrigger>
+          </Tooltip>
+        </TooltipProvider>
+        <span
+          class="absolute top-4 left-4 rounded-lg bg-purple-500 px-3 py-1 text-sm font-medium text-purple-100 shadow"
+        >
+          Q. {{ questionNumber }}
+        </span>
         <slot name="term">{{ term }}</slot>
       </div>
 
@@ -21,28 +39,37 @@
       >
         <!-- Zone texte au centre -->
         <div
-          class="flex flex-1 items-center justify-center p-8 text-lg font-semibold text-neutral-900"
+          class="flex flex-1 items-center justify-center p-8 text-justify text-lg font-semibold text-neutral-900"
         >
           <slot name="definition">{{ definition }}</slot>
         </div>
 
         <!-- Barre d’actions en bas -->
-        <div class="flex h-14">
+        <div class="border-accent flex justify-center gap-4 border-t bg-white p-3 shadow-inner">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Icon
+                  name="message-circle-question-mark"
+                  size="lg"
+                  class="absolute top-4 right-4 text-purple-600"
+                />
+                <TooltipContent side="left">
+                  Click on the button to validate your answer
+                </TooltipContent>
+              </TooltipTrigger>
+            </Tooltip>
+          </TooltipProvider>
+
           <!-- Wrong (rouge vif) -->
-          <Button
-            @click.stop="handleWrong"
-            class="peer flex h-full w-1/2 origin-bottom items-center justify-center gap-2 rounded-none bg-rose-500 text-white transition hover:scale-y-110"
-          >
-            <X class="h-5 w-5" />
+          <Button variant="destructive" @click.stop="handleWrong">
+            <Icon name="X" class="h-5 w-5" />
             <span>Wrong</span>
           </Button>
 
           <!-- Correct (vert vif) -->
-          <Button
-            @click.stop="handleCorrect"
-            class="flex h-full w-1/2 items-center justify-center gap-2 rounded-none bg-emerald-500 text-white hover:bg-emerald-600"
-          >
-            <Check class="h-5 w-5" />
+          <Button variant="success" @click.stop="handleCorrect">
+            <Icon name="Check" class="h-5 w-5" />
             <span>Correct</span>
           </Button>
         </div>
@@ -54,13 +81,20 @@
 <script setup lang="ts">
   import Button from '@/components/ui/button/Button.vue';
   import { useCarousel } from '@/components/ui/carousel/useCarousel';
-  import { Check, X } from 'lucide-vue-next';
+  import Icon from '@/components/ui/icon/Icon.vue';
+  import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+  } from '@/components/ui/tooltip';
 
   /* Props : libellé et réponse */
   const props = defineProps<{
     term: string;
     definition: string;
     color: string;
+    questionNumber?: number;
   }>();
 
   const emit = defineEmits<{
