@@ -20,8 +20,7 @@ class PagesController < ApplicationController
   end
 
   def build_nav_props
-    left   = [
-      { label: 'StudyApp', url: root_path },
+    left = [
       { label: 'Docs',     url: docs_path },
       { label: 'Contact',  url: contact_path }
     ]

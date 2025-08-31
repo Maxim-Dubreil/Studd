@@ -3,6 +3,10 @@
   import Icon from '@/components/ui//icon/Icon.vue';
   import { Button } from '@/components/ui/button';
   import { reactive, ref } from 'vue';
+  import maximAvatar from '../../../images/team/maxim.png';
+  import theoAvatar from '../../../images/team/theo.png';
+  import yannisAvatar from '../../../images/team/yannis.png';
+  import yohannAvatar from '../../../images/team/yohann.png';
   import NavbarLanding from '../landingPage/NavbarLanding.vue';
 
   interface NavItem {
@@ -27,28 +31,28 @@
       name: 'Yannis',
       role: 'Backend - Machine Learning - Data Architect',
       email: 'yannis.djaffer@epitech.eu',
-      avatar: '/images/team/yannis.jpg',
+      avatar: yannisAvatar,
     },
     {
       id: 2,
       name: 'Théo ',
       role: 'Backend - Machine Learning - Design',
       email: 'theo.lordelot@epitech.eu',
-      avatar: '/images/team/theo.jpg',
+      avatar: theoAvatar,
     },
     {
       id: 3,
       name: 'Yohann',
       role: 'Frontend - Test Manager, CI/CD',
       email: 'yohann.provost@epitech.eu',
-      avatar: '/images/team/yohann.jpg',
+      avatar: yohannAvatar,
     },
     {
       id: 4,
       name: 'Maxim',
       role: 'Frontend - UI/UX - DevOps - Design',
       email: 'maxim.dubreil@epitech.eu',
-      avatar: '/images/team/maxim.jpg',
+      avatar: maximAvatar,
     },
   ]);
 
@@ -117,16 +121,7 @@
               <div
                 class="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border border-slate-200"
               >
-                <img
-                  :src="
-                    p.avatar ||
-                    'https://api.dicebear.com/8.x/initials/svg?seed=' + encodeURIComponent(p.name)
-                  "
-                  :alt="p.name"
-                  class="h-full w-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
+                <img :src="p.avatar" :alt="p.name" class="h-full w-full object-cover" />
               </div>
               <div>
                 <div class="text-md font-bold">{{ p.name }}</div>
@@ -157,7 +152,7 @@
               <a class="inline-flex" :href="'mailto:' + p.email" aria-label="Send an email">
                 <Button variant="gradient" class="h-9 px-3">
                   <Icon name="send" />
-                  Open directly in mailer
+                  Open in mail app
                 </Button>
               </a>
 
@@ -213,7 +208,7 @@
     <!-- FOOTER -->
     <footer class="border-t">
       <div class="mx-auto flex max-w-screen-xl items-center justify-between gap-4 px-4 py-8">
-        <p class="text-muted-foreground text-xs">© {{ new Date().getFullYear() }} StudyApp</p>
+        <p class="text-muted-foreground text-xs">© {{ new Date().getFullYear() }} Studd</p>
         <div class="flex items-center gap-4 text-xs">
           <p>
             an

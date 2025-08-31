@@ -56,7 +56,7 @@
       >
         <div class="flex flex-col justify-center">
           <h1 class="text-3xl leading-tight font-bold md:text-5xl">
-            StudyApp — Courses, AI, Quizzes, mind maps & Revision in one place.
+            Studd — Courses, AI, Quizzes, mind maps & Revision in one place.
           </h1>
           <p class="text-muted-foreground mt-4 md:text-lg">
             Import your courses, generate summaries and mind maps with AI, revise with quizzes, and
@@ -175,7 +175,7 @@
     <!-- FOOTER (léger) -->
     <footer class="border-t">
       <div class="mx-auto flex max-w-screen-xl items-center justify-between gap-4 px-4 py-8">
-        <p class="text-muted-foreground text-xs">© {{ new Date().getFullYear() }} StudyApp</p>
+        <p class="text-muted-foreground text-xs">© {{ new Date().getFullYear() }} Studd</p>
         <div class="flex items-center gap-4 text-xs">
           <p> an <span class="text-blue-500">{Epitech}</span> Project</p>
           <p> | </p>

@@ -16,7 +16,7 @@
   const props = withDefaults(defineProps<Props>(), {
     user: () => ({
       name: 'Student Demo',
-      email: 'demo@studyapp.com',
+      email: 'demo@studd.com',
       avatar: undefined,
     }),
     dashboard_stats: () => null,
