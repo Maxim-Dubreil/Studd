@@ -17,6 +17,8 @@
 
     <section class="relative z-10 px-10 pb-24">
       <BackButton href="/workspaces" />
+      <HomeButton :href="`/dashboard`" />
+
       <div class="relative mb-8 p-4 text-center">
         <div class="flex items-center justify-center">
           <div class="relative">
@@ -60,10 +62,11 @@
   import { computed, ref } from 'vue';
   import AppLayout from '../../layout/AppLayout.vue';
   // Import des composants d'onglets
+  import BackButton from '@/components/ui/button/BackButton.vue';
+  import HomeButton from '@/components/ui/button/HomeButton.vue';
   import WorkspaceContentTab from './tabs/WorkspaceContentTab.vue';
   import WorkspaceProgressionTab from './tabs/WorkspaceProgressionTab.vue';
   import WorkspaceToolsTab from './tabs/WorkspaceToolsTab.vue';
-  import BackButton from '@/components/ui/button/BackButton.vue';
 
   interface IconInfo {
     id: number;

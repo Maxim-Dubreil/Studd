@@ -1,5 +1,7 @@
 <template>
   <AppLayout :hideSidebar="true" :hideTopNav="true" :hideToggle="false">
+    <BackButton :href="`/workspaces/${props.workspace_id}`" />
+    <HomeButton :href="`/dashboard`" />
     <!-- Affichage de la mindmap si elle existe -->
     <div
       v-if="!isLoading && content"
@@ -27,14 +29,14 @@
           </span>
         </Button>
         <Button @click="deleteMindmap" variant="destructive">
-          <Icon name="save" class="h-4 w-4" />
+          <Icon name="trash" class="h-4 w-4" />
           Delete
         </Button>
       </div>
-      <BackButton :href="`/workspaces/${props.workspace_id}`" />
     </div>
+
     <!-- Affichage du loader pendant la génération -->
-    <div class="flex h-[600px] flex-col items-center justify-center">
+    <div v-else class="flex h-[600px] flex-col items-center justify-center">
       <p class="mb-4 text-lg">
         {{ isLoading ? 'Generating mindmap...' : 'No mindmap available' }}
       </p>
@@ -62,18 +64,28 @@
         </span>
       </Button>
     </div>
+    <Sonner
+      class="toaster group"
+      :duration="5000"
+      :style="{
+        '--normal-bg': 'var(--popover)',
+        '--normal-text': 'var(--popover-foreground)',
+        '--normal-border': 'var(--border)',
+      }"
+    />
   </AppLayout>
 </template>
 
 <script setup lang="ts">
   import { Button } from '@/components/ui/button';
+  import BackButton from '@/components/ui/button/BackButton.vue';
+  import HomeButton from '@/components/ui/button/HomeButton.vue';
   import Icon from '@/components/ui/icon/Icon.vue';
   import type { MindElixirData } from 'mind-elixir';
   import MindElixir from 'mind-elixir';
   import 'mind-elixir/style.css';
   import { onMounted, ref } from 'vue';
   import AppLayout from '../../../components/layout/AppLayout.vue';
-  import BackButton from '@/components/ui/button/BackButton.vue';
 
   interface props {
     workspace_id: number;
@@ -139,7 +151,6 @@
       console.error(err instanceof Error ? err.message : 'Erreur inconnue');
 
       // TO DO : afficher un pop up
-      alert('Error saving mindmap');
     } finally {
       isSaving.value = false;
     }
