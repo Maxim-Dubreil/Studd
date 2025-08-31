@@ -207,3 +207,94 @@ module PromptBuilder
     end
   end
 end
+
+def validate_schema(json_response)
+  begin
+    # Vérifier si la réponse est un JSON valide
+    data = JSON.parse(json_response) rescue nil
+    return { valid: false, error: "La réponse n'est pas un JSON valide" } unless data
+
+    # Vérifier si la structure de base est correcte
+    return { valid: false, error: "La clé 'mindmap' est manquante" } unless data.key?("mindmap")
+
+    # Vérifier si le nœud racine est conforme
+    mindmap = data["mindmap"]
+    return { valid: false, error: "Le nœud racine doit être un objet" } unless mindmap.is_a?(Hash)
+
+    # Vérifier les propriétés requises du nœud racine
+    required_props = ["topic", "children", "style"]
+    missing_props = required_props.select { |prop| !mindmap.key?(prop) }
+    return { valid: false, error: "Propriétés manquantes dans le nœud racine: #{missing_props.join(', ')}" } if missing_props.any?
+
+    # Vérifier le type des propriétés
+    return { valid: false, error: "'topic' doit être une chaîne de caractères" } unless mindmap["topic"].is_a?(String)
+    return { valid: false, error: "'children' doit être un tableau" } unless mindmap["children"].is_a?(Array)
+
+    # Vérifier le style
+    if mindmap["style"] && mindmap["style"] != nil
+      style = mindmap["style"]
+      return { valid: false, error: "'style' doit être un objet ou null" } unless style.is_a?(Hash)
+
+      # Vérifier les propriétés requises du style
+      style_props = ["background", "border-radius", "color"]
+      missing_style_props = style_props.select { |prop| !style.key?(prop) }
+      return { valid: false, error: "Propriétés manquantes dans le style: #{missing_style_props.join(', ')}" } if missing_style_props.any?
+
+      # Vérifier le type des propriétés du style
+      style_props.each do |prop|
+        return { valid: false, error: "La propriété '#{prop}' du style doit être une chaîne de caractères" } unless style[prop].is_a?(String)
+      end
+    end
+
+    # Vérifier récursivement tous les nœuds enfants
+    errors = validate_nodes(mindmap["children"])
+    return { valid: false, error: errors } if errors
+
+    # Si tout est valide
+    return { valid: true }
+  rescue => e
+    return { valid: false, error: "Erreur lors de la validation: #{e.message}" }
+  end
+end
+
+private
+
+def validate_nodes(nodes)
+  return nil unless nodes.is_a?(Array)
+
+  nodes.each_with_index do |node, index|
+    # Vérifier si le nœud est un objet
+    return "Le nœud à l'index #{index} doit être un objet" unless node.is_a?(Hash)
+
+    # Vérifier les propriétés requises
+    required_props = ["topic", "children", "style"]
+    missing_props = required_props.select { |prop| !node.key?(prop) }
+    return "Propriétés manquantes dans le nœud à l'index #{index}: #{missing_props.join(', ')}" if missing_props.any?
+
+    # Vérifier le type des propriétés
+    return "'topic' doit être une chaîne de caractères dans le nœud à l'index #{index}" unless node["topic"].is_a?(String)
+    return "'children' doit être un tableau dans le nœud à l'index #{index}" unless node["children"].is_a?(Array)
+
+    # Vérifier le style
+    if node["style"] && node["style"] != nil
+      style = node["style"]
+      return "'style' doit être un objet ou null dans le nœud à l'index #{index}" unless style.is_a?(Hash)
+
+      # Vérifier les propriétés requises du style
+      style_props = ["background", "border-radius", "color"]
+      missing_style_props = style_props.select { |prop| !style.key?(prop) }
+      return "Propriétés manquantes dans le style du nœud à l'index #{index}: #{missing_style_props.join(', ')}" if missing_style_props.any?
+
+      # Vérifier le type des propriétés du style
+      style_props.each do |prop|
+        return "La propriété '#{prop}' du style doit être une chaîne de caractères dans le nœud à l'index #{index}" unless style[prop].is_a?(String)
+      end
+    end
+
+    # Vérifier récursivement les enfants de ce nœud
+    child_error = validate_nodes(node["children"])
+    return child_error if child_error
+  end
+
+  nil # Pas d'erreur
+end
