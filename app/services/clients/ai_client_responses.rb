@@ -26,8 +26,9 @@ module Clients
       raise OpenAIError, "HTTP #{resp.code} – #{resp.body}" unless resp.success?
 
       body = JSON.parse(resp.body) rescue {}
-      txt  = body['output_text']
-      return JSON.parse(txt) rescue txt # si c'est déjà un JSON parsable, on renvoie l'objet
+
+      return body.to_json if body.is_a?(Hash) && !body.key?('output_text')
+
     end
   end
 end

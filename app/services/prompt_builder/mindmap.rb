@@ -1,79 +1,209 @@
+# frozen_string_literal: true
+require "json"
+
 module PromptBuilder
   class Mindmap
     SYSTEM_PROMPT = <<~PROMPT
       Tu es un expert en création de mind-maps pédagogiques pour étudiants.
-      Tes réponses doivent être prêtes à être parsées par un programme :
+      Ta mission : CRÉER une mind-map JSON à partir du contenu fourni.
+      Règles de sortie :
       — Pas de texte d'introduction ni de conclusion
       — Pas de Markdown ni de balises
       — Un seul objet JSON strict (UTF-8)
     PROMPT
 
-    # Exemple mis à jour avec une clé "style"
+    # Schéma strict de sortie pour la mind-map
+    # - Racine: { "mindmap": Node }
+    # - Node: { topic, children[], style }
+    # - style est "nullable" pour rester optionnel, tout en respectant l'exigence de champs requis dans l'objet
+    JSON_SCHEMA = {
+      "name"   => "mindmap",
+      "strict" => true,
+      "schema" => {
+        "type"                 => "object",
+        "additionalProperties" => false,
+        "required"             => ["mindmap"],
+        "properties"           => {
+          "mindmap" => { "$ref" => "#/$defs/node" }
+        },
+        "$defs" => {
+          "style" => {
+            "type"                 => "object",
+            "additionalProperties" => false,
+            "required"             => ["background", "border-radius", "color"],
+            "properties"           => {
+              "background"    => { "type" => "string" },
+              "border-radius" => { "type" => "string" },
+              "color"         => { "type" => "string" }
+            }
+          },
+          "node" => {
+            "type"                 => "object",
+            "additionalProperties" => false,
+            "required"             => ["topic", "children", "style"],
+            "properties"           => {
+              "topic"   => { "type" => "string" },
+              "children"=> {
+                "type"  => "array",
+                "items" => { "$ref" => "#/$defs/node" }
+              },
+              # style optionnel via null, sinon objet strict
+              "style"   => {
+                "anyOf" => [
+                  { "type" => "null" },
+                  { "$ref" => "#/$defs/style" }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }.freeze
+
     EXAMPLE_JSON = <<~JSON.chomp
       {
         "mindmap": {
-          "topic": "Titre principal",
+          "topic": "Programmation Web",
           "style": { "background": "#8ab6f9", "border-radius": "16px", "color": "#fff" },
           "children": [
             {
-              "topic": "Chapitre 1",
-              "style": { "background": "#ffb3ba", "border-radius": "12px" },
+              "topic": "Frontend",
+              "style": { "background": "#ffb3ba", "border-radius": "12px", "color": "#000" },
               "children": [
                 {
-                  "topic": "Sous-chapitre 1.1",
-                  "style": { "background": "#ffd966" },
-                  "children": []
-                }
-              ]
-            }
+                  "topic": "HTML/CSS",
+                  "style": { "background": "#ffd966", "border-radius": "8px", "color": "#000" },
+                  "children": [
+                    {
+                      "topic": "Sémantique HTML5",
+                      "style": { "background": "#ffd966", "border-radius": "8px", "color": "#000" },
+                      "children": [
+                        {
+                          "topic": "Utilisation de balises qui décrivent leur contenu (header, nav, section)",
+                          "style": { "background": "#e6f2ff", "border-radius": "6px", "color": "#333" },
+                          "children": []
+                        },
+                        {
+                          "topic": "Améliore l'accessibilité et le référencement naturel (SEO)",
+                          "style": { "background": "#e6f2ff", "border-radius": "6px", "color": "#333" },
+                          "children": []
+                        },
+                        {
+                          "topic": "Facilite la maintenance et la compréhension du code",
+                          "style": { "background": "#e6f2ff", "border-radius": "6px", "color": "#333" },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "topic": "Flexbox & Grid",
+                      "style": { "background": "#ffd966", "border-radius": "8px", "color": "#000" },
+                      "children": [
+                        {
+                          "topic": "Flexbox: système de mise en page unidimensionnel pour organiser les éléments en ligne ou en colonne",
+                          "style": { "background": "#e6f2ff", "border-radius": "6px", "color": "#333" },
+                          "children": []
+                        },
+                        {
+                          "topic": "Grid: système bidimensionnel permettant de créer des mises en page complexes avec lignes et colonnes",
+                          "style": { "background": "#e6f2ff", "border-radius": "6px", "color": "#333" },
+                          "children": []
+                        },
+                        {
+                          "topic": "Remplacent les anciennes techniques comme les tableaux et les flottants pour la mise en page",
+                          "style": { "background": "#e6f2ff", "border-radius": "6px", "color": "#333" },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "topic": "Responsive Design",
+                      "style": { "background": "#ffd966", "border-radius": "8px", "color": "#000" },
+                      "children": [
+                        {
+                          "topic": "Approche de conception qui adapte l'affichage à la taille de l'écran de l'utilisateur",
+                          "style": { "background": "#e6f2ff", "border-radius": "6px", "color": "#333" },
+                          "children": []
+                        },
+                        {
+                          "topic": "Utilise les media queries CSS pour appliquer différents styles selon les caractéristiques de l'appareil",
+                          "style": { "background": "#e6f2ff", "border-radius": "6px", "color": "#333" },
+                          "children": []
+                        },
+                        {
+                          "topic": "Essentiel pour offrir une expérience utilisateur optimale sur mobile, tablette et desktop",
+                          "style": { "background": "#e6f2ff", "border-radius": "6px", "color": "#333" },
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
           ]
         }
       }
     JSON
 
-    def initialize(content, root_title: "Mind-map", palette: nil)
-      @content     = content
+    def initialize(raw_content:, root_title: "Mind-map", palette: nil)
+      @raw_content = raw_content
       @root_title  = root_title
-      # palette par défaut : couleurs pastel
       @palette     = palette || %w[#8ab6f9 #ffb3ba #baffc9 #bae1ff #ffd966 #ffdfba]
     end
 
-    def build
-      [
-        { role: "system", content: SYSTEM_PROMPT },
-        {
-          role: "user",
-          content: <<~CONTENT
-            Génère **exactement** une structure de mind-map au format JSON strict correspondant à l'exemple :
 
-            #{EXAMPLE_JSON}
+    def request_payload(model: ENV.fetch("OPENAI_MINDMAP_MODEL", "gpt-4o-2024-08-06"),
+                        temperature: 0.2,
+                        max_output_tokens: 12_000)
+      prompt_text = <<~CONTENT
+        Génère exactement une structure de mind-map au format JSON correspondant à l'exemple.
+        Tu dois ANALYSER le CONTENU fourni et le transformer en une hiérarchie de nœuds.
 
-            ▸ Schéma à respecter :
-              • Clé racine obligatoire : "mindmap"
-              • Champs obligatoires par nœud :
-                  - "topic"   (string)
-                  - "children" (array, peut être vide)
-              • Champ optionnel : "style" (objet CSS inline ; ex. {"background":"#ffb3ba","border-radius":"12px"})
+        ▸ Schéma fonctionnel à respecter (guidelines) :
+          • Clé racine obligatoire : "mindmap"
+          • Pour chaque nœud :
+              - "topic"    (string, une seule ligne, sans retour à la ligne)
+              - "children" (array, peut être vide)
+              - "style"    (objet optionnel; si absent → null). Le schéma exige la clé "style", mais elle peut être null.
 
-            ▸ Contraintes impératives :
-              1. Aucune ligne avant/après l'objet JSON.
-              2. Pas de retour à la ligne dans les valeurs de "topic".
-              3. Le nœud racine doit avoir pour topic « #{@root_title} ».
-              4. Limite la profondeur à 3 niveaux maximum (« Chapitre », « Sous-chapitre », « Détail »).
-              5. Utilise la palette suivante pour colorer les nœuds (cycle sur la profondeur) :
-                 #{@palette.join(', ')}
-                 * Niveau 0 → couleur[0], niveau 1 → couleur[1], niveau 2 → couleur[2]…
-              6. Applique un "border-radius" plus faible lorsque la profondeur augmente :
-                 * 16px (niveau 0) → 12px (niveau 1) → 8px (niveau 2).
-              7. IMPORTANT: Assure-toi que chaque nœud a la même couleur de fond ("background") que la couleur de sa branche parente.
-                 * La couleur de la branche est déterminée par la couleur du nœud parent.
-                 * Exemple: si un nœud parent a un style {"background":"#ffb3ba"}, tous ses enfants directs doivent avoir la même couleur de fond.
+        ▸ Contraintes de présentation :
+          1) Le nœud racine doit avoir pour topic "#{@root_title}".
+          2) Profondeur EXACTE : 3 niveaux (Chapitre → Sous-chapitre/Notion → Détail).
+             IMPORTANT : Chaque sous-chapitre/notion DOIT avoir au moins deux nœuds de détail. Ces détails doivent être des phrases courtes (et non une suite de mots)
+          3) Palette par profondeur (cycle) : #{@palette.join(', ')}.
+             - Niveau 0 → couleur[0], niveau 1 → couleur[1], niveau 2 → couleur[2].
+          4) Border radius décroissant : 16px (niveau 0), 12px (niveau 1), 8px (niveau 2).
+          5) IMPORTANT : tous les enfants héritent du "background" de leur parent (même couleur de fond).
+      CONTENT
 
-            ▸ Contenu source à transformer en mind-map :
-            #{@content}
-          CONTENT
+      example_json_text = EXAMPLE_JSON
+      raw_content_text = @raw_content
+
+      {
+        model: model,
+        temperature: temperature,
+        max_output_tokens: max_output_tokens,
+        instructions: SYSTEM_PROMPT,
+        input: [
+          {
+            role: "user",
+            content: [
+              { type: "input_text", text: prompt_text },
+              { type: "input_text", text: "Exemple (à titre indicatif) :" },
+              { type: "input_text", text: example_json_text },
+              { type: "input_text", text: "CONTENU à analyser et transformer en mindmap :" },
+              { type: "input_text", text: raw_content_text }
+            ]
+          }
+        ],
+        text: {
+          format: {
+            name: "mindmap",
+            type: "json_schema",
+            schema: JSON_SCHEMA["schema"]
+          }
         }
-      ]
+      }
     end
   end
 end

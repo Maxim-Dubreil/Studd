@@ -14,7 +14,7 @@ module Workspaces
       content_text = extract_workspace_content
       return unless content_text
 
-      mindmap_data = Generators::MindMapGenerator.new(content_text).call
+      mindmap_data = Generators::MindMapGenerator.new(content_text, @workspace.name).call
 
         # Création de l'enregistrement en base de données
         @mindmapContent = @workspace.mindmaps.create!(
