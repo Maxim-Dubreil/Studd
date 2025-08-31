@@ -150,7 +150,7 @@
       </div>
 
       <div class="fixed inset-0 flex flex-col items-center justify-center">
-        <div class="absolute bottom-40 z-50">
+        <div class="absolute bottom-20 z-50">
           <ResetButton label="Restart the quizz" @click="resetSeries" />
         </div>
 

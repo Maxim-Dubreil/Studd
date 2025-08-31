@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: raw_contents
+#
+#  id           :integer          not null, primary key
+#  workspace_id :integer          not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  content      :text
+#
+# Indexes
+#
+#  index_raw_contents_on_workspace_id  (workspace_id)
+#
+
 FactoryBot.define do
   factory :raw_content do
     association :workspace

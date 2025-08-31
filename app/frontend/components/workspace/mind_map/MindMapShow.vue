@@ -5,10 +5,10 @@
     <!-- Affichage de la mindmap si elle existe -->
     <div
       v-if="!isLoading && content"
-      class="relative flex min-h-screen items-center justify-center"
+      class="relative flex min-h-screen flex-col items-center justify-center gap-6"
     >
       <div id="map" class="h-[600px] w-300 rounded-xl"></div>
-      <div class="absolute top-25 right-90 flex gap-2">
+      <div class="flex gap-4">
         <Button @click="saveMindmap" variant="default" :disabled="isSaving">
           <Icon name="save" class="h-4 w-4" />
           <span v-if="!isSaving">Save</span>
